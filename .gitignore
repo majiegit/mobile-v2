@@ -1,0 +1,15 @@
+.DS_Store
+node_modules/
+dist/
+src/webzhang/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/*.project
+/src/pages/addressList/VUEdemo.vue
+/src/pages/addressList/addressDeptList-bak.vue
+/src/pages/addressList/labelPage-bak20170821.vue
+/src/pages/labelSquare/index.js
+/src/pages/labelSquare/label-square.vue
+/src/pages/addressList/moredata.vue
+/src/pages/test/test.vue

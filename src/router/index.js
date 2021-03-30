@@ -1,0 +1,61 @@
+/*
+ *Created by yangyang11 on 2017/8/17.
+ *
+ */
+import Vue from 'vue'
+import Router from 'vue-router'
+import application from './application'
+import addressList from './addressList'
+import personalInfo from './personalInfo'
+import message from './message'
+import teamAnatomy from './teamAnatomy'
+import salary from './salary'
+import prove from './prove'
+import myteam from './myteam'
+import frontVoice from './frontVoice'
+import commonReports from './commonReports'
+import employeeResume from './employeeResume'
+import attendanceLeave from './attendance-leave/index.js'
+//路由增加"绩效信息" by tianxx5 20180117
+import performanceInfo from './performanceInfo'
+import checkout from './checkout'
+import approveCenter from './approveCenter'
+//路由增加"人员转正" by tianxx5 20190108
+import psnreg from './psnreg'
+import trns from './transmng'
+import dimission from './dimissionmng'
+
+
+Router.prototype.goBack = function () {
+　　this.isBack = true
+　　window.history.go(-1)
+}
+
+const routeArr = [].concat(
+  application,
+  message,
+  addressList,
+  personalInfo,
+  teamAnatomy,
+  salary,
+  prove,
+  myteam,
+  frontVoice,
+  commonReports,
+  employeeResume,
+  attendanceLeave,
+  performanceInfo,//路由增加"绩效信息" by tianxx5 20180117
+  checkout,
+  approveCenter,
+  psnreg, //路由增加"人员转正" by tianxx5 20190108
+  trns,
+  dimission
+)
+Vue.use(Router)
+const router = new Router({
+  mode: 'hash',
+  routes: routeArr,
+  base: './'
+})
+export default router
+
