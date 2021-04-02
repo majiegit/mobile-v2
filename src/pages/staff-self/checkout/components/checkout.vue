@@ -74,46 +74,49 @@
       },
       posPub(type) {
         let _this = this
-        let map, geolocation
-        //加载地图，调用浏览器定位服务
-        map = new AMap.Map('container', {
-          resizeEnable: true
-        })
-        map.plugin('AMap.Geolocation', function() {
-          geolocation = new AMap.Geolocation({
-            enableHighAccuracy: true,//是否使用高精度定位，默认:true
-            timeout: 100          //超过10秒后停止定位，默认：无穷大
-          })
-          map.addControl(geolocation)
-          geolocation.getCurrentPosition()
-          AMap.event.addListener(geolocation, 'complete', function(data) {
-            let x = data.position.getLat()
-            let y = data.position.getLng()
-            _this.initCheckData(x, y, type)
-          })//返回定位信息
-          AMap.event.addListener(geolocation, 'error', function(error) {
-            if ('query' == type) {
-              _this.initCheckData(null, null, 'query')
-            } else {
-              Indicator.close()
-              _this.checkstate = 0
-            }
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                Toast('用户拒绝位置访问')
-                break
-              case error.POSITION_UNAVAILABLE:
-                Toast('位置信息不可用')
-                break
-              case error.TIMEOUT:
-                Toast('获取位置超时')
-                break
-              case error.UNKNOWN_ERROR:
-                Toast('未知的错误')
-                break
-            }
-          })
-        })
+         let map, geolocation
+         //加载地图，调用浏览器定位服务
+         map = new AMap.Map('container', {
+           resizeEnable: true
+         })
+         map.plugin('AMap.Geolocation', function() {
+           geolocation = new AMap.Geolocation({
+             enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            // timeout: 5000,//超过10秒后停止定位，默认：无穷大
+             noGeoLocation:1,
+             //noGeoLocation:3,
+             useNative: true
+           })
+           map.addControl(geolocation)
+           geolocation.getCurrentPosition()
+           AMap.event.addListener(geolocation, 'complete', function(data) {
+             let x = data.position.getLat()
+             let y = data.position.getLng()
+             _this.initCheckData(x, y, type)
+           })//返回定位信息
+           AMap.event.addListener(geolocation, 'error', function(error) {
+             if ('query' == type) {
+               _this.initCheckData(null, null, 'query')
+             } else {
+               Indicator.close()
+               _this.checkstate = 0
+             }
+             switch (error.code) {
+               case error.PERMISSION_DENIED:
+                 Toast('用户拒绝位置访问')
+                 break
+               case error.POSITION_UNAVAILABLE:
+                 Toast('位置信息不可用')
+                 break
+               case error.TIMEOUT:
+                 Toast('获取位置超时')
+                 break
+               case error.UNKNOWN_ERROR:
+                 Toast('未知的错误')
+                 break
+             }
+           })
+         })
       },
       reload() {
         Indicator.open({
