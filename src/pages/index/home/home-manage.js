@@ -30,9 +30,9 @@ const LeaderApp = {
   lable: '领导自助',
   items: [
     {name: '审批中心',path:'approveCenter',imgpath:'hr-examination-and-approval',color: '#ff5a59'},
-    {name: '统计分析',path:'teamAnatomy',imgpath:'hr-organization-portrait2',color: '#0ec08d'},
-     {name: '常用报表',path:'commonReports',imgpath:'hr-performance-appraisal',color: '#00aee1'},
-    {name: '员工简历',path:'employeeResume',imgpath:'hr-head',color: '#00aee1'}
+    {name: '员工简历',path:'employeeResume',imgpath:'hr-head',color: '#00aee1'},
+    {name: '常用报表',path:'commonReports',imgpath:'hr-performance-appraisal',color: '#00aee1'},
+    {name: '统计分析',path:'teamAnatomy',imgpath:'hr-organization-portrait2',color: '#0ec08d'}
   ]
 }
 
@@ -48,11 +48,11 @@ const ManagerApp = {
 const LeaderManagerApp = {
   lable: '领导自助',
   items: [
-    {name: '我的团队',path:'myteam',imgpath:'hr-my-team2',color: '#00aee1'},
+   // {name: '我的团队',path:'myteam',imgpath:'hr-my-team2',color: '#00aee1'},
     {name: '审批中心',path:'approveCenter',imgpath:'hr-examination-and-approval',color: '#ff5a59'},
-    {name: '统计分析',path:'teamAnatomy',imgpath:'hr-organization-portrait2',color: '#0ec08d'},
-    // {name: '常用报表',path:'commonReports',imgpath:'hr-performance-appraisal',color: '#00aee1'},
-    {name: '员工简历',path:'employeeResume',imgpath:'hr-head',color: '#00aee1'}
+    {name: '员工简历',path:'employeeResume',imgpath:'hr-head',color: '#00aee1'},
+    {name: '常用报表',path:'commonReports',imgpath:'hr-performance-appraisal',color: '#00aee1'},
+    {name: '统计分析',path:'teamAnatomy',imgpath:'hr-organization-portrait2',color: '#0ec08d'}
   ]
 }
 
