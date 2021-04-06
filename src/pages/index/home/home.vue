@@ -17,7 +17,7 @@
                 <input type="text" name="" @focus='handleclick()'placeholder="搜索姓名、手机号、邮箱" ref='input'/>
                 <div style="width: 18%;display: inline-block;position: fixed;" @click='handleMessageClick()'>
                   <i style="color: #F5F5F5;font-size: 0.5rem;padding-top: 0.1rem" class="icon hrfont hr-remind sn-clock"></i>
-                  <sup class="el-badge__content is-fixed" style="">...</sup>
+                  <sup class="el-badge__content is-fixed" style="" v-if="this.newsArray.length !=0 ">{{this.newsArray.length}}</sup>
                 </div>
             </div>
         </header>
@@ -75,18 +75,24 @@
         name : 'application',
         data () {
             return {
+                newsArray: [],
                 AppTemps: [],
                 userinfo:{},
                 mastData:[],
                 choiceData:[],
                 userRole : '',
-                isDevelop: false
+                isDevelop: false,
+                newType: 'noread',
+                pagesize: 16,
+                pageno1: 0, // 页码
+                pageno2: 0
             }
         },
         components : {
         },
 
         created(){
+          this.initData()
             this.isDevelop =    this.$NODE_ENV == 'development'
                               ? true
                               : false
@@ -105,6 +111,45 @@
         },
 
         methods: {
+            // 消息个数统计
+
+          initData(){
+              this.getInfoNews()
+              this.getWorkListNews()
+             // console.log(this.newsArray)
+          },
+          getInfoNews(){
+            fetchData({
+              url: '/hrssc/portal/message/queryInfoMessageListByPage',
+              method: 'post',
+              param: {
+                currPage: this.pageno1,
+                pageSize: this.pagesize,
+                newType: this.newType
+              },
+              mock: false,
+              contentType: "application/json",
+              success: res => {
+                this.newsArray = this.newsArray.concat(res.data.content)
+              }
+            })
+          },
+          getWorkListNews(){
+            fetchData({
+              url: '/hrssc/portal/message/queryWorkMessageListByPage',
+              method: 'post',
+              param: {
+                currPage: this.pageno2,
+                pageSize: this.pagesize,
+                newType: this.newType
+              },
+              mock: false,
+              contentType: "application/json",
+              success: res => {
+                this.newsArray = this.newsArray.concat(res.data.content)
+              }
+            })
+          },
             // 权限检测
             checkUserRole() {
               let _this = this
@@ -310,19 +355,20 @@
                     }
                    .el-badge__content{
                      background-color: #ff4949;
-                     border-radius: 0.4rem;
+                     border-radius: 0.5rem;
                      color: #fff;
                      display: inline-block;
                      font-size: 0.2rem;
-                     height: 0.37rem;
-                     line-height: 0.2rem;
-                     padding: 0 0.1rem;
+                     height: 0.4rem;
+                     width: 0.4rem;
+                     line-height: 0.3rem;
+                     padding: 0.01rem;
                      text-align: center;
                      border: 0.02rem solid #fff;
                    }
                   .is-fixed{
                     top: 0.1rem;
-                    left: -0.2rem;
+                    left: -0.1rem;
                     position: absolute;
                     transform: translateY(-50%) translateX(100%);
                   }
