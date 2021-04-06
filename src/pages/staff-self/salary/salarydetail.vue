@@ -39,7 +39,7 @@
         data(){
             return {
                 currentHeight: this.height,
-                detaildata:JSON.parse(this.$route.params.detaildata),
+                detaildata:JSON.parse(this.$route.params.detaildata)
             }
         },
         mounted (){
@@ -57,7 +57,8 @@
                 this.$router.push({
                     name: 'salary',
                     params: {
-                      secret: this.$route.params.secret  
+                      secret: this.$route.params.secret,
+                      timestart: this.$route.params.timestart
                     }
                 })
             }

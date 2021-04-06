@@ -20,7 +20,7 @@
 
     <div v-if="listData != null && listData.length > 0" class="h-listgroup">
         <div v-for="(list,index) in listData" >
-            <div @click="gopage({ path: 'salarydetail',name:'salarydetail',params: { detaildata: JSON.stringify(list), secret: secret }})">
+            <div @click="gopage({ path: 'salarydetail',name:'salarydetail',params: { detaildata: JSON.stringify(list), secret: secret, timestart:timestart }})">
                 <mt-cell style="color:#333;"
                   :title="list.salaryList[list.countItem[0]].content.slice(0,7)+' '+list.salaryList[list.countItem[1]].title"
 
@@ -84,6 +84,7 @@ export default {
   mounted (){
     this.pageHeight = Math.max(document.body.scrollHeight, document.body.clientHeight)
     this.secret = this.$route.params.secret
+    this.timestart = this.$route.params.timestart
     this.currentTime();
     this.getuserinfo()
   },
@@ -177,7 +178,10 @@ export default {
 //                startyear=Number(startyear)-1;
 //            }
               //设置显示的默认时间数据
-              this.timestart=this.outString(startyear,startmonth);
+              if(this.timestart == "" || this.timestart == null){
+                this.timestart=this.outString(startyear,startmonth);
+              }
+
               this.timeend=this.outString(endyear,endmonth);
               this.initTimefun();
             },
