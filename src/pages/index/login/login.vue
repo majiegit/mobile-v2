@@ -3,13 +3,13 @@
 *
 */
 <template>
-  <div id="wrap" class="um-win" style="background-image:url(./static/img/pages/login/login-bg.jpg)" v-if="isIndexShow == true">
+  <div id="wrap" class="um-win" style="background-image:url(./static/img/pages/login/login-bg2.png)" v-if="isIndexShow == true">
     <div class="um-content">
       <dl>
         <dt class="logo">
-          <img src="../../../../static/img/pages/login/newlogo.png" id="logo"/>
+          <img src="../../../../static/img/pages/login/newlogog2.png" id="logo"/>
         </dt>
-        <dd  class="env">人力资源自助平台</dd>
+       <!-- <dd  class="env">员工赋能平台</dd>-->
       </dl>
       <div class="login-aera">
         <div class="p15">
@@ -24,8 +24,9 @@
             <img v-show='pwd' src="../../../../static/img/pages/login/showPwd.svg" class="showPwdIcon" @click="handleClick"/>
           </div>
         </div>
-        <button class="um-btn um-no-brs" @click="login()">登录</button>
+        <button class="um-btn um-no-brs" @click="login()">登 录</button>
         <!--<div class="test" @click='showTestUserSelectBar'>葛旭快捷登录</div>-->
+       <!-- <p style="margin-top: 1rem; color: #fff"> 忘记密码</p>-->
       </div>
     </div>
     <div class="zhezhao" v-show='testBarShow' @click='hideTestUserSelectBar'>
@@ -163,6 +164,11 @@
       },
       //登录NC
       login() {
+        if(this.noLogin.title != "" && this.id.trim() != ""){
+          this.noLogin.title = ""
+          this.noLogin.code = ""
+        }
+
         let _this = this,
           userinfo = {},
           param = {
@@ -202,11 +208,13 @@
                 message: data.data.message,
                 duration: 2000
               });
+             // this.isIndexShow =  true
             }
           },
           error : function(error) {
+            _this.isIndexShow = true
             Indicator.close()
-            Toast(error.message)
+           // Toast(error.message)
           }
         })
       },
@@ -252,18 +260,22 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+
   #wrap {
-    background: #84907A;
+   // background: #000;
+    background-repeat:no-repeat;
+    background-size:100% 100%;
     height: 100%;
     // background: url(../../../static/img/pages/login/login-bg.jpg) no-repeat;
-    background-size: cover;
+   // background-size: cover;
   }
   dl dt {
     padding-top: 0.9rem;
     text-align: center;
   }
   dl dt #logo {
-    width: 2.2rem;
+    margin-top: 0.65rem;
+    width: 4.8rem;
   }
   dd.env {
     height: 0.5rem;
@@ -274,7 +286,7 @@
   }
   .login-aera{
     padding: 0 .7rem;
-    margin-top: 0.3rem;
+    margin-top: 1.5rem;
     .um-label{
       clear: both;
       height: .7rem;
@@ -282,7 +294,7 @@
       margin-bottom: .3rem;
       margin-left: 5%;
       padding: 0 .05rem;
-      border-bottom: 1px solid  #aba6a6;
+      border-bottom: 1px solid  rgb(119,200,255);
       i{
         display: block;
         float: left;
@@ -311,7 +323,7 @@
       }
       input::-webkit-input-placeholder {
         /* WebKit browsers */
-        color: #9fcbdd;
+        color: #fff;
         margin-top: 0.2rem;
       }
       .showPwdIcon{
@@ -323,11 +335,13 @@
     .um-btn{
       clear: both;
       height: .8rem;
-      width: 90%;
-      margin-top: .2rem;
-      margin-left: 5%;
-      border-radius: 0.1rem;
-      background: #ddd;
+      width: 80%;
+      margin-top: 0.7rem;
+      margin-left: 10%;
+      border-radius: 1rem;
+      background: #fff;
+      color: rgb(0,162,255);
+      font-weight: bolder;
     }
     .test{
       width: 2rem;
