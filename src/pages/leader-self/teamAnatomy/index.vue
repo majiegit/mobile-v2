@@ -23,7 +23,7 @@
       <mt-tab-item id="populationAnalysis" class='selectbar-font'>人员分析</mt-tab-item>
       <mt-tab-item id="entryAnalysis">入职分析</mt-tab-item>
       <mt-tab-item id="dimissionAnalysis">离职分析</mt-tab-item>
-      <mt-tab-item id="costAnalysis">成本分析</mt-tab-item>
+    <!--  <mt-tab-item id="costAnalysis">成本分析</mt-tab-item>-->
       <!--<a class="mint-tab-item selectbar-font "><div class="mint-tab-item-label" style="color:#e4e4e4">成本分析</div></a>-->
     </mt-navbar>
 
@@ -82,7 +82,7 @@
   import entryAnalysis from './children/entryAnalysis'
   import populationAnalysis from './children/populationAnalysis'
   import dimissionAnalysis from './children/dimissionAnalysis'
-  import costAnalysis from './children/costAnalysis'
+  //import costAnalysis from './children/costAnalysis'
   export default {
     components : {
       Navbar,
@@ -92,7 +92,7 @@
       entryAnalysis,
       populationAnalysis,
       dimissionAnalysis,
-      costAnalysis,
+     // costAnalysis,
       HrHeader,
       hrScroll,
       datePicker
@@ -197,7 +197,8 @@
               }
             },
             error: error=> {
-              Toast(error.message)
+
+             // Toast(error.message)
             }
           })
         }else {
