@@ -10,7 +10,8 @@ const hostList = {
 
     'customerZS': 'http://10.16.120.9:80/',  //移动客户生产环境ip
     'customerym': 'http://ehr.xiangyu.cn:9080/',  //移动客户生产环境域名
-    'ceshi': 'http://127.0.0.1:8001/', //测试环境
+    'ceshi': 'http://8.140.136.205:8080/', //测试环境
+    'localhost': 'http://127.0.0.1:8001/', //测试环境
     'nginxFW': 'http://172.18.10.163:8081/', //nginx服务部署用
     'yangwengsheng': 'http://172.18.12.203/'
 }
