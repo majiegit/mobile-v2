@@ -25,10 +25,10 @@
       </div>
       <div class="content">
         <label>内容</label>
-        <textarea placeholder="必填（最多输入100字）" rows="5" ref='content' maxLength='100' v-model='content'
+        <textarea placeholder="必填（最多输入300字）" rows="5" ref='content' maxLength='300' v-model='content'
                   @input='_contentChange'>
         </textarea>
-         <div class='director'>{{contentNum}}/100</div>
+         <div class='director'>{{contentNum}}/300</div>
       </div>
       <div class="photoArea">
         <label>图片</label>
@@ -218,8 +218,8 @@ import { Toast } from 'mint-ui';
         e.target.value = emojiFilter(e.target.value)
         let v = e.target.value
 
-        if(v.length > 100){
-          this.contentNum = 100
+        if(v.length > 300){
+          this.contentNum = 300
           this.content = e.target.value.substr(0,99)
         }else{
           this.contentNum = v.length
