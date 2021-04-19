@@ -32,7 +32,7 @@
                 </div>
                 <div class="personalInfo-entries" v-if='userinfo'>
                     <div class="name">{{userinfo.name}}
-                        <span class="r-border" v-show='userinfo.postname'></span>
+                        <span class="r-border" v-show='userinfo.postname'> </span>
                         {{userinfo.postname}}
                     </div>
                     <div class="tittles">
@@ -41,13 +41,10 @@
                         </span>
                     </div>
                     <div class="days" v-if='userinfo.joinsysyear > 0'>
-                        今天是您加入集团的第 <span>{{userinfo.joinsysyear}}</span> 年 <span>{{userinfo.joinsysdate}}</span> 天
+                        今天是您加入{{userinfo.orgname}}的第 <span>{{userinfo.joinsysyear}}</span> 年 <span>{{userinfo.joinsysdate}}</span> 天
                     </div>
                     <div class="days" v-else>
-                        今天是您加入集团的第 <span>{{userinfo.joinsysdate}}</span> 天
-                    </div>
-                    <div class="days">
-                        年假剩余<span>{{userinfo.leavebalance}}</span> 天
+                        今天是您加入{{userinfo.orgname}}的第 <span>{{userinfo.joinsysdate}}</span> 天
                     </div>
                 </div>
             </div>
