@@ -15,7 +15,11 @@
               :bottom-method="loadBottomOne"
               :bottom-all-loaded="allLoadedone"
               ref="loadmoreone">
-              <mt-cell style="border-bottom: solid 2px #F5F5F5" v-for="item in infoData" :title="item.subject.length<=24?item.subject:item.subject.toString().substring(0,24)+'...'" is-link  :to="'/message-detail?messagePk='+item.pkmessage" :value="item.content"/>
+              <mt-cell style="border-bottom: solid 2px #F5F5F5" v-for="(item,index) in infoData"
+                       :key="index" :title="item.subject.length<=24?item.subject:item.subject.toString().substring(0,24)+'...'" is-link
+                       @click.native="oMsgDetail(item.pkmessage)"
+                       :value="item.content"/>
+
             </mt-loadmore>
           </mt-tab-container-item>
           <mt-tab-container-item id="2">
@@ -66,6 +70,9 @@
       this.initData()
     },
     methods: {
+      oMsgDetail(item) {
+        this.$router.push({ path: '/message-detail', query: { messagePk:item} });
+      },
       handleTabClick(type){
          if(type === 'info'){
            this.pageno1 = 0
@@ -189,6 +196,7 @@
               Toast('已经没有更多了！')
             }
             this.infoData = this.infoData.concat(res.data.content)
+            console.log(this.infoData)
           },
           error: error=> {
             Indicator.close()
