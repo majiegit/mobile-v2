@@ -516,10 +516,10 @@
             _this.orgdeptname = data.data.orgdeptname
             _this.newpk_org = data.data.orgdeptname.pk_org
             _this.newpk_dept = data.data.orgdeptname.pk_dept
-            // _this.newpk_psncl = data.data.orgdeptname.pk_psncl
-            _this.begindate = data.data.trialdata.begindate
-            _this.overdate = data.data.trialdata.enddate
-            _this.regulardate = data.data.trialdata.regulardate
+             _this.newpk_psncl = data.data.orgdeptname.pk_psncl
+            //_this.begindate = data.data.trialdata.begindate
+           // _this.overdate = data.data.trialdata.enddate
+           // _this.regulardate = data.data.trialdata.regulardate
           },
           error: function(error) {
             Indicator.close()
