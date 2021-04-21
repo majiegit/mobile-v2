@@ -14,20 +14,47 @@
             <span class="h-time-start" >{{timestart}}</span> 至 <span class="h-time-end">{{timeend}}</span><i class="icon hrfont hr-calendar"></i>
         </div>
     </div>
+    <div  v-if="listData != null && listData.length > 0">
+      <div class="h-title-group" >
+        <span>查询合计</span>
+      </div>
+      <div style="width: 95%; height: 1.5rem; border-radius: 5px; margin: 0 0.2rem 0.2rem; padding: 0.2rem; background: #2689D6;">
+        <p v-for="(item,index) in summarizing" :key=index style=" color: #fff; width: 50%;height: 0.6rem; float: left">
+          <span>{{item.title}} : </span>
+          <span>{{item.number}}</span>
+        </p>
+      </div>
+    </div>
     <div class="h-title-group" >
         <span>{{username}}</span><span class="h-title-department">{{userdepartment}}</span>
     </div>
 
-    <div v-if="listData != null && listData.length > 0" class="h-listgroup">
-        <div v-for="(list,index) in listData" >
+    <div v-if="listData != null && listData.length > 0" class="h-listgroup" style="background: none">
+        <div v-for="(list,index) in listData" style="margin-top: 0.1rem;" :key="index">
             <div @click="gopage({ path: 'salarydetail',name:'salarydetail',params: { detaildata: JSON.stringify(list), secret: secret, timestart:timestart }})">
-                <mt-cell style="color:#333;"
-                  :title="list.salaryList[list.countItem[0]].content.slice(0,7)+' '+list.salaryList[list.countItem[1]].title"
-
-                  is-link  class="h-left">
-                  <span style="color: #0CAEF5;fontSize:0.32rem;" >{{list.salaryList[list.countItem[1]].content}}</span>
-                  <span class="h-money">{{list.splanname}}</span>
-                </mt-cell>
+                  <div style="width: 100%; height: 2.3rem; font-size: 0.3rem; background: #fff; border-radius: 5px;   padding-left: 0.2rem;">
+                    <p style="width: 50%; height: 0.9rem; line-height: 0.9rem;  font-size: 0.4rem;">
+                      {{list.salaryList[list.countItem[0]].content.slice(0,7)}}
+                    </p>
+                    <p style=" color: #333333; width: 50%; height: 0.6rem; float: left">
+                      <span>{{list.salaryList[list.countItem[2]].title}} : </span>
+                      <span>{{list.salaryList[list.countItem[2]].content}}</span>
+                    </p>
+                    <p style=" color: #333333; width: 50%; height: 0.6rem; float: left">
+                      <span>{{list.salaryList[list.countItem[1]].title}} : </span>
+                      <span>{{list.salaryList[list.countItem[1]].content}}</span>
+                    </p>
+                    <p style=" color: #333333; width: 50%;height: 0.6rem; float: left">
+                      <span>{{list.salaryList[list.countItem[3]].title}} : </span>
+                      <span>{{list.salaryList[list.countItem[3]].content}}</span>
+                    </p>
+                    <p style=" color: #333333; width: 50%;height: 0.6rem; float: left">
+                      <span>{{list.salaryList[list.countItem[2]].title}} : </span>
+                      <span>{{list.salaryList[list.countItem[2]].content}}</span>
+                    </p>
+                  </div>
+                 <!-- <span style="color: #0CAEF5;fontSize:0.32rem;" >{{list.salaryList[list.countItem[1]].content}}</span>
+                  <span class="h-money">{{list.splanname}}</span>-->
             </div>
         </div>
     </div>
@@ -70,7 +97,8 @@ export default {
       timeArrs:[],
       username:"",
       userdepartment:"",
-      secret: ''
+      secret: '',
+      summarizing: []
     }
   },
   updated () {
@@ -209,6 +237,7 @@ export default {
                         if(data.data){
                             _this.listData=data.data.salaryData;
                             _this.secret = data.data.secret
+                            _this.totalChange(_this.listData, _this)
                         }else{
                             _this.listData=[];
                         }
@@ -230,7 +259,44 @@ export default {
             },
             goApp() {
               this.$router.push('application')
+            },
+          toDecimal2 (x) {
+            var f = parseFloat(x)
+            if (isNaN(f)) {
+              return false
             }
+            var f = Math.round(x*100)/100
+            var s = f.toString()
+            var rs = s.indexOf('.')
+            if (rs < 0) {
+              rs = s.length
+              s += '.'
+            }
+            while (s.length <= rs + 2) {
+              s += '0'
+            }
+            return s
+          },
+          totalChange(data,_this){
+            var shouldTotal = 0
+            var practicalTotal = 0
+            var chargeTotal = 0
+            var taxTotal = 0
+           for( var i = 0; i<data.length; i++){
+             shouldTotal += parseFloat(data[i].salaryList.wa_dataf_1.content)
+             practicalTotal += parseFloat(data[i].salaryList.wa_dataf_3.content)
+             chargeTotal += parseFloat(data[i].salaryList.wa_dataf_2.content)
+             taxTotal += parseFloat(data[i].salaryList.wa_dataf_2.content)
+           }
+            if(data.length !== 0){
+              _this.summarizing = [
+                {title: '应发汇总',number: _this.toDecimal2(shouldTotal)},
+                {title: '实发汇总',number: _this.toDecimal2(practicalTotal)},
+                {title: '扣税合计',number: _this.toDecimal2(taxTotal)},
+                {title: '扣款合计',number: _this.toDecimal2(chargeTotal)}
+              ]
+            }
+          }
         }
     };
 </script>
@@ -243,7 +309,6 @@ export default {
         background: #fff;
         border-radius: 5px;
         margin: 0 0.2rem 0.2rem;
-        padding: 0.2rem ;
         .mint-cell-text{
             font-size:0.3rem;
         }

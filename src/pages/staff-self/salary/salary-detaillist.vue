@@ -26,7 +26,7 @@
 </template>
 
 <script>
-
+  import {waterMark, clearWaterMark} from 'hr-utils'
 /*
     查薪资详情页 列表组件  zhanghua 2017/08/26
  */
@@ -36,7 +36,9 @@
     props:['listdata'],
     data(){
         return {
-            detaildata:[]
+          isWater: false,
+          pageHeight: 0,
+          detaildata:[]
         }
     },
     watch: {
@@ -44,8 +46,17 @@
         this.init();
       }
     },
+    updated () {
+      var pageHeight = Math.max(document.body.scrollHeight, document.body.clientHeight)
+      if (pageHeight !== this.pageHeight || this.isWater === false) {
+        this.isWater = true
+        clearWaterMark()
+        waterMark({watermark_txt: localStorage.getItem('userName').split('-')[1] + ' ' + localStorage.getItem('mobile').split('-')[1] })
+      }
+    },
     mounted (){
-        this.init();
+      this.pageHeight = Math.max(document.body.scrollHeight, document.body.clientHeight)
+      this.init();
     },
     methods:{
       init() {
