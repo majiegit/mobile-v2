@@ -33,7 +33,7 @@ module.exports = {
         //target: 'http://10.16.16.17:80/', // 客户测试环境ip
         target: 'http://localhost:8001/', // 客户准生产环境ip
         // target: 'http://172.18.12.134:80/',     // 调试暂时使用
-        changeOrigin: true,
+        changOrigin: true,
         pathRewrite: {
           '^hrssc': '/hrself'
         }

@@ -7,6 +7,7 @@ const Personal = r => require.ensure([], () => r(require('@/pages/staff-self/per
 const Editpage = r => require.ensure([], () => r(require('@/pages/staff-self/personalInfo/editpage.vue')), 'editpage')
 const Editlist = r => require.ensure([], () => r(require('@/pages/staff-self/personalInfo/editlist.vue')), 'editlist')
 const Personalstaff = r => require.ensure([], () => r(require('@/pages/staff-self/personalInfo/personalstaff.vue')), 'personalstaff')
+const Fjmanage = r => require.ensure([], () => r(require('@/pages/staff-self/personalInfo/fjmanage.vue')), 'fjmanage')
 export default [
 
     {
@@ -28,5 +29,10 @@ export default [
         path : '/personalstaff',
         name : 'personalstaff',
         component : Personalstaff
+    },
+  {
+        path : '/fjmanage',
+        name : 'fjmanage',
+        component : Fjmanage
     },
 ]

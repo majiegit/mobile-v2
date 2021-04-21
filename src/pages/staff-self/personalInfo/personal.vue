@@ -13,6 +13,7 @@
         <div class="fr">
           <span class="name">{{userdata.name}}</span>
         </div>
+        <div class="fujiandiv" @click="fjmanage()">附件管理</div>
       </div>
     </div>
 
@@ -75,6 +76,15 @@
 
     },
     methods:{
+      fjmanage(){
+        var _this = this;
+        this.$router.push({
+          name: 'fjmanage',
+          query: {
+            pk_psndoc: _this.userdata.pk_psndoc
+          }
+        })
+      },
       getImgUrl:function(imgdata){
         //console.log(imgdata.imginfo[0].data)
         var _this=this;
@@ -301,5 +311,9 @@
     }
 
   }
-
+.fujiandiv{
+  float: right;
+  padding-right: 0.5rem;
+  color: #0caef5;
+}
 </style>
