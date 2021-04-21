@@ -18,11 +18,6 @@
         <textarea ref='title' placeholder="必填"  @input='_titleChange' maxLength='25' v-model='title'></textarea>
         <div class='director'>{{textNum}}/25</div>
       </div>
-      <div class="className" @click='openScroll'>
-        <label>分类</label>
-        <div>{{className}}</div>
-        <i class="icon hrfont hr-drop-down02"></i>
-      </div>
       <div class="content">
         <label>内容</label>
         <textarea placeholder="必填（最多输入300字）" rows="5" ref='content' maxLength='300' v-model='content'
@@ -30,8 +25,15 @@
         </textarea>
          <div class='director'>{{contentNum}}/300</div>
       </div>
+      <div class="className">
+        <label>是否匿名</label>
+        <div style="height: 1rem">
+          <span style="margin-left:0.08rem">是 <input type="radio" checked="checked" name="is_anonymity" :value="is_anonymity"  style="width: 0.32rem; height: 0.32rem;" @click="selectIsRadio"/></span>
+          <span style="margin-left: 1rem">否 <input type="radio" name="is_anonymity" :value="is_anonymity" style="width: 0.32rem; height: 0.32rem" @click="selectNoRadio"/></span>
+        </div>
+      </div>
       <div class="photoArea">
-        <label>图片</label>
+        <label style="float: left">图片</label>
         <ImgPicker ref='ImgPicker' v-on:imgUrl='getImgUrl' type='img-only' maxSize=10></ImgPicker>
       </div>
     </section>
@@ -56,6 +58,7 @@ import { Toast } from 'mint-ui';
     name: 'sendVoice',
     data (){
       return {
+        is_anonymity: 'Y',
         scrolldata : {
           type:'custom', 
           mark:'name', 
@@ -77,55 +80,27 @@ import { Toast } from 'mint-ui';
       ImgPicker
     },
     mounted(){
-      //获取一线声音类型
-      Indicator.open({
-        text: '数据加载中...',
-        spinnerType: 'fading-circle'
-      })
-      this.h = document.body.clientHeight - (1.88*window.fontSize) + 'px'
-      
-      let _this = this,
-          sdata = []
-         
-      fetchData({
-        url : 'hrssc/portal/psnVoice/queryVoiceTypeList',
-        method : 'get',
-        param : {},
-        mock : false,
-        contentType : "application/json",
-        success : function(data) {
-          Indicator.close()
-          data.data.forEach((data=>{
-            let obj = {
-                name : data.name,
-                id: data.voicecode
-            }
-            sdata.push(obj)
-          }))
-
-          _this.scrolldata = {
-             type:'custom', 
-             mark:'name', 
-             data:sdata
-          }
-        },
-        error : function(error) {
-          Indicator.close()
-          Toast(error.message)
-        }
-      })
     },
     methods : {
+      selectIsRadio () {
+        let _this = this
+        _this.is_anonymity = 'Y'
+      },
+      selectNoRadio () {
+        let _this = this
+        _this.is_anonymity = 'N'
+      },
       //提交button绑定的事件
       commit : function () {
         let _this = this,
             param = {
               title : this.title._trim(), // decodeURI(encodeURI(this.title).split('%E2%80%86').join('')),
-              type : this.classId,
+              type : null,
               content  : this.content._trim(),//decodeURI(encodeURI(this.content).split('%E2%80%86').join('')),
-              attachPath : ''
+              attachPath : '',
+              is_anonymity : _this.is_anonymity
             }
-        if(!param.title || !param.type || !param.content) {
+        if(!param.title || !param.is_anonymity || !param.content) {
           Toast({
             message: '必选项不能为空',
             duration: 800
@@ -247,10 +222,6 @@ import { Toast } from 'mint-ui';
 .progress-bar{
   position: fixed;
   top: 0.88rem;
-}
-.hrfont{
-  font-size: 0.5rem;
-  color: #999;
 }
 textarea{
   font-size: 16px;

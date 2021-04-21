@@ -21,7 +21,7 @@
                   {{data.title}}
                 </div>
                 <div class="auAndClass">
-                  <span class="className">{{data.voicetype}}</span>
+               <!--  <span class="className">{{data.voicetype}}</span>-->
                   <span class="author">{{data.creator}}</span>
                 </div>
             </div>

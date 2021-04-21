@@ -23,9 +23,11 @@
                  >
                     <div class="title">
                     {{data.title}}
-                      </div>
+                      <span class="className2" v-if="data.is_verify == 0">待审核</span>
+                      <span class="className3" v-if="data.is_verify == 1">审核通过</span>
+                      <span class="className1" v-if="data.is_verify == 2">审核未通过</span>
+                    </div>
                     <div class="auAndClass" >
-                      <span class="className">{{data.voicetype}}</span>
                       <span class="author">{{data.creator}}</span>
                     </div>
                 </div>
@@ -252,9 +254,9 @@
             .className{
               float: right;
               font-size: 12px;
-              color: #FFCC66;
+              color: rgb(255,73,73);
               letter-spacing: 0;
-              border: 1px solid #FFCC66;
+              border: 1px solid rgb(255,73,73);
               padding: 0px 1px;
             }
           }
@@ -279,7 +281,30 @@
 .hrfont{
   font-size: 0.5rem;
 }
-
+.className1{
+    float: right;
+    font-size: 12px;
+    color: rgb(255,73,73);
+    letter-spacing: 0;
+    border: 1px solid rgb(255,73,73);
+    padding: 0px 1px;
+}
+.className2{
+  float: right;
+  font-size: 12px;
+  color: rgb(77,179,255);
+  letter-spacing: 0;
+  border: 1px solid rgb(77,179,255);;
+  padding: 0px 1px;
+}
+.className3{
+  float: right;
+  font-size: 12px;
+  color: rgb(19,206,102);
+  letter-spacing: 0;
+  border: 1px solid rgb(19,206,102);
+  padding: 0px 1px;
+}
 footer{
 
 }
