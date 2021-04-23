@@ -51,7 +51,7 @@
       if (pageHeight !== this.pageHeight || this.isWater === false) {
         this.isWater = true
         clearWaterMark()
-        waterMark({watermark_txt: localStorage.getItem('userName').split('-')[1] + ' ' + localStorage.getItem('mobile').split('-')[1] })
+        waterMark({watermark_txt: localStorage.getItem('userName').split('-')[1] + ' ' + localStorage.getItem('usercode').split('-')[1] })
       }
     },
     mounted (){
