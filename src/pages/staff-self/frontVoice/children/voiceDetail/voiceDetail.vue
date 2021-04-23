@@ -21,7 +21,7 @@
          <!--  {{data.content}}
           111<br/> 12 -->
         </div>
-        <img v-lazy="path.viewUrl"  v-for='path in pathItem'>
+        <img :src="baseUrl + path.viewUrl.substring(find(path.viewUrl,'/',2)+1)"  v-for='path in pathItem' style="width: 50%; height: 50%;">
       </figure>
     </section>
     <footer>
@@ -44,10 +44,12 @@
 import { ProgressBar, HrHeader } from 'hr-ui'
 import { ajax } from 'hr-utils'
 import { Lazyload, Toast} from 'mint-ui';
+import { host} from '../../../../../utils/hostConfig'
   export default {
     name: 'sendVoice',
     data (){
       return {
+        baseUrl: host,
         data : {},
         count : {
           replyCount: 0,
@@ -131,6 +133,13 @@ import { Lazyload, Toast} from 'mint-ui';
              'fresh' : freshFlag
           }
         })
+      },
+      find (str, cha, num) {
+        var x = str.indexOf(cha)
+        for (var i = 0; i < num; i++) {
+          x = str.indexOf(cha, x + 1)
+        }
+        return x
       }
     }
   }
