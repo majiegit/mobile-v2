@@ -25,19 +25,23 @@
             &nbsp;&nbsp;{{item.calendartime}}&nbsp;&nbsp;签到成功<span v-if="item.dr == 1">（外勤）</span>
           </span>
         </div>
-        <div id="emptydiv" class="emptydiv" v-if="this.checkdatalist.length == 0" style="padding-top: 30%; text-align: center;">
+        <div id="emptydiv" class="emptydiv" v-if="this.checkdatalist.length == 0" style="padding-top: 20%; text-align: center;">
           <img src="../../../../../static/img/pages/application/noCheck.svg">
         </div>
       </div>
-      <div class="checkbtn" @click="checkout()" :style="{'background': checkstate == 1 ? '#26a2ff' : 'rgb(118, 224, 251)'}">
-        <span>签到</span>
-        <span>{{hours}}:{{minutes}}</span>
+      <div style="width: 100%; height: 22%;">
+        <div class="checkbtn" @click="checkout()" :style="{'background': checkstate == 1 ? '#26a2ff' : 'rgb(118, 224, 251)'}">
+          <span>签到</span>
+          <span>{{hours}}:{{minutes}}</span>
+        </div>
       </div>
-      <div class="reload">
-        <span style="color: #26a2ff;display: inline-block;width: 22%;text-align: right;" @click="upField">
-          <i class="hrfont hr-Arrow2"></i>外勤上报
-        </span>
-        <span class="reloadSpan" :style="{'display': checkstate == 0 ? 'inline-block' : 'none'}">不在考勤范围&nbsp;<a @click="reload()">重新定位</a></span>
+      <div style="width: 100%; height: 6%; position: relative;">
+        <div class="reload" style="width: 100%; float: left;position: absolute;bottom: 0px;">
+          <span style="color: #26a2ff;display: inline-block;width:1.7rem;text-align: right;" @click="upField">
+            <i class="hrfont hr-Arrow2"></i>外勤上报
+          </span>
+          <span class="reloadSpan" :style="{'display': checkstate == 0 ? 'inline-block' : 'none'}">不在考勤范围&nbsp;<a @click="reload()">重新定位</a></span>
+        </div>
       </div>
     </div>
   </div>
@@ -76,16 +80,16 @@
         let _this = this
          let map, geolocation
          //加载地图，调用浏览器定位服务
-         map = new AMap.Map('container', {
-           resizeEnable: true
-         })
+         map = new AMap.Map('container')
          map.plugin('AMap.Geolocation', function() {
            geolocation = new AMap.Geolocation({
              enableHighAccuracy: true,//是否使用高精度定位，默认:true
-            // timeout: 5000,//超过10秒后停止定位，默认：无穷大
-             noGeoLocation:1,
-             //noGeoLocation:3,
-             useNative: true
+             timeout: 10000,//超过10秒后停止定位，默认：无穷大
+           //  GeoLocationFirst: true
+            // noGeoLocation:1,
+            // noIpLocate: 3
+            // noGeoLocation:3,
+            // useNative: true
            })
            map.addControl(geolocation)
            geolocation.getCurrentPosition()
@@ -97,24 +101,12 @@
            AMap.event.addListener(geolocation, 'error', function(error) {
              if ('query' == type) {
                _this.initCheckData(null, null, 'query')
+
              } else {
                Indicator.close()
                _this.checkstate = 0
              }
-             switch (error.code) {
-               case error.PERMISSION_DENIED:
-                 Toast('用户拒绝位置访问')
-                 break
-               case error.POSITION_UNAVAILABLE:
-                 Toast('位置信息不可用')
-                 break
-               case error.TIMEOUT:
-                 Toast('获取位置超时')
-                 break
-               case error.UNKNOWN_ERROR:
-                 Toast('未知的错误')
-                 break
-             }
+             console.log(error)
            })
          })
       },
@@ -170,8 +162,6 @@
                 let state = data.data.state
                 if (state == 200) {
                   Toast('签到成功')
-                } else if (state == 500) {
-                  Toast('不在考勤范围，请重新定位')
                 }
               }
             } else {
@@ -266,7 +256,7 @@
       .checklist {
         margin-bottom: 3px;
         overflow-y: auto;
-        height: 60%;
+        height: 50%;
         .checkHistory {
           padding: 5% 10% 0%;
           .first {
@@ -291,7 +281,7 @@
         text-align: center;
         color: white;
         margin: 0 38%;
-        padding: 25px 20px;
+        padding: 20px 20px;
         border-radius: 1rem;
       }
       .reload {

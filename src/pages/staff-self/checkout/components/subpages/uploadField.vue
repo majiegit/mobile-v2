@@ -95,14 +95,15 @@
         })
         let _this = this
         let location = this.$route.query.location
+        console.log('location',location)
         if (location != undefined) {
           let bodyParam = {
-            key: '2c1198a67b45fa59aae6488a86787429',
+            key: 'be714871c55d21783c0418ed3c78a08c',
             location: location
           }
           axios({
             method: 'POST',
-            url: 'http://restapi.amap.com/v3/geocode/regeo',
+            url: 'https://restapi.amap.com/v3/geocode/regeo',
             data: JSON.stringify(bodyParam),
             params: bodyParam
           }).then(response => {
@@ -123,7 +124,7 @@
           map.plugin('AMap.Geolocation', function () {
             geolocation = new AMap.Geolocation({
               enableHighAccuracy: true,//是否使用高精度定位，默认:true
-              timeout: 100          //超过10秒后停止定位，默认：无穷大
+              timeout: 10000          //超过10秒后停止定位，默认：无穷大
             })
             map.addControl(geolocation)
             geolocation.getCurrentPosition()
@@ -131,12 +132,12 @@
               _this.latitude = data.position.getLat()
               _this.longitude = data.position.getLng()
               let bodyParam = {
-                key: '2c1198a67b45fa59aae6488a86787429',
+                key: 'be714871c55d21783c0418ed3c78a08c',
                 location: _this.longitude + ',' + _this.latitude
               }
               axios({
                 method: 'POST',
-                url: 'http://restapi.amap.com/v3/geocode/regeo',
+                url: 'https://restapi.amap.com/v3/geocode/regeo',
                 data: JSON.stringify(bodyParam),
                 params: bodyParam
               }).then(response => {
@@ -145,25 +146,13 @@
                   _this.location = response.data.regeocode.formatted_address
                 }
               }).catch(response => {
-                console.log(response)
+                Indicator.close()
               });
             })//返回定位信息
             AMap.event.addListener(geolocation, 'error', function (error) {
+              console.log(error)
               Indicator.close()
-              switch (error.code) {
-                case error.PERMISSION_DENIED:
-                  Toast('用户拒绝位置访问')
-                  break
-                case error.POSITION_UNAVAILABLE:
-                  Toast('位置信息不可用')
-                  break
-                case error.TIMEOUT:
-                  Toast('获取位置超时')
-                  break
-                case error.UNKNOWN_ERROR:
-                  Toast('未知的错误')
-                  break
-              }
+              Toast(error.message)
             })
           })
         }

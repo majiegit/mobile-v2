@@ -2,15 +2,15 @@
   <div id="checkIndex">
     <mt-tabbar v-model="selected" fixed>
       <mt-tab-item id="1">
-        <i class="hrfont hr-sign" style="display: block;padding-bottom: 3px;font-size: 26px;"></i>
+        <i class="hrfont hr-sign" style="display: block;padding-bottom: 0.05rem;font-size: 26px;"></i>
         签到
       </mt-tab-item>
       <mt-tab-item id="2">
-        <i class="hrfont hr-calendar02" style="display: block;padding-bottom: 3px;font-size: 26px;"></i>
+        <i class="hrfont hr-calendar02" style="display: block;padding-bottom: 0.05rem;font-size: 26px;"></i>
         我的外勤
       </mt-tab-item>
       <mt-tab-item id="3">
-        <i class="hrfont hr-examination-and-approval" style="display: block;padding-bottom: 3px;font-size: 26px;"></i>
+        <i class="hrfont hr-examination-and-approval" style="display: block;padding-bottom: 0.05rem;font-size: 26px;"></i>
         外勤审批
       </mt-tab-item>
     </mt-tabbar>
@@ -78,6 +78,7 @@
   #checkIndex .mint-tabbar.is-fixed {
     border-top: 1px solid #ececec;
     height: 8%;
+    min-height: 47px;
   }
   #checkIndex .mint-tab-item.is-selected {
     color: #26a2ff;

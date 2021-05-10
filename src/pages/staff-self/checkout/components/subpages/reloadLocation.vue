@@ -63,7 +63,7 @@
         map.plugin('AMap.Geolocation', function() {
           geolocation = new AMap.Geolocation({
             enableHighAccuracy: true,//是否使用高精度定位，默认:true
-            timeout: 100          //超过10秒后停止定位，默认：无穷大
+            timeout: 10000          //超过10秒后停止定位，默认：无穷大
           })
           map.addControl(geolocation)
           geolocation.getCurrentPosition()
@@ -76,7 +76,7 @@
               center: [_this.longitude, _this.latitude]
             })
             let bodyParam = {
-              key: '2c1198a67b45fa59aae6488a86787429',
+              key: 'be714871c55d21783c0418ed3c78a08c',
               location: _this.longitude + ',' + _this.latitude,
               radius: '500',
               offset: '20',
@@ -85,7 +85,7 @@
             }
             axios({
               method: 'GET',
-              url: 'http://restapi.amap.com/v3/place/around',
+              url: 'https://restapi.amap.com/v3/place/around',
               data: JSON.stringify(bodyParam),
               params : bodyParam
             }).then(response => {
@@ -100,21 +100,8 @@
             });
           })//返回定位信息
           AMap.event.addListener(geolocation, 'error', function(error) {
+            console.log(error)
             Indicator.close()
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                Toast('用户拒绝位置访问')
-                break
-              case error.POSITION_UNAVAILABLE:
-                Toast('位置信息不可用')
-                break
-              case error.TIMEOUT:
-                Toast('获取位置超时')
-                break
-              case error.UNKNOWN_ERROR:
-                Toast('未知的错误')
-                break
-            }
           })
         })
       },
