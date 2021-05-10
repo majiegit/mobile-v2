@@ -33,8 +33,12 @@
         <div v-for="(list,index) in listData" style="margin-top: 0.1rem;" :key="index">
             <div @click="gopage({ path: 'salarydetail',name:'salarydetail',params: { detaildata: JSON.stringify(list), secret: secret, timestart:timestart }})">
                   <div style="width: 100%; height: 2.3rem; font-size: 0.3rem; background: #fff; border-radius: 5px;   padding-left: 0.2rem;">
-                    <p style="width: 50%; height: 0.9rem; line-height: 0.9rem;  font-size: 0.4rem;">
-                      {{list.salaryList[list.countItem[0]].content.slice(0,7)}}
+                    <p style="width: 50%; height: 0.9rem; line-height: 0.9rem; float: left">
+                      <span style="font-size: 0.4rem;">{{list.salaryList[list.countItem[0]].content.slice(0,7)}}</span>
+                    </p>
+                    <p style="width: 50%; height: 0.9rem; line-height: 0.9rem;float: left">
+                      <span>发放日期 :</span>
+                      <span>{{list.salaryList[list.countItem[0]].content}}</span>
                     </p>
                     <p style=" color: #333333; width: 50%; height: 0.6rem; float: left">
                       <span>{{list.salaryList[list.countItem[2]].title}} : </span>
@@ -45,12 +49,12 @@
                       <span>{{list.salaryList[list.countItem[1]].content}}</span>
                     </p>
                     <p style=" color: #333333; width: 50%;height: 0.6rem; float: left">
-                      <span>{{list.salaryList[list.countItem[3]].title}} : </span>
-                      <span>{{list.salaryList[list.countItem[3]].content}}</span>
+                      <span>{{list.salaryList[list.countItem[4]].title}} : </span>
+                      <span>{{list.salaryList[list.countItem[4]].content}}</span>
                     </p>
                     <p style=" color: #333333; width: 50%;height: 0.6rem; float: left">
-                      <span>{{list.salaryList[list.countItem[2]].title}} : </span>
-                      <span>{{list.salaryList[list.countItem[2]].content}}</span>
+                      <span>{{list.salaryList[list.countItem[3]].title}} : </span>
+                      <span>{{list.salaryList[list.countItem[3]].content}}</span>
                     </p>
                   </div>
                  <!-- <span style="color: #0CAEF5;fontSize:0.32rem;" >{{list.salaryList[list.countItem[1]].content}}</span>
@@ -286,7 +290,7 @@ export default {
              shouldTotal += parseFloat(data[i].salaryList.wa_dataf_1.content)
              practicalTotal += parseFloat(data[i].salaryList.wa_dataf_3.content)
              chargeTotal += parseFloat(data[i].salaryList.wa_dataf_2.content)
-             taxTotal += parseFloat(data[i].salaryList.wa_dataf_2.content)
+             taxTotal += parseFloat(data[i].salaryList.wa_dataf_5.content)
            }
             if(data.length !== 0){
               _this.summarizing = [
