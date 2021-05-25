@@ -24,7 +24,8 @@ import approveCenter from './approveCenter'
 import psnreg from './psnreg'
 import trns from './transmng'
 import dimission from './dimissionmng'
-
+// 路由增加HR绩效和考勤统计
+import hrpegrow from './hrpegrow'
 
 Router.prototype.goBack = function () {
 　　this.isBack = true
@@ -49,7 +50,9 @@ const routeArr = [].concat(
   approveCenter,
   psnreg, //路由增加"人员转正" by tianxx5 20190108
   trns,
-  dimission
+  dimission,
+  hrpegrow,
+  images
 )
 Vue.use(Router)
 const router = new Router({

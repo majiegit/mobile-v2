@@ -8,7 +8,8 @@ import MintUI from 'mint-ui'
 import axios from 'axios'
 import "mint-ui/lib/style.css"
 import store from './store/index'
-
+import VCharts from 'v-charts'
+Vue.use(VCharts)
 String.prototype._trim = function() {
 		return decodeURI(encodeURI(this).replace(/%E2%80%86/g, ""))
 }
