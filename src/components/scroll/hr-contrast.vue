@@ -21,11 +21,11 @@
                        <!-- <span class="h-list-mark"><i  class="icon hrfont hr-check-mark2"></i></span> -->
                    </div>
                 </div>
-            
+
             </div>
             <div class="h-prompt" :class="{active:isActive}"><span>您还没有选择条目</span></div>
         </div>
-      
+
     </mt-popup>
 </div>
 
@@ -56,8 +56,7 @@
     import { Toast} from 'mint-ui'
 
     import myHeader from '../../components/base/my-header.vue'
-    import tools from '../../utils/tools'
-
+    import {getStorage} from 'hr-utils'
     export default {
       name:'hrcontrast',
         components: {
@@ -86,7 +85,7 @@
                 }
               },
         },
-        methods:{      
+        methods:{
             openpopup(){//打开遮罩
                 this.popupVisible=true;
                 this.getData();
@@ -96,7 +95,7 @@
                 this.seldata=[];
             },
             getData:function(){//获取参照数据
-               this.listdata=tools.getStorage(this.param);
+               this.listdata= getStorage(this.param);
             },
             sellist:function(ldata){//选择展示列表中的数据
                 this.seldata.push(ldata)
@@ -125,7 +124,7 @@
 
 
         }
-        
+
 
     }
 </script>
@@ -184,7 +183,7 @@
                     color: @0CAEF5-color;
                     i{
                         font-size:0.4rem;
-                    
+
                     }
 
                 }
@@ -217,6 +216,6 @@
             }
         }
 
-    }    
+    }
 
 </style>
