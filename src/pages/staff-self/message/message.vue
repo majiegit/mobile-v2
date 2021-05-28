@@ -18,8 +18,11 @@
               <mt-cell style="border-bottom: solid 2px #F5F5F5" v-for="(item,index) in infoData"
                        :key="index" :title="item.subject.length<=24?item.subject:item.subject.toString().substring(0,24)+'...'" is-link
                        @click.native="oMsgDetail(item.pkmessage)"
-                       :value="item.content"/>
-
+                       :value="item.content" v-if="item.isread === 'N'"/>
+              <mt-cell style="border-bottom: solid 2px #F5F5F5; color: rgb(206, 212, 225)" v-for="(item,index) in infoData"
+                       :key="index" :title="item.subject.length<=24?item.subject:item.subject.toString().substring(0,24)+'...'" is-link
+                       @click.native="oMsgDetail(item.pkmessage)"
+                       :value="item.content" v-if="item.isread === 'Y'"/>
             </mt-loadmore>
           </mt-tab-container-item>
           <mt-tab-container-item id="2">
@@ -29,7 +32,11 @@
               :bottom-method="loadBottomTwo"
               :bottom-all-loaded="allLoadedtwo"
               ref="loadmoretwo">
-              <mt-cell style="border-bottom: solid 2px #F5F5F5" v-for="item in workData" :title="item.subject.length<=24?item.subject:item.subject.toString().substring(0,24)+'...'" :value="item.content" is-link @click.native="skipClick(item.pkmessage, item.isread, item.detail, item.msgtype, item.ishandled)">
+              <mt-cell style="border-bottom: solid 2px #F5F5F5" v-for="item in workData" :title="item.subject.length<=24?item.subject:item.subject.toString().substring(0,24)+'...'" :value="item.content" is-link @click.native="skipClick(item.pkmessage, item.isread, item.detail, item.msgtype, item.ishandled)"
+                       v-if="item.isread === 'N'">
+              </mt-cell>
+              <mt-cell style="border-bottom: solid 2px #F5F5F5;  color: rgb(206, 212, 225)" v-for="item in workData" :title="item.subject.length<=24?item.subject:item.subject.toString().substring(0,24)+'...'" :value="item.content" is-link @click.native="skipClick(item.pkmessage, item.isread, item.detail, item.msgtype, item.ishandled)"
+                       v-if="item.isread === 'Y'">
               </mt-cell>
             </mt-loadmore>
 
@@ -50,7 +57,7 @@
         selected: '1',
         infoData: [],
         workData: [],
-        newType: 'noread',
+        newType: 'all',
         pagesize: 16,
         bottomPullTextone: '上拉刷新',
         bottomPullTexttwo: '上拉刷新',
