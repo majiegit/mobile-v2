@@ -29,7 +29,7 @@
 
 </template>
 <script>
-  import { ajax, setStorage, getStorage, formatTime, formatdata, waterMark, clearWaterMark} from 'hr-utils'
+  import { ajax, setStorage, getStorage, formatTime,fetchData, formatdata, waterMark, clearWaterMark,clearStorage} from 'hr-utils'
   import { myHeader, imgPicker } from 'hr-ui'
   import { Picker,Popup,Toast,Cell,Indicator } from 'mint-ui'
   import hrList2 from './hr-list2.vue'
@@ -66,16 +66,81 @@
       if (pageHeight !== this.pageHeight || this.isWater === false) {
         this.isWater = true
         clearWaterMark()
-        waterMark({watermark_txt: localStorage.getItem('userName').split('-')[1] + ' ' + localStorage.getItem('mobile').split('-')[1] })
+        waterMark({watermark_txt: localStorage.getItem('userName').split('-')[1] + ' ' + localStorage.getItem('usercode').split('-')[1] })
       }
     },
     mounted (){
       this.pageHeight = Math.max(document.body.scrollHeight, document.body.clientHeight)
       this.currentHeight = document.documentElement.clientHeight - this.$refs.myheader.offsetHeight - 10;
-      this.getdata();
-
+      // 判断是否单点操作
+      var  isSso = window.location.hash.indexOf("login_name")
+      if( isSso != -1){
+        this.login()
+      }else{
+        this.getdata();
+      }
     },
     methods:{
+      //获取请求url中用户编码的参数
+      getUrlParams: function() {
+        //debugger
+        var params = null;
+        if(!!window.location.hash) {
+          //console.log(window.location.search);
+          //params = window.location.hash.substr(12);
+          if(!!location.hash.split('?')) {
+            params = location.hash.split('?')[1];
+            if(!!params) {
+              params = params.replace(/\=/g, '":"');
+              params = params.replace(/\&/g, '","');
+              params = '{"' + params + '"}';
+              //alert("params = " + params);
+              params = JSON.parse(params);
+            }
+          }
+        }
+        return params;
+      },
+      login: function() {
+        let _this = this;
+        let loginName = this.getUrlParams().login_name
+        // 获取token
+        fetchData({
+          url : '/hrssc/portal/plantform/getTokenTest',
+          method : 'POST',
+          param : {userCode: loginName},
+          contentType : "application/json",
+          success : function(data) {
+            if(data.statusCode == 200) {
+              let token = data.data.token
+              let param = {token: token, usercode: loginName}
+              fetchData({
+                url : 'hrssc/portal/plantform/loginSsorm',
+                method : 'POST',
+                param : param,
+                contentType : "application/json",
+                success : function(data) {
+                  let userinfo = {};
+                  if(data.data.loginSuccess == true) {
+                    userinfo.usercode = data.data.usercode
+                    userinfo.sessionId = data.data.sessionId
+                    userinfo.userRole = data.data.userRole
+                    setStorage('userinfo', userinfo)
+                    setStorage('usercode', userinfo.usercode)
+                    setStorage('userName', data.data.userName)
+                    setStorage('mobile', data.data.mobile)
+                    _this.getdata()
+                  }else{
+                    Toast({
+                      message: data.data.message
+                    });
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
       fjmanage(){
         var _this = this;
         this.$router.push({
