@@ -2,6 +2,7 @@
  * Created by tianxx5 on 2018/1/17.
  */
 const performance = r => require.ensure([], () => r(require('@/pages/staff-self/performanceInfo/performance.vue')), 'performance')
+const performanceCheck = r => require.ensure([], () => r(require('@/pages/staff-self/performanceInfo/performancecheck.vue')), 'performancecheck')
 const myPerformance = r => require.ensure([], () => r(require('@/pages/staff-self/performanceInfo/myPerformance.vue')), 'myPerformance')
 const target = r => require.ensure([], () => r(require('@/pages/staff-self/performanceInfo/components/target.vue')), 'target')
 const indexFill = r => require.ensure([], () => r(require('@/pages/staff-self/performanceInfo/indexFill.vue')), 'indexFill')
@@ -75,5 +76,10 @@ export default [
     path : '/scoreDetail',
     name : 'scoreDetail',
     component : scoreDetail
+  },
+  {
+    path : '/performanceCheck',
+    name : 'performanceCheck',
+    component : performanceCheck
   }
 ]
