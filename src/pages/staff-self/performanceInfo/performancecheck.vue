@@ -182,12 +182,37 @@
       getIsNoCheck(){
       },
       saveData(){
-        alert(111)
+        let saveData = JSON.stringify(this.checkDataList)
+        let url = this.windowPageContent + '/approveresult/save'
+        let data = {
+          changedArray: saveData
+        }
+        axios({
+          url: url,
+          method: 'post',
+          data: data,
+          transformRequest: [function (data) {
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(res => {
+          if (res.data.success) {
+            Toast('保存成功！')
+            this.queryCheckList()
+          } else {
+            Toast(res.data.msg)
+          }
+        })
       },
       // 审核数据
       approveClick () {
-        console.log(this.checkDataList)
-       // this.approve()
+        this.approve()
       /*//  this.queryUnAbleApproveCount()
         let schForceDist = true
         let groupForceDist = true
@@ -431,7 +456,12 @@
         this.queryCheckList()
       },
       goApp() {
-        this.$router.push('application')
+        this.$router.push({
+          name: 'performance',
+          params: {
+            secret: this.$route.params.secret
+          }
+        })
       },
       routerpush(path) {
         this.$router.push(path)
