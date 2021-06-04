@@ -290,7 +290,7 @@
       getHrefInfo(){
         this.innerMap.transtypevalue = this.$route.params.transway
         if(this.innerMap.transtypevalue === 1){
-          this.transwayname = '跨部门调动'
+          this.transwayname = '组织内调动'
         }else{
           this.transwayname = '跨组织调动'
         }

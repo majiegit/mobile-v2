@@ -41,7 +41,7 @@
         transtypes: '',
         transtypesname: '必填项',
         transway: [
-          {pk_trnstype: 1, trnstypename: '跨部门调动'},
+          {pk_trnstype: 1, trnstypename: '组织内调动'},
           {pk_trnstype: 2, trnstypename: '跨组织调动'}
           ],
         transtype: [],

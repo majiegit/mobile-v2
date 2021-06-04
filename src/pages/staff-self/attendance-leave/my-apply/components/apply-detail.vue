@@ -471,7 +471,7 @@
                 调配方式：
               </div>
               <div class="area-right">
-                <label>{{billInfo.innermap.transtypevalue === 1?'跨部门调动':'跨组织调动'}}</label>
+                <label>{{billInfo.innermap.transtypevalue === 1?'组织内调动':'跨组织调动'}}</label>
               </div>
             </div>
             <div class="msgtypediv" style="padding-left: 0;">
