@@ -26,6 +26,9 @@ import trns from './transmng'
 import dimission from './dimissionmng'
 // 路由增加HR绩效和考勤统计
 import hrpegrow from './hrpegrow'
+// 路由增加静态数据
+import images from './images'
+//import liucheng from './liucheng'
 
 Router.prototype.goBack = function () {
 　　this.isBack = true
@@ -53,6 +56,8 @@ const routeArr = [].concat(
   dimission,
   hrpegrow,
   images
+  //,
+  //liucheng
 )
 Vue.use(Router)
 const router = new Router({
@@ -60,5 +65,17 @@ const router = new Router({
   routes: routeArr,
   base: './'
 })
+/*router.beforeEach((to, from, next) => {
+
+
+  if(localStorage.getItem('userinfo')){
+  if(to.path==='/login'){
+    router.go(-2)
+  }else{
+    next()
+  }
+}
+next()
+})*/
 export default router
 
