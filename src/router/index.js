@@ -55,9 +55,8 @@ const routeArr = [].concat(
   trns,
   dimission,
   hrpegrow,
-  images
-  //,
-  //liucheng
+  images,
+  liucheng
 )
 Vue.use(Router)
 const router = new Router({

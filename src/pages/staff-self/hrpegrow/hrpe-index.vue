@@ -41,7 +41,7 @@
         <div style='width: 100%;padding: 1% 0;'>
           <span style='color: #535353; font-size: 16px; font-weight: bold;margin-left: 10px; font-family: Microsoft YaHei;'>历史成绩</span>
         </div>
-        <ve-line :data='chartData' height='300px' :settings='chartDataSetting' :extend='extend' :tooltip="options.tooltip"></ve-line>
+        <ve-line :data='chartData' :settings='chartDataSetting' :extend='extend' :tooltip="options.tooltip"></ve-line>
       </div>
       <div style='width: 100%; background: #fff; float: left; margin-top: 1%;'>
         <div style='width: 100%;padding-top:1%;'>
@@ -52,8 +52,8 @@
             <p style="width: 50%; float: left">开始日期:</p> <p  style="width: 50%; float: left">{{item.beginDate}}</p>
             <p style="width: 50%; float: left">结束日期:</p> <p  style="width: 50%; float: left">{{item.endDate}}</p>
             <p style="width: 50%; float: left;">考核名称:</p> <p  style="width: 50%; float: left">{{item.schemeName}}</p>
-            <p style="width: 50%; float: left;">分数:</p> <p  style="width: 50%; float: left">{{item.schemeScore}}</p>
-            <p style="width: 50%; float: left;">成绩:</p> <p  style="width: 50%; float: left">{{item.glbdef1}}1</p>
+            <p style="width: 50%; float: left;">考核成绩:</p> <p  style="width: 50%; float: left">{{item.schemeScore}}</p>
+            <p style="width: 50%; float: left;">新考核等级:</p> <p  style="width: 50%; float: left">{{item.glbdef1}}</p>
             <p style="width: 50%; float: left;">组织:</p> <p  style="width: 50%; float: left">{{item.orgAss}}</p>
           </div>
         </div>
@@ -97,6 +97,14 @@
           },
           axisTick: {
             show: true
+          },
+          axisLabel: {
+            interval:0,
+            /*formatter:function(value)
+            {
+              return value.split("").join("\n");
+            },*/
+            rotate: 60
           }
         },
         series: {
