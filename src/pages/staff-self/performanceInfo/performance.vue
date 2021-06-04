@@ -1,18 +1,42 @@
 <!--绩效信息主页 by tianxx5 20180117-->
 <template>
   <div id="performance">
-    <header>
+    <header class="myheader">
       <hr-header
         title='绩效信息'
         v-on:lcallBack='goApp'
       >
       </hr-header>
     </header>
-    <!--<div style="width: 95%;text-align: center;margin-left: 2.5%;margin-top: 1.2rem;">-->
-      <!--<img src="../../../../static/img/pages/performanceInfo/performance-bg23-1.png" style="height: 30%; width: 95%"/>-->
-    <!--</div>-->
+    <div class="div_1">
+      <div class="body_div body_div_1" @click="routerpush('/myPerformance')" >
+        <img src="../../../../static/img/pages/performanceInfo/1.png" class="body_div_img"/>
+        <span class="div_title">我的绩效</span>
+      </div>
+      <div class="body_div body_div_2" @click="routerpush('/indexFill')">
+        <img src="../../../../static/img/pages/performanceInfo/2.png" class="body_div_img"/>
+        <span class="div_title">指标填报</span>
+      </div>
+      <div class="body_div body_div_3" @click="routerpush('/fillApprove')">
+        <img src="../../../../static/img/pages/performanceInfo/3.png" class="body_div_img"/>
+        <span class="div_title">指标审核</span>
+      </div>
+      <div class="body_div body_div_4" @click="routerpush('/assessmentScore')">
+        <img src="../../../../static/img/pages/performanceInfo/4.png" class="body_div_img"/>
+        <span class="div_title">考核评分</span>
+      </div>
+      <div class="body_div body_div_5" @click="routerpush('/performanceCheck')">
+        <img src="../../../../static/img/pages/performanceInfo/5.png" class="body_div_img"/>
+        <span class="div_title" style=" position: absolute; right: 18%;">绩效结果审核</span>
+      </div>
+    </div>
+
+
+  <!--  &lt;!&ndash;<div style="width: 95%;text-align: center;margin-left: 2.5%;margin-top: 1.2rem;">&ndash;&gt;
+      &lt;!&ndash;<img src="../../../../static/img/pages/performanceInfo/performance-bg23-1.png" style="height: 30%; width: 95%"/>&ndash;&gt;
+    &lt;!&ndash;</div>&ndash;&gt;
     <section style="text-align: center;">
-      <!--<label style="font-size: 36px; color: #0caef5;">绩效管理</label>-->
+      &lt;!&ndash;<label style="font-size: 36px; color: #0caef5;">绩效管理</label>&ndash;&gt;
       <figure style="text-align: left">
         <div style="text-align: center">
           <div class="icondiv" @click="routerpush('/myPerformance')" style="color: #ffffff;">
@@ -39,7 +63,8 @@
         </div>
         <div class= 'clear'></div>
       </figure>
-    </section>
+    </section>-->
+
   </div>
 </template>
 
@@ -66,96 +91,54 @@
   }
 </script>
 
-<style lang="less" scoped>
-  @fff-color : #ffffff;
-  @333-color : #333333;
-  html{
-    div{
-      #performance{
-        background-image: url(../../../../static/img/pages/performanceInfo/performance-xueshan_1.png);
-        background-size: 100% 60%;
-      }
-    }
-    header{
-      position: fixed;
-      height: .88rem;
-      width: 100%;
-      line-height: .88rem;
-    }
-    section{
-      height: calc(~'100% - 2.7rem');
-      figure {
-        margin-top: 4rem;
-        /*border: 1px solid #666666;*/
-        border-radius: 150px 150px 0 0 ;
-        background-color: #0caef5;
-        padding-bottom: 3.5rem;
-        /*filter:alpha(opacity=50);*/
-        /*-moz-opacity:0.5;*/
-        /*-khtml-opacity: 0.5;*/
-        /*opacity: 0.5;*/
-        div{
-          .icondiv:hover{
-            /*text-shadow: 5px 5px 10px #CCCCCC;*/
-          }
-          .icondiv{
-            /*border: #666666 1px solid;*/
-          }
-          .clear{
-            clear: both;
-          }
-        }
-        .img{
-          opacity: 1;
-          -webkit-transform: scale(1);
-          -moz-transform: scale(1);
-          -ms-transform: scale(1);
-          -o-transform: scale(1);
-          transform: scale(1);
-          -webkit-transition: all 0.35s ease-in-out;
-          -moz-transition: all 0.35s ease-in-out;
-          transition: all 0.35s ease-in-out;
-          position: relative;
-          width: 220px;
-          height: 220px;
-          border-radius: 50%;
-          margin-left: 2.8rem;
-        }
-        .img :before{
-          position: absolute;
-          display: block;
-          width: 40%;
-          height: 40%;
-          border-radius: 50%;
-          box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.6), 0 1px 2px rgba(0, 0, 0, 0.3);
-          -webkit-transition: all 0.35s ease-in-out;
-          -moz-transition: all 0.35s ease-in-out;
-          transition: all 0.35s ease-in-out;
-        }
-        .img :before, :after {
-          -webkit-box-sizing: border-box;
-          -moz-box-sizing: border-box;
-          box-sizing: border-box;
-        }
-        .info{
-          transform: scale(0.5);
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          text-align: center;
-          border-radius: 50%;
-          -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-          background: #333333;
-          opacity: 0;
-          -webkit-transition: all 0.35s ease-in-out;
-          -moz-transition: all 0.35s ease-in-out;
-          transition: all 0.35s ease-in-out;
-        }
-      }
-    }
+<style>
+  .div_1{
+    width: 100%;
+    height: 95%;
+    overflow: auto;
+    position: relative;
+    background: #fff;
+    padding: 0 2%;
+  }
+  .body_div{
+    width: 100%;
+    height: 85px;
+    border-radius: 5px;
+    margin-top: 2%;
+    position: relative;
+  }
+  .body_div_img{
+    position: relative;
+    left: 7%;
+    width:91.5px;
+    height: 79.5px;
+  }
+  .div_title{
+    color: #FFFFFF;
+    line-height: 85px;
+    font-size: 18px;
+    font-family: Microsoft YaHei !important;
+    position: absolute;
+    right: 22%;
+  }
+  .myheader{
+    height: .88rem;
+    line-height: .88rem;
+  }
+  .body_div_1{
+    background: linear-gradient(90deg, #F1506F 0%, #FF9B65 100%);
+  }
+  .body_div_2{
+    background: linear-gradient(90deg, #7696ED 0%, #2EB6FF 100%);
+  }
+  .body_div_3{
+    background: linear-gradient(90deg, #F0975B 0%, #FFCE30 100%);
+  }
+  .body_div_4{
+    background: linear-gradient(90deg, #64CF25 0%, #40EC8B 99%);
+  }
+  .body_div_5{
+    background: linear-gradient(90deg, #F1506F 0%, #FF9B65 100%);
   }
 
 </style>
