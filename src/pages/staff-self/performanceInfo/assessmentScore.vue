@@ -76,6 +76,7 @@
         this.pk_schemeperiod = this.$route.query.pk_schemeperiod
         this.schemeperiodname = this.$route.query.schemeperiodname
       };
+      this.inittarget();
     },
     watch:{
       pk_schemeperiod(){
