@@ -8,8 +8,8 @@
         >
         </hr-header>
       </header>
-    <div class="mp-body" style="width: 100%; height:15%;  background: #2479ED; float: left; position: relative;">
-      <div style="float: left; width: 85%; height: 35%; position: absolute; top: 6%; left: 7.5%">
+    <div class="mp-body" style="width: 100%; float: left; position: relative;">
+<!--      <div style="float: left; width: 85%; height: 35%; position: absolute; top: 6%; left: 7.5%">
         <input type="text" placeholder="请输入关键词搜索" style="color: #B3B3B3; font-size:0.1rem;
        padding: 0 15% 0 5%; height: 100%; width: 85%; border-radius: 25px;
         background-image: url('../../../../static/img/pages/performanceInfo/check-search.png');
@@ -17,8 +17,23 @@
         background-size: auto 0.4rem;
         background-position: 95% center;"/>
         <span class="quxiao">取消</span>
+      </div>-->
+      <div class="s-box">
+        <div class="my-box" style="margin-top: 0.1rem;">  <!--@click="opensearch()"-->
+          <div v-if="fangAnId == ''">
+            <div class="searchimgdiv">
+              <i class="hrfont hr-magnifier" style="color:#adadad;"></i>
+            </div>
+            <div class="searchmsg">
+              <p class="txt">请选择方案期间</p>
+            </div>
+          </div>
+          <div v-else>
+            <p><i class="hrfont hr-organization-structure" style="color: #666666;"></i>&nbsp;{{fangAnName}}-{{hrpeName}}</p>
+          </div>
+        </div>
       </div>
-      <div style="position: relative; width: 100%; height: 50%; top: 50%;">
+      <div style="position: relative; width: 100%; height: 50%; margin-top: 0.15rem">
         <section class="job-module" style="width: 100%; height: 100%;">
           <dl class="retrie">
             <dt>
@@ -121,8 +136,10 @@
         grade_items:[],
         checkDataList:[],
         hrpeValue: '',
+        hrpeName: '',
         hrpeTimeList:[],
         fangAnId: '',
+        fangAnName: '',
         fangAnList:[],
         value:1,
         currPage : 0,
@@ -155,6 +172,17 @@
       this.queryHrpeFangAn()
     },
     methods: {
+      // 选择方案
+      opensearch(){
+        this.$router.push({
+          name: 'schperiod',
+          query: {
+            source: 'assessmentScore',
+            pk_schemeperiod: this.fangAnList,
+            schemeperiodname: this.fangAnName
+          }
+        })
+      },
       // 取消
       quxiao(){
         this.queryCheckList()
@@ -395,6 +423,7 @@
             if(res.data.resultData.length != 0){
               this.hrpeTimeList  = res.data.resultData
               this.hrpeValue = this.hrpeTimeList[0].value
+              this.hrpeName = this.hrpeTimeList[0].text
               this.queryCheckList()
             }
           }
@@ -414,6 +443,7 @@
             if(res.data.resultData[0].totalCount != 0){
               this.fangAnList =  res.data.resultData[1]
               this.fangAnId = this.fangAnList[0].id
+              this.fangAnName = this.fangAnList[0].pe_sch_evaname
               this.queryHrpeJiXiao(this.fangAnId)
             }
         })
@@ -446,12 +476,14 @@
       },
       selectFangAnId(index){
         this.fangAnId = this.fangAnList[index].id
+        this.fangAnName = this.fangAnList[index].pe_sch_evaname
         $('.downlist').hide();
         this.queryGradeItem(this.fangAnId)
         this.queryHrpeJiXiao(this.fangAnId)
       },
       selectHrpeValue(index){
         this.hrpeValue = this.hrpeTimeList[index].value
+        this.hrpeName = this.hrpeTimeList[index].text
         $('.downlist').hide();
         this.queryCheckList()
       },
@@ -551,6 +583,7 @@
   .btnBg{
     background: #999999 !important;
   }
+
   .button{
     font-size: 0.25rem;
     color: #FFFFFF;
@@ -560,7 +593,7 @@
     box-shadow: 0px 2px 6px 2px rgba(60, 60, 60, 0.16);
     border-radius: 0.1rem;
     position: relative;
-    top: 25%;
+    top: 20%;
     margin-left: 3%;
   }
   .select option{
@@ -761,5 +794,26 @@
   .slide li a.select { background-color: #fff; }
   .select_option_color{
     color: #007ccf !important;
+  }
+  .body{
+    width: 100%;
+    height: 100%;
+  }
+  .my-box{
+    text-align: center;
+    background: #ffffff;
+    border-radius: .1rem;
+    height: .7rem;
+    line-height: .7rem;
+  }
+  .my-box .searchimgdiv{
+    display: inline;
+  }
+  .my-box .searchmsg {
+    display: inline;
+  }
+  .my-box .searchmsg p{
+    display: inline;
+    color:#adadad;
   }
 </style>

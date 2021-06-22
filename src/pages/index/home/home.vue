@@ -37,16 +37,12 @@
                     </div>
                     <div class="tittles">
                         <span class="orgname">
-                          {{userinfo.orgname}}&nbsp;&nbsp; <br v-if="orgNameLength > 10 "/>
+                          {{userinfo.orgname}}&nbsp;&nbsp;
                           {{userinfo.deptname}}
                         </span>
                     </div>
-                    <div class="days" v-if='userinfo.joinsysyear > 0' style="word-wrap: break-word; word-break: normal;">
-                        今天是您加入{{userinfo.orgname}} <br v-if="orgNameLength > 10 "/>
-                      第 <span>{{userinfo.joinsysyear}}</span> 年 <span>{{userinfo.joinsysdate}}</span> 天
-                    </div>
-                    <div class="days" v-else>
-                        今天是您加入{{userinfo.orgname}}的第 <span>{{userinfo.joinsysdate}}</span> 天
+                    <div class="days">
+                        今天是您加入厦门港务集团第 <span>{{userinfo.joinsysyear}}</span> 年 <span>{{userinfo.joinsysdate}}</span> 天
                     </div>
                 </div>
             </div>
@@ -140,7 +136,6 @@
         name : 'application',
         data () {
             return {
-                orgNameLength: 0,
                 nowDate: new Date().toLocaleDateString().replace('/','-').replace('/','-'),
                 userName: '',
                 shengriShow: false,
@@ -394,23 +389,14 @@
             getUserinfo() {
                 let detailInfo = {},
                     sUserinfo = getStorage('userinfo')
-
-                // 避免重复获取用户信息
-                if(sUserinfo.pk_psndoc){
-                    this.userinfo = sUserinfo
-                    return
-                }
-
                 fetchData({
                   url : 'hrssc/portal/psnbase/getPsnInfo',
                   method : 'POST',
                   param : {},
-                  mock : false,
                   contentType : "application/json",
                   success : data => {
                     detailInfo = data.data[0];
                     this.userinfo = detailInfo
-                    this.orgNameLength = this.userinfo.orgname.length
                     setStorage('userinfo', Object.assign(sUserinfo,detailInfo))
                    // 判断是不是周年庆
                     if(this.userinfo.joinsysdate === 1 && this.userinfo.joinsysyear !== 0 ) {
@@ -590,7 +576,7 @@
                     .photo{
                         float: left;
                         height:1.2rem;
-                        width: 1rem;
+                        width: 1.2rem;
                         margin-top: 0.05rem;
                         border-radius: 50%;
                         overflow: hidden;
@@ -644,8 +630,8 @@
                             }
                         }
                         .days{
-                            overflow-x: scroll;
-                            white-space:nowrap;
+                           // overflow-x: scroll;
+                           // white-space:nowrap;
                             width: 100%;
                             font-size:0.24rem;
                             color:#888888;

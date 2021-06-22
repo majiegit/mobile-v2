@@ -83,13 +83,16 @@
                   mock : false,
                   contentType : "application/json",
                   success : function(data) {
+                    console.log(data)
                     if(data.data.loginSuccess == true) {
                       Indicator.close()
-                      userinfo.usercode = _this.id
+                      userinfo.usercode = data.data.usercode
                       userinfo.sessionId = data.data.sessionId
                       userinfo.userRole = data.data.userRole
                       setStorage('userinfo', userinfo)
                       setStorage('usercode', userinfo.usercode)
+                      setStorage('userName', data.data.userName)
+                      setStorage('mobile', data.data.mobile)
                       // _this.getUserInfo()
                       _this.$router.push('application')
                       // TODO 测试和本地开发方便，正式使用应该删除

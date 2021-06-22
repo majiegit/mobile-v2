@@ -49,12 +49,12 @@
         </div>
         <div style='width: 100%;padding:2%;'>
           <div style="width: 100%; background: #f9f9f9; border-radius: 5px; padding: 2% 3% 2% 3%; float: left; margin-top: 2%; line-height:24px;"  v-for="(item,index) in tableData" :key="index">
-            <p style="width: 50%; float: left">开始日期:</p> <p  style="width: 50%; float: left">{{item.beginDate}}</p>
-            <p style="width: 50%; float: left">结束日期:</p> <p  style="width: 50%; float: left">{{item.endDate}}</p>
-            <p style="width: 50%; float: left;">考核名称:</p> <p  style="width: 50%; float: left">{{item.schemeName}}</p>
-            <p style="width: 50%; float: left;">考核成绩:</p> <p  style="width: 50%; float: left">{{item.schemeScore}}</p>
-            <p style="width: 50%; float: left;">新考核等级:</p> <p  style="width: 50%; float: left">{{item.glbdef1}}</p>
-            <p style="width: 50%; float: left;">组织:</p> <p  style="width: 50%; float: left">{{item.orgAss}}</p>
+            <div style="width: 100%;float: left"><p style="width: 50%; float: left">开始日期:</p> <p  style="width: 50%; float: left">{{item.beginDate}}</p></div>
+            <div style="width: 100%;float: left"><p style="width: 50%; float: left">结束日期:</p> <p  style="width: 50%; float: left">{{item.endDate}}</p></div>
+            <div style="width: 100%;float: left"> <p style="width: 50%; float: left;">考核名称:</p> <p  style="width: 50%; float: left">{{item.schemeName}}</p></div>
+            <div style="width: 100%;float: left"><p style="width: 50%; float: left;">考核成绩:</p> <p  style="width: 50%; float: left">{{item.schemeScore}}</p></div>
+            <div style="width: 100%;float: left"> <p style="width: 50%; float: left;">新考核等级:</p> <p  style="width: 50%; float: left">{{item.glbdef1}}</p></div>
+            <div style="width: 100%;float: left"> <p style="width: 50%; float: left;">组织:</p> <p  style="width: 50%; float: left">{{item.orgAss}}</p></div>
           </div>
         </div>
       </div>

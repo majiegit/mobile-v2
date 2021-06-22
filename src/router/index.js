@@ -28,7 +28,7 @@ import dimission from './dimissionmng'
 import hrpegrow from './hrpegrow'
 // 路由增加静态数据
 import images from './images'
-//import liucheng from './liucheng'
+import liucheng from './liucheng'
 
 Router.prototype.goBack = function () {
 　　this.isBack = true
@@ -59,11 +59,21 @@ const routeArr = [].concat(
   liucheng
 )
 Vue.use(Router)
+
 const router = new Router({
   mode: 'hash',
   routes: routeArr,
   base: './'
 })
+
+ // 服务器打包测试  不带#
+/*const router = new Router({
+  mode: 'history',
+  routes: routeArr,
+  base: '/mobile'
+})*/
+
+// 跳转
 /*router.beforeEach((to, from, next) => {
 
 

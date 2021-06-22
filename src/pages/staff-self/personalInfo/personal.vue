@@ -72,8 +72,10 @@
     mounted (){
       this.pageHeight = Math.max(document.body.scrollHeight, document.body.clientHeight)
       this.currentHeight = document.documentElement.clientHeight - this.$refs.myheader.offsetHeight - 10;
-      // 判断是否单点操作
-      var  isSso = window.location.hash.indexOf("login_name")
+      // 判断是否单点操作这块好像写错了
+      var  isSso = window.location.href.indexOf("login_name")
+      console.log(isSso,'oooooooooooooooooo')
+
       if( isSso != -1){
         this.login()
       }else{
@@ -85,11 +87,11 @@
       getUrlParams: function() {
         //debugger
         var params = null;
-        if(!!window.location.hash) {
+        if(!!window.location.href) {
           //console.log(window.location.search);
           //params = window.location.hash.substr(12);
-          if(!!location.hash.split('?')) {
-            params = location.hash.split('?')[1];
+          if(!!location.href.split('?')) {
+            params = location.href.split('?')[1];
             if(!!params) {
               params = params.replace(/\=/g, '":"');
               params = params.replace(/\&/g, '","');
@@ -135,7 +137,8 @@
                       message: data.data.message
                     });
                   }
-                }
+                },
+
               })
             }
           }
