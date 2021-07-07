@@ -42,7 +42,7 @@
                         </span>
                     </div>
                     <div class="days">
-                        今天是您加入厦门港务集团第 <span>{{userinfo.joinsysyear}}</span> 年 <span>{{userinfo.joinsysdate}}</span> 天
+                        今天是您加入{{userinfo.orgname}}第 <span>{{userinfo.joinsysyear}}</span> 年 <span>{{userinfo.joinsysdate}}</span> 天
                     </div>
                 </div>
             </div>
