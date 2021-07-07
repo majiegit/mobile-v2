@@ -29,21 +29,13 @@
             </span>
           </div>
           <div v-if="this.jbxxFlag == true">
-            <div class="msgtypediv" style="padding-left: 0;">
-              <div class="area-left">
-                离职类型：
-              </div>
-              <div class="area-right">
-                <label>{{billInfo.innermap.trnstypename }}</label>
-              </div>
+            <div class="area" >
+              <label>离职类型：</label>
+              <span style="float:right;padding-right: .4rem" >{{ billInfo.innermap.trnstypename}}</span>
             </div>
-            <div class="msgtypediv" style="padding-left: 0;">
-              <div class="area-left">
-                离职原因：
-              </div>
-              <div class="area-right">
-                <label>{{billInfo.innermap.trnreasonname }}</label>
-              </div>
+            <div class="area" >
+              <label>离职原因：</label>
+              <span style="float:right;padding-right: .4rem" >{{ billInfo.innermap.trnreasonname}}</span>
             </div>
             <div class="timeLabel">
               <label>生效时间</label>
@@ -120,11 +112,11 @@
             </div>
             <div class="area">
               <label>解除：</label>
-              <span>{{billInfo.innermap.isrelease===true?'是':'否'}}</span>
+              <span style="float:right;padding-right: .4rem">{{billInfo.innermap.isrelease===true?'是':'否'}}</span>
             </div>
             <div class="area">
               <label>终止：</label>
-              <span>{{billInfo.innermap.isend===true?'是':'否'}}</span>
+              <span style="float:right;padding-right: .4rem">{{billInfo.innermap.isend===true?'是':'否'}}</span>
             </div>
           </div>
           <div class="index" @click="toggle('zxxxFlag')">
@@ -136,11 +128,11 @@
           <div v-if="this.zxxxFlag">
             <div class="area">
               <label>停用离职人员：</label>
-              <span>{{billInfo.innermap.isdisablepsn===true?'是':'否'}}</span>
+              <span style="float:right;padding-right: .4rem">{{billInfo.innermap.isdisablepsn===true?'是':'否'}}</span>
             </div>
             <div class="area">
               <label>加入黑名单：</label>
-              <span>{{billInfo.innermap.ifaddblack===true?'是':'否'}}</span>
+              <span style="float:right;padding-right: .4rem">{{billInfo.innermap.ifaddblack===true?'是':'否'}}</span>
             </div>
           </div>
         </div>
@@ -185,7 +177,9 @@
           innermap: {}
         },
         billType: '',
+        type: this.$route.query.type,
         pk_h: '',
+        billpk: this.$route.query.billpk,
         tbm_h_name: '',
         bill_code: '',
         orgName: '',
@@ -208,7 +202,6 @@
 
     methods: {
       goApp() {
-//        this.$router.push({name: 'approveCenter'})
         history.go(-1)
       },
 
@@ -232,11 +225,12 @@
         Indicator.open()
         let _this = this
         fetchData({
-          url: 'hrssc/portal/trnquery/queryVOData',
+          url: 'hrssc/portal/tbmquery/getBillInfo',
           method: 'post',
           param: {
             pk_h: _this.billpk,
-            billtype: 'dimission'
+            billtype: 'dimission',
+            source: "mobile"
           },
           mock: false,
           contentType: "application/json",

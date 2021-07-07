@@ -948,6 +948,46 @@
           }
         })
       },
+      // 提交之前，查询是否需要指派
+      selectIsZhiPai () {
+        this.loading = true
+        fetchData({
+          url: 'hrssc/portal/wf/judgeAssign',
+          method: 'post',
+          param: {
+            pk_h: this.pk_h,
+            billtype: this.$route.query.billtype,
+            oprationtype: 'Commit'
+          },
+        })
+        fetchData('hrssc/portal/wf/judgeAssign', {
+          data: {
+            pk_h: this.pk_h,
+            billtype: this.$route.query.billtype,
+            oprationtype: 'Commit'
+          },
+          type: 'POST',
+          headers: {'Content-Type': 'application/json'}
+        }).then(res => {
+          this.loading = false
+        if (res.statusCode === 200) {
+          if (res.data !== {}) {
+            this.zhiPaiData = res.data.data
+            if (this.zhiPaiData.isAssigned === 'true') {
+              // 需要调用指派并提交
+              this.zhiPaiDialogVisible = true
+            } else {
+              // 无需指派，直接提交
+              this.submitForm()
+            }
+          } else {
+            // 无需指派，直接提交
+            this.submitForm()
+          }
+        }
+      })
+      },
+
       callback(){
         let url = '';
         if(this.$route.query.billtype == 'away'){
