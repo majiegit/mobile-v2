@@ -111,6 +111,12 @@
                     this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=加班&billtype=overtime&bill_code='+strArr[2])
                   } else if (strArr[1] === '6402') { // 签卡
                     this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=签卡&billtype=signcard&bill_code='+strArr[2])
+                  } else if (strArr[1] === '6407') { // 销差
+                    this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=销差&billtype=awayoff&bill_code='+strArr[2])
+                  } else if (strArr[1] === '6406') { // 销假
+                    this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=销假&billtype=leaveoff&bill_code='+strArr[2])
+                  } else if (strArr[1] === '6115') { // 离职
+                    this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=离职&billtype=dimission&bill_code='+strArr[2])
                   }
                 } else {
                   if (strArr[1].startsWith('6404')) { // 请假
@@ -121,6 +127,12 @@
                     this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=加班&billtype=overtime&bill_code='+strArr[2])
                   } else if (strArr[1].startsWith('6402')) { // 签卡
                     this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=签卡&billtype=signcard&bill_code='+strArr[2])
+                  } else if (strArr[1].startsWith('6407')) { // 销差
+                    this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=销差&billtype=awayoff&bill_code='+strArr[2])
+                  } else if (strArr[1].startsWith('6406')) { // 销假
+                    this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=销假&billtype=leaveoff&bill_code='+strArr[2])
+                  } else if (strArr[1].startsWith('6115')) { // 离职
+                    this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=离职&billtype=dimission&bill_code='+strArr[2])
                   }
                 }
               } else {
@@ -133,6 +145,12 @@
                     this.$router.push('/overtimeapprove?billpk=' + strArr[0] + '&type=0')
                   } else if (strArr[1] === '6402') { // 签卡
                     this.$router.push('/signcardapprove?billpk=' + strArr[0] + '&type=0')
+                  } else if (strArr[1] === '6407') { // 销差
+                    this.$router.push('/awayoffapprove?billpk=' + strArr[0] + '&type=0')
+                  } else if (strArr[1] === '6406') { // 销假
+                    this.$router.push('/leaveoffapprove?billpk=' + strArr[0] + '&type=0')
+                  } else if (strArr[1] === '6115') { // 离职
+                    this.$router.push('/demissionapprove?billpk=' + strArr[0] + '&type=0')
                   }
                 } else {
                   if (strArr[1].startsWith('6404')) { // 请假
@@ -143,6 +161,12 @@
                     this.$router.push('/overtimeapprove?billpk=' + strArr[0] + '&type=0')
                   } else if (strArr[1].startsWith('6402')) { // 签卡
                     this.$router.push('/signcardapprove?billpk=' + strArr[0] + '&type=0')
+                  } else if (strArr[1].startsWith('6407')) { // 销差
+                    this.$router.push('/awayoffapprove?billpk=' + strArr[0] + '&type=0')
+                  } else if (strArr[1].startsWith('6406')) { // 销假
+                    this.$router.push('/leaveoffapprove?billpk=' + strArr[0] + '&type=0')
+                  } else if (strArr[1].startsWith('6115')) { // 离职
+                    this.$router.push('/demissionapprove?billpk=' + strArr[0] + '&type=0')
                   }
                 }
               }
@@ -156,6 +180,12 @@
                   this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=加班&billtype=overtime&bill_code='+strArr[2])
                 } else if (strArr[1] === '6402') { // 签卡
                   this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=签卡&billtype=signcard&bill_code='+strArr[2])
+                } else if (strArr[1] === '6407') { // 销差
+                  this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=签卡&billtype=awayoff&bill_code='+strArr[2])
+                } else if (strArr[1] === '6406') { // 销假
+                  this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=销假&billtype=leaveoff&bill_code='+strArr[2])
+                } else if (strArr[1] === '6115') { // 离职
+                  this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=离职&billtype=dimission&bill_code='+strArr[2])
                 }
               } else {
                 if (strArr[1].startsWith('6404')) { // 请假
@@ -166,6 +196,12 @@
                   this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=加班&billtype=overtime&bill_code='+strArr[2])
                 } else if (strArr[1].startsWith('6402')) { // 签卡
                   this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=签卡&billtype=signcard&bill_code='+strArr[2])
+                } else if (strArr[1].startsWith('6407')) { // 销差
+                  this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=销差&billtype=awayoff&bill_code='+strArr[2])
+                } else if (strArr[1].startsWith('6406')) { // 销假
+                  this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=销假&billtype=leaveoff&bill_code='+strArr[2])
+                } else if (strArr[1].startsWith('6115')) { // 离职
+                  this.$router.push('/attendance-leave/my-apply/apply-detail?pk_h=' + strArr[0] + '&approve_state=-1&tbm_h_name=离职&billtype=dimission&bill_code='+strArr[2])
                 }
               }
             }
