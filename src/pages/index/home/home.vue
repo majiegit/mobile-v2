@@ -15,7 +15,7 @@
             <!--</div>-->
             <div class="search" ref='search'>
 
-                <div style="width: 18%;display: inline-block;position: fixed; right: 0px;" @click='handleMessageClick()'>
+                <div style="width: 14%;display: inline-block;position: fixed; right: 0px;" @click='handleMessageClick()'>
                   <i style="color: #F5F5F5;font-size: 0.5rem;padding-top: 0.1rem" class="icon hrfont hr-remind sn-clock"></i>
                   <sup class="el-badge__content is-fixed" style="" v-if="this.newsArray.length !=0 ">{{this.newsArray.length}}</sup>
                 </div>
@@ -30,7 +30,7 @@
                     <img v-if="userinfo.photo" v-bind:src= "userinfo.photo" />
                     <i v-if="!userinfo.photo" class="icon hrfont hr-head"></i>
                 </div>
-                <div class="personalInfo-entries" v-if='userinfo'>
+                <div class="personalInfo-entries" v-if='userinfo.name'>
                     <div class="name">{{userinfo.name}}
                         <span class="r-border" v-show='userinfo.postname'> </span>
                         {{userinfo.postname}}
@@ -567,7 +567,7 @@
                 margin-top: -0.88rem;
                 height: calc(~'100% - 2.7rem');
                 .personalInfo-bar{
-                    height: 2.17rem;
+                    height: 2.06rem;
                     width: 91.5%;
                     padding: 0.32rem;
                     margin: 0rem 4.25%;
@@ -581,15 +581,17 @@
                         border-radius: 50%;
                         overflow: hidden;
                         background: #f5f5f5;
+                        text-align: center;
                         img{
                             display:block;
                             height: 100%;
                             width: 100%;
                         }
                         i{
-                            margin-left: .1rem;
-                            font-size: .8rem;
-                            color: #d4d4d4;
+                          position: relative;
+                          top: .1rem;
+                          font-size: .8rem;
+                          color: #d4d4d4;
                         }
                     }
                     .personalInfo-entries{
@@ -638,7 +640,7 @@
                             letter-spacing:0;
                             text-align:left;
                             span{
-                                color: #0caef5;
+                              color: #0caef5;
                             }
                         }
                     }
