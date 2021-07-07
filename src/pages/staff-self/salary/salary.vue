@@ -1,6 +1,6 @@
 <template>
 
-<div >
+<div style="height: 100%; overflow: auto;">
     <div class="myheader">
       <hr-header
         title='查询薪资'
