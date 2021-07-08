@@ -96,7 +96,7 @@ export default {
     border-bottom: 1px solid #ececec;
     .um-h-left{
         float: left;
-        width: 33%;
+        width: 28%;
         height: 100%;
         .hrfont {
             color: #0CAEF5;
@@ -116,7 +116,7 @@ export default {
         }
     }
     .um-h-middle{
-        width: 33%;
+        width:43%;
         overflow: hidden;
         font-size: 0.36rem;
         letter-spacing: 0;
@@ -129,7 +129,7 @@ export default {
     }
     .um-h-right{
         float: right;
-        width: 33%;
+        width: 28%;
         padding-right: 0.2rem;
         h4{ 
             float: right;
