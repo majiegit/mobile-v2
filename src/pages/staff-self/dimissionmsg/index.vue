@@ -85,8 +85,8 @@
         </div>
       </div>
     </div>
-    <footer>
-      <span @click='save'>保存</span>
+    <footer @click='save'>
+      <span>保存</span>
     </footer>
     <div>
       <hrScrollcustom :scrolldata="refdata" v-on:increment="incrementTotal" ref="scrollpopup"></hrScrollcustom>
@@ -297,7 +297,6 @@
         })
       },
       save() {
-        Indicator.open()
         let _this = this
         //校验数据
         if(_this.innerMap.effecttime === 'undefined' || _this.innerMap.effecttime === '') {
@@ -314,6 +313,7 @@
             return
           }
         })
+        Indicator.open()
         fetchData({
           url: 'hrssc/portal/trnquery/savebill',
           method: 'post',
