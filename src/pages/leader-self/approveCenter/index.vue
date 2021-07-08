@@ -399,6 +399,8 @@
     width: 100%;
     line-height: .88rem;
     border-bottom: 1px solid #ececec;
+    z-index: 1;
+    background: #ffffff;
   }
   #approveBody {
     padding-top: 1rem;
