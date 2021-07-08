@@ -534,13 +534,13 @@
                     height: 1rem;
                    .el-badge__content{
                      background-color: #ff4949;
-                     border-radius: 0.5rem;
+                     border-radius: 50%;
                      color: #fff;
                      display: inline-block;
                      font-size: 0.2rem;
                      height: 0.4rem;
                      width: 0.4rem;
-                     line-height: 0.3rem;
+                     line-height: 0.35rem;
                      padding: 0.01rem;
                      text-align: center;
                      border: 0.02rem solid #fff;
