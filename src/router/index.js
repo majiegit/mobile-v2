@@ -28,7 +28,6 @@ import dimission from './dimissionmng'
 import hrpegrow from './hrpegrow'
 // 路由增加静态数据
 import images from './images'
-import liucheng from './liucheng'
 
 Router.prototype.goBack = function () {
 　　this.isBack = true
@@ -55,8 +54,7 @@ const routeArr = [].concat(
   trns,
   dimission,
   hrpegrow,
-  images,
-  liucheng
+  images
 )
 Vue.use(Router)
 

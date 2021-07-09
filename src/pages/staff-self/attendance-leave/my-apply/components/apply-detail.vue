@@ -13,7 +13,7 @@
       >
       </hr-header>
     </header>
-    <section>
+    <section v-show="show">
       <div class="postmark" v-show='approve_state == 0'>
         <img src="../../../../../../static/img/pages/attendance-leave/nopass.png" >     <!-- 未通过邮戳 -->
       </div>
@@ -725,7 +725,7 @@
       </div>
     </section>
     <footer v-if='approve_state == -1'>
-      <span @click="sumbitLeav('submit')">提交</span>
+      <span @click="selectIsZhiPai">提交</span>
       <span @click='reEdit'>编辑</span>
     </footer>
     <footer v-else>
@@ -737,17 +737,29 @@
         <span style="width: 100%; border-right: none" @click="showApproveStates()">审批状态</span>
       </div>
     </footer>
+    <ZhiPai
+      :popupVisible = zhiPaiVisible
+      :topData="zhiPaiData.userInfo"
+      :pk_h="pk_h"
+      :billtype="billType">
+    </ZhiPai>
   </div>
 </template>
 
 <script>
-  import { HrHeader } from 'hr-ui'
+  import { HrHeader ,ZhiPai} from 'hr-ui'
   import { fetchData, getStorage } from 'hr-utils'
   import { Toast, Indicator, MessageBox } from 'mint-ui'
   export default {
-    name: 'test',
+    components: {
+      ZhiPai,
+      HrHeader
+    },
     data (){
       return {
+        zhiPaiVisible: false,
+        zhiPaiData:{},
+        show: false,
         title: '',
         billInfo: {
           data: {
@@ -779,7 +791,6 @@
       }
     },
 
-    components: { HrHeader },
 
     created() {
       let user = getStorage('userinfo').name
@@ -839,15 +850,6 @@
       toggle(flag){
         this[flag] = !this[flag]
       },
-      goOA() {
-        this.$router.push({
-          name: 'frame',
-          query: {
-            url: encodeURIComponent('https://www.hao123.com/')
-          }
-        })
-      },
-
       queryBillInfo() {
         Indicator.open()
         let _this = this
@@ -870,10 +872,9 @@
               this.billInfo.newmap = res.data.newmap
               this.billInfo.oldmap = res.data.oldmap
             }else {
-
               this.billInfo = res.data
             }
-            console.log(this.billInfo)
+            _this.show = true
           },
           error : err=> {
             Indicator.close()
@@ -932,7 +933,8 @@
           param: {
             billKey: this.pk_h,
             billtype: this.$route.query.billtype,
-            oprationtype: 'Commit'
+            oprationtype: 'Commit',
+            assignUsers: []
           },
           mock: false,
           contentType: "application/json",
@@ -950,7 +952,6 @@
       },
       // 提交之前，查询是否需要指派
       selectIsZhiPai () {
-        this.loading = true
         fetchData({
           url: 'hrssc/portal/wf/judgeAssign',
           method: 'post',
@@ -959,35 +960,25 @@
             billtype: this.$route.query.billtype,
             oprationtype: 'Commit'
           },
-        })
-        fetchData('hrssc/portal/wf/judgeAssign', {
-          data: {
-            pk_h: this.pk_h,
-            billtype: this.$route.query.billtype,
-            oprationtype: 'Commit'
-          },
-          type: 'POST',
-          headers: {'Content-Type': 'application/json'}
-        }).then(res => {
-          this.loading = false
-        if (res.statusCode === 200) {
-          if (res.data !== {}) {
-            this.zhiPaiData = res.data.data
-            if (this.zhiPaiData.isAssigned === 'true') {
-              // 需要调用指派并提交
-              this.zhiPaiDialogVisible = true
-            } else {
-              // 无需指派，直接提交
-              this.submitForm()
+          success: res =>{
+            if (res.statusCode === 200) {
+              if (res.data !== {}) {
+                this.zhiPaiData = res.data.data
+                if (this.zhiPaiData.isAssigned === 'true') {
+                  // 需要调用指派并提交
+                  this.zhiPaiVisible = true
+                } else {
+                  // 无需指派，直接提交
+                  this.sumbitLeav('submit')
+                }
+              } else {
+                // 无需指派，直接提交
+                this.sumbitLeav('submit')
+              }
             }
-          } else {
-            // 无需指派，直接提交
-            this.submitForm()
           }
-        }
-      })
+        })
       },
-
       callback(){
         let url = '';
         if(this.$route.query.billtype == 'away'){
