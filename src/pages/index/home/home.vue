@@ -420,22 +420,23 @@
               mock : false,
               contentType : "application/json",
               success : data => {
-                console.log(data)
-              // 判断是不是生日
+                // 判断是不是生日
                 let  birehdate = data.data.bd_psndoc[0].birthdate;
-                let  dateBiredh = birehdate.substring(birehdate.indexOf("-")+1)
-                let date = new Date();
-                let mon = date.getMonth()  + 1;         //getMonth()返回的是0-11，则需要加1
-                if(mon <=9){                                     //如果小于9的话，则需要加上0
-                  mon = "0" + mon;
-                }
-                let day = date.getDate();                   //getdate()返回的是1-31，则不需要加1
-                if(day <=9){                                     //如果小于9的话，则需要加上0
-                  day = "0" + day;
-                }
-                let nowdate = mon + "-"+ day
-                if( dateBiredh === nowdate ){
-                  this.getSession(this.shengriType,1)
+                if(birehdate !== undefined) {
+                  let dateBiredh = birehdate.substring(birehdate.indexOf("-") + 1)
+                  let date = new Date();
+                  let mon = date.getMonth() + 1;         //getMonth()返回的是0-11，则需要加1
+                  if (mon <= 9) {                                     //如果小于9的话，则需要加上0
+                    mon = "0" + mon;
+                  }
+                  let day = date.getDate();                   //getdate()返回的是1-31，则不需要加1
+                  if (day <= 9) {                                     //如果小于9的话，则需要加上0
+                    day = "0" + day;
+                  }
+                  let nowdate = mon + "-" + day
+                  if (dateBiredh === nowdate) {
+                    this.getSession(this.shengriType, 1)
+                  }
                 }
               },
               error : function(error) {
