@@ -4,11 +4,11 @@
       v-model="popupVisible"
       position="right"
       :modal ='false'
-      style="width: 100%; height: 100%;"
+      style="width: 100%; height: 100%; z-index: 2;"
       :closeOnClickModal="closeOnClickModal">
       <div class="myheader">
         <div class="um-h-left">
-        <i class="icon hrfont hr-Arrow2" @mousedown="lClick($event)"></i>
+        <i class="icon hrfont hr-Arrow2" @click="exitChick()"></i>
         </div>
         <div class="um-h-middle">流程指派</div>
       </div>
@@ -52,8 +52,8 @@
           </ul>
         </div>
         <div class="user_foot">
-          <button style="margin-left: 4%;">确认</button>
-          <button style="margin-left: 4%;">取消</button>
+          <button style="margin-left: 4%;" @click="submit">确认</button>
+          <button style="margin-left: 4%;" @click="exitChick()">取消</button>
         </div>
       </div>
     </mt-popup>
@@ -62,6 +62,7 @@
 
 <script>
   import { fetchData } from 'hr-utils'
+  import { Indicator,Toast } from 'mint-ui'
   export default {
     name: 'ZhiPai',
     compent:{
@@ -69,12 +70,12 @@
     data: function() {
       return {
         buttonDisabledBackground: 'rgb(192, 192, 192)',
-        buttonDisblay: true,
         modal: false,
         closeOnClickModal: false,
         bottomData: [],
         topCheckData: [],
-        bottomCheckData: []
+        bottomCheckData: [],
+        assignUsers: []
       }
     },
     props: {
@@ -122,6 +123,7 @@
       topButton(e) {
         if(e.target.style.background !== this.buttonDisabledBackground) {
           if(this.bottomCheckData.length === 0 ){
+            Toast("请选择上移的数据")
           }else {
             for(var i=0; i<this.bottomCheckData.length; i++) {
               for(var j= 0; j<this.bottomData.length; j++){
@@ -144,6 +146,7 @@
       bottomButton(e) {
         if(e.target.style.background !== this.buttonDisabledBackground) {
           if (this.topCheckData.length === 0) {
+            Toast("请选择下移的数据")
           } else {
             for (var i = 0; i < this.topCheckData.length; i++) {
               for (var j = 0; j < this.topData.length; j++) {
@@ -188,14 +191,20 @@
       goApp() {
        this.popupVisible = false
       },
-      assignUsers(){
-        var assignUsers = []
+      assignUsersMethon(){
         for(var i =0 ; i<this.bottomData.length; i++){
-          assignUsers.push(this.bottomData[i].key)
+          this.assignUsers.push(this.bottomData[i].key)
         }
-        return assignUsers
       },
       submit(){
+        this.assignUsers = []
+        this.assignUsersMethon()
+        if(this.bottomData.length ===0 ) {
+          Toast("请选择指派人员")
+          return
+        }
+        this.$emit('closepup');
+        Indicator.open('正在提交中')
         let url = '';
         if(this.billtype == 'away'){
           url = 'hrssc/portal/tbmAway/saveAndSubmitAway';
@@ -237,8 +246,7 @@
           mock: false,
           contentType: "application/json",
           success: res=> {
-          Indicator.close()
-            this.approve_state = res.data.approve_state
+            Indicator.close()
             Toast('提交成功')
             this.$router.push({name: 'myApply'})
           },
@@ -247,7 +255,16 @@
             Toast(error.message)
           }
         })
+      },
+      exitChick(){
+        this.popupVisible = false
+        this.topData = []
+        this.bottomData = []
+        this.topCheckData = []
+        this.bottomCheckData = []
+        this.assignUsers = []
       }
+
     },
     updated () {
     },
@@ -355,5 +372,8 @@
     height: 31%;
     color: #FFFFFF;
     border-radius: 7px;
+  }
+  .mint-popup{
+    z-index: 2 !important;
   }
 </style>

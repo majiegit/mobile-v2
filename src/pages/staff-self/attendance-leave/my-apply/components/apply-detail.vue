@@ -725,7 +725,7 @@
       </div>
     </section>
     <footer v-if='approve_state == -1'>
-      <span @click="selectIsZhiPai">提交</span>
+      <span @click="sumbitBill">提交</span>
       <span @click='reEdit'>编辑</span>
     </footer>
     <footer v-else>
@@ -741,7 +741,8 @@
       :popupVisible = zhiPaiVisible
       :topData="zhiPaiData.userInfo"
       :pk_h="pk_h"
-      :billtype="billType">
+      :billtype="billType"
+      @closepup="closepup">
     </ZhiPai>
   </div>
 </template>
@@ -810,7 +811,9 @@
 //        this.$router.push({name: 'myApply'})
         history.go(-1)
       },
-
+      closepup(){
+        this.zhiPaiVisible = false
+      },
       fjmanagement(billId , approve_state){
         //alert("附件管理");
         //console.log("billcode = " + billId);
@@ -851,7 +854,7 @@
         this[flag] = !this[flag]
       },
       queryBillInfo() {
-        Indicator.open()
+        Indicator.open("正在加载中")
         let _this = this
         fetchData({
           url: 'hrssc/portal/tbmquery/getBillInfo',
@@ -899,6 +902,7 @@
         });
       },
       submit(){
+        Indicator.open('正在提交中')
         let url = '';
         if(this.$route.query.billtype == 'away'){
           url = 'hrssc/portal/tbmAway/saveAndSubmitAway';
@@ -950,8 +954,20 @@
           }
         })
       },
+      sumbitBill(){
+        MessageBox.confirm(`确定提交单据?`).then(action => {
+          if(action === 'confirm'){
+            this.selectIsZhiPai()
+          }
+        }).catch(err => {
+            if(err === 'cancel') {
+            Toast('已取消')
+          }
+        });
+      },
       // 提交之前，查询是否需要指派
       selectIsZhiPai () {
+        Indicator.open()
         fetchData({
           url: 'hrssc/portal/wf/judgeAssign',
           method: 'post',
@@ -961,6 +977,7 @@
             oprationtype: 'Commit'
           },
           success: res =>{
+            Indicator.close()
             if (res.statusCode === 200) {
               if (res.data !== {}) {
                 this.zhiPaiData = res.data.data
@@ -969,17 +986,21 @@
                   this.zhiPaiVisible = true
                 } else {
                   // 无需指派，直接提交
-                  this.sumbitLeav('submit')
+                  this.submit('submit')
                 }
               } else {
                 // 无需指派，直接提交
-                this.sumbitLeav('submit')
+                this.submit('submit')
               }
             }
-          }
+          },
+          error: res =>{
+          Indicator.close()
+        }
         })
       },
       callback(){
+        Indicator.open("正在收回中")
         let url = '';
         if(this.$route.query.billtype == 'away'){
           url = 'hrssc/portal/tbmAway/callbackAway';
@@ -1014,7 +1035,9 @@
           param: {
             billKey: this.pk_h,
             billtype: this.$route.query.billtype,
-            oprationtype: 'rollBack'
+            oprationtype: 'rollBack',
+            assignUsers: []
+
           },
           mock: false,
           contentType: "application/json",
@@ -1080,7 +1103,6 @@
   }
   section{
     position: relative;
-    z-index: 2;
     height: 85.0%;
     margin-top: .88rem;
     overflow-y: scroll;
@@ -1310,5 +1332,8 @@
     line-height: 0.8rem;
     color: #0caef5;
     font-size: 0.35rem;
+  }
+  .mint-popup{
+    z-index: 2 !important;
   }
 </style>
