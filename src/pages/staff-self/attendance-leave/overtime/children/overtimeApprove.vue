@@ -280,7 +280,6 @@
   }
   section{
     position: relative;
-    z-index: 2;
     height: 85.0%;
     margin-top: .88rem;
     overflow-y: scroll;

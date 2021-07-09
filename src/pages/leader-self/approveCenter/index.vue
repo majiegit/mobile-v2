@@ -3,12 +3,12 @@
     <div id="title">
       <i class="icon hrfont hr-Arrow2" style="color: #0CAEF5;font-size: 0.6rem;display: inline-block;float: left;" @click="goApp"></i>
       <span style="display: inline-block; text-align: center; width: 90%;font-size: 0.36rem;">
-        审批中心&nbsp;-
-        <select @change="changeLoad" id="typeChange">
-          <option value="0">待办</option>
-          <option value="1">已办</option>
-        </select>
+        审批中心
       </span>
+    </div>
+    <div style="width: 100%; height: .88rem; background: #fff; margin-top: .88rem">
+      <div class="option" :class="selectedOne == '0' ? 'option_click': ''" @click="changeLoad('0')">待办</div>
+      <div class="option" :class="selectedOne == '1' ? 'option_click': ''" @click="changeLoad('1')">已办</div>
     </div>
     <div id="approveBody">
       <mt-navbar v-model="selected">
@@ -179,6 +179,7 @@
   export default {
     data() {
       return {
+        selectedOne: '0',
         allData: [],
         leaveData: [],
         signData: [],
@@ -271,15 +272,13 @@
         this.trnsData = []
         this.dimissionData = []
       },
-      changeLoad() {
-        let el = document.getElementById('typeChange')
-        let index = el.selectedIndex
-        let value = el.options[index].value
+      changeLoad(param) {
+        this.selectedOne = param
         Indicator.open({
           text: '查询中...',
           spinnerType: 'fading-circle'
         })
-        this.getApproveList(value)
+        this.getApproveList(this.selectedOne)
       },
       toDetail(item){
         if(item.type == 0){
@@ -377,7 +376,7 @@
       },
       toDimission(billpk, type){
         this.$router.push({
-          name: 'dimissionapprove',
+          name: 'demissionapprove',
           query: {
             billpk: billpk,
             type: type
@@ -403,10 +402,10 @@
     background: #ffffff;
   }
   #approveBody {
-    padding-top: 1rem;
     background: white;
     height: 100%;
     overflow-y: auto;
+    padding-top: 0.2rem;
   }
   #approveCenter select {
     font-size: 0.36rem;
@@ -448,5 +447,16 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     border-bottom: 0px;
+  }
+  .option{
+    width: 50%;
+    height: .88rem;
+    text-align: center;
+    line-height:.88rem;
+    float: left;
+  }
+  .option_click{
+    border-bottom: 3px solid #26a2ff;
+    color: #26a2ff;
   }
 </style>

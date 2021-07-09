@@ -5,7 +5,7 @@ const hostList = {
     'test123' : 'http://10.211.55.3:8050/',
     'shengaozhengshi' : 'http://115.238.47.59:8098/',
     'test172': 'http://172.20.14.201:8199/',
-    'customer': 'http://192.101.109.48:9090/',  //移动客户测试环境ip
+    'customer': 'http://192.168.43.55:8065/',  //移动客户测试环境ip
     'customerZSC': 'http://10.16.24.13:80/',  //移动客户准生产环境ip
 
     'customerZS': 'http://10.16.120.9:80/',  //移动客户生产环境ip

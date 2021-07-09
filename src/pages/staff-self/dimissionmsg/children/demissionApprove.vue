@@ -189,7 +189,8 @@
         jbxxFlag: true,
         zzqxxFlag: true,
         zzhxxFlag: true,
-        zxxxFlag: true
+        zxxxFlag: true,
+        approve_state: null
       }
     },
 
