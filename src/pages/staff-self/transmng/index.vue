@@ -289,7 +289,7 @@
       },
       getHrefInfo(){
         this.innerMap.transtypevalue = this.$route.params.transway
-        if(this.innerMap.transtypevalue === 1){
+        if(this.innerMap.transtypevalue == '1'){
           this.transwayname = '组织内调动'
         }else{
           this.transwayname = '跨组织调动'
@@ -429,7 +429,6 @@
       },
       queryRefList(type){
         let _this = this
-        Indicator.open()
         let newseries = ''
         if(type === 'newpk_job'){
           for(var i=0; i<this.newtemplet.length; i++){
@@ -438,8 +437,8 @@
             }
           }
           if(!newseries){
-            Toast('请先选择职务类别！')
             return
+            Toast('请先选择职务类别！')
           }
         }
         let newpk_org
@@ -448,6 +447,7 @@
             newpk_org = this.newtemplet[i].value
           }
         }
+        Indicator.open()
         fetchData({
           url: 'hrssc/portal/psnbase/querySeoRef',
           method: 'post',
@@ -551,7 +551,6 @@
         this.$router.push('/application')
       },
       savebill() {
-        Indicator.open()
         let _this = this
         //校验数据
         if(_this.innerMap.effecttime === 'undefined' || _this.innerMap.effecttime === '') {
@@ -568,6 +567,7 @@
             return
           }
         })
+
         if(_this.newcrtmanage.pk_hi_org === 'undefined' || _this.newcrtmanage.pk_hi_org === ''){
           Toast('调配后人事管理组织必填！')
           return
@@ -576,16 +576,25 @@
           Toast('调配后合同管理组织必填！')
           return
         }
-        _this.crtmanage.forEach(function (temp,index) {
-          if(_this.innerMap.transtypevalue === 1 && _this.newcrtmanage.pk_hi_org === temp.pk_old_hi_org){
+
+        if(_this.innerMap.transtypevalue == '1' && _this.oldtemplet[0].value !== _this.newtemplet[0].value){
+          Toast('调配方式为组织内调配时，不允许调配后组织和调配前组织不一致')
+          return
+        }
+        for(var i=0; i<_this.crtmanage.length; i++ ){
+          var temp= _this.crtmanage[i]
+          if(_this.innerMap.transtypevalue == '1' && _this.newcrtmanage.pk_hi_org !== temp.pk_old_hi_org){
             Toast('调配方式为组织内调配时，不允许调配后人事组织和原调配后人事组织不一致')
             return
+            break
           }
-          if(_this.innerMap.transtypevalue === 2 && _this.newcrtmanage.pk_hrcm_org === temp.pk_old_hrcm_org){
-            Toast('调配方式为组织内调配时，不允许调配后合同管理组织和原调配后人事组织不一致')
+          if(_this.innerMap.transtypevalue == '1' && _this.newcrtmanage.pk_hrcm_org !== temp.pk_old_hrcm_org){
+            Toast('调配方式为组织内调配时，不允许调配后合同管理组织不一致')
             return
+            break
           }
-        })
+        }
+        Indicator.open()
         fetchData({
           url: 'hrssc/portal/trnquery/savebill',
           method: 'post',
@@ -602,7 +611,6 @@
           contentType: 'application/json',
           success: function (data) {
             Indicator.close()
-            Toast('保存成功，请预览')
             _this.$router.push({
               name: 'apply-detail',
               query: {
