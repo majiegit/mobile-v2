@@ -52,7 +52,7 @@
           </ul>
         </div>
         <div class="user_foot">
-          <button style="margin-left: 4%;" @click="submit">确认</button>
+          <button style="margin-left: 4%;" @click="submitMethon">确认</button>
           <button style="margin-left: 4%;" @click="exitChick()">取消</button>
         </div>
       </div>
@@ -90,7 +90,13 @@
         }
       },
       pk_h: '',
-      billtype: ''
+      billtype: '',
+      workflownotes: '',
+      billactive: '',
+      submitType: {
+        type: '',
+        default: 'submit'
+      }
     },
     methods: {
       // 全部上移
@@ -196,6 +202,14 @@
           this.assignUsers.push(this.bottomData[i].key)
         }
       },
+      submitMethon(){
+        if (this.submitType === 'submit'){
+          this.submit()
+        }else {
+          this.Approve()
+        }
+      },
+       // 提交
       submit(){
         this.assignUsers = []
         this.assignUsersMethon()
@@ -256,13 +270,49 @@
           }
         })
       },
+      // 审批
+      Approve(){
+        this.assignUsers = []
+        this.assignUsersMethon()
+        if(this.bottomData.length ===0 ) {
+          Toast("请选择指派人员")
+          return
+        }
+        this.$emit('closepup');
+        Indicator.open({
+          text: '单据审批中，请稍等...',
+          spinnerType: 'fading-circle'
+        })
+        let url = 'hrssc/portal/tbmquery/doApprove';
+        fetchData({
+          url: url,
+          method: 'post',
+          param: {
+            pk_h: this.pk_h,
+            billtype: this.billtype,
+            assignUsers: this.assignUsers,
+            workflownotes: this.workflownotes,
+            billactive: this.billactive
+          },
+          mock: false,
+          contentType: "application/json",
+          success: res=> {
+            Indicator.close()
+            Toast('已审批')
+            this.$router.push({name: 'approveCenter'})
+          },
+          error: error=> {
+            Indicator.close()
+            Toast(error.message)
+          }
+        })
+      },
       exitChick(){
-        this.popupVisible = false
-        this.topData = []
         this.bottomData = []
         this.topCheckData = []
         this.bottomCheckData = []
         this.assignUsers = []
+        this.$emit('closepup');
       }
 
     },
@@ -274,7 +324,7 @@
     }
   }
 </script>
-<style>
+<style lang='less' scoped>
   .myheader {
     height: .88rem;
     line-height: .88rem;

@@ -8,7 +8,7 @@
       >
       </hr-header>
     </header>
-    <section>
+    <section v-show="show">
       <div class="postmark" v-show='approve_state == 0'>
       <img src="../../../../../../static/img/pages/attendance-leave/nopass.png" >     <!-- 未通过邮戳 -->
       </div>
@@ -71,20 +71,36 @@
       <span style='background:#DEE6EA'>驳回</span>
       <span style='background:#DEE6EA'>审批不通过</span>
     </footer>
+    <ZhiPai
+      :popupVisible = zhiPaiVisible
+      :topData="zhiPaiData.userInfo"
+      :pk_h="billpk"
+      :billtype="billType"
+      :workflownotes="workflownotes"
+      :billactive="billactive"
+      :submitType = "submitType"
+      @closepup="closepup">
+    </ZhiPai>
   </div>
 </template>
 
 <script>
-  import { HrHeader } from 'hr-ui'
+  import { HrHeader, ZhiPai } from 'hr-ui'
   import { fetchData, getStorage } from 'hr-utils'
   import { Toast, Indicator, MessageBox } from 'mint-ui'
   export default {
     name: "awayapprove",
     data (){
       return {
+        submitType: 'approve',
+        workflownotes: '',
+        billactive: '',
+        zhiPaiVisible: false,
+        zhiPaiData:{},
+        show: false,
         title: '出差审批',
         billInfo: {},
-        billType: '',
+        billType: 'away',
         billpk: this.$route.query.billpk,
         rIcon: 'hr-list',
         approve_state: null,
@@ -92,7 +108,7 @@
       }
     },
 
-    components: { HrHeader },
+    components: { HrHeader, ZhiPai},
 
     created() {
       let user = getStorage('userinfo').name
@@ -100,6 +116,9 @@
     },
 
     methods: {
+      closepup(){
+        this.zhiPaiVisible = false
+      },
       goApp() {
 //        this.$router.push({name: 'approveCenter'})
         history.go(-1)
@@ -133,6 +152,7 @@
             Indicator.close()
             _this.billInfo = res.data
             _this.approve_state = res.data.approve_state
+            _this.show = true
           },
           error : err=> {
             Indicator.close()
@@ -149,9 +169,9 @@
             if(operation === 'Reject'){
               this.Reject(value)
             }else if(operation === 'Approve'){
-              this.Approve(value)
+              this.selectIsZhiPai(value,'Approve')
             }else if(operation === 'UnApprove'){
-              this.UnApprove(value)
+              this.selectIsZhiPai(value,'UnApprove')
             }
           }
         }).catch(err => {
@@ -163,6 +183,55 @@
           }
         });
       },
+      // 审核指派
+      // 提交之前，查询是否需要指派
+      selectIsZhiPai (value,param) {
+        Indicator.open()
+        fetchData({
+          url: 'hrssc/portal/wf/judgeAssign',
+          method: 'post',
+          param: {
+            pk_h: this.billpk,
+            billtype: this.billType,
+            oprationtype: 'Approve'
+          },
+          success: res =>{
+          Indicator.close()
+        if (res.statusCode === 200) {
+          if (res.data !== {}) {
+            this.zhiPaiData = res.data.data
+            if (this.zhiPaiData.isAssigned === 'true') {
+              // 需要调用指派并提交
+              this.zhiPaiVisible = true
+              this.workflownotes = value
+              if(param === 'Approve' ){
+                this.billactive = 'Y'
+              }else if (param === 'UnApprove'){
+                this.billactive = 'N'
+              }
+            } else {
+              if(param === 'Approve' ){
+                this.Approve(value)
+              }else if (param === 'UnApprove'){
+                this.UnApprove(value)
+              }
+            }
+          } else {
+            // 无需指派，直接提交
+            if(param === 'Approve' ){
+              this.Approve(value)
+            }else if (param === 'UnApprove'){
+              this.UnApprove(value)
+            }
+          }
+        }
+      },
+        error: res =>{
+          Indicator.close()
+        }
+      })
+      },
+
       Approve(note){
         Indicator.open({
           text: '单据审批中，请稍等...',
@@ -176,6 +245,7 @@
             pk_h: this.billpk,
             billtype: 'away',
             workflownotes: note,
+            assignUsers: [],
             billactive: 'Y'
           },
           mock: false,
@@ -206,6 +276,7 @@
             pk_h: this.billpk,
             billtype: 'away',
             workflownotes: note,
+            assignUsers: [],
             billactive: 'R'
           },
           mock: false,
@@ -236,6 +307,7 @@
             pk_h: this.billpk,
             billtype: 'away',
             workflownotes: note,
+            assignUsers: [],
             billactive: 'N'
           },
           mock: false,
@@ -272,7 +344,6 @@
   }
   section{
     position: relative;
-    z-index: 2;
     height: 85.0%;
     margin-top: .88rem;
     overflow-y: scroll;
