@@ -1,17 +1,27 @@
 <template>
-  <div class="h-popup">
-    <mt-popup v-model="popupVisible" popup-transition="popup-fade">
-      <div ref="myheader" class="h-popup-header">
-        <message-header title="消息"></message-header>
-      </div>
-      <div class="h-popup-title">
-        <h1 class="h-popup-name">{{listData.subject}}</h1>
-        <span class="h-popup-time">{{listData.sendtime}}</span>
-      </div>
-      <div class="h-popup-content" :style="{ 'height': currentHeight + 'px'}">
-        <p>{{listData.content}}</p>
-      </div>
-    </mt-popup>
+  <!--  <div class="h-popup">-->
+  <!--    <mt-popup v-model="popupVisible" popup-transition="popup-fade">-->
+  <!--      <div ref="myheader" class="h-popup-header">-->
+  <!--        <message-header title="消息"></message-header>-->
+  <!--      </div>-->
+  <!--      <div class="h-popup-title">-->
+  <!--        <h1 class="h-popup-name">{{listData.subject}}</h1>-->
+  <!--        <span class="h-popup-time">{{listData.sendtime}}</span>-->
+  <!--      </div>-->
+  <!--      <div class="h-popup-content" :style="{ 'height': currentHeight + 'px'}">-->
+  <!--        <p>{{listData.content}}</p>-->
+  <!--      </div>-->
+  <!--    </mt-popup>-->
+  <!--  </div>-->
+  <div style="overflow-x: hidden;overflow-y: scroll">
+    <div ref="myheader" class="h-popup-header">
+      <message-header title="消息"></message-header>
+    </div>
+    <div class="messageDiv">
+      <div class="messageDiv_title">{{listData.subject}}</div>
+      <div class="messageDiv_time">{{listData.sendtime}}</div>
+      <div class="messageDiv_text">{{listData.content}}</div>
+    </div>
   </div>
 </template>
 <script>
@@ -100,12 +110,38 @@
     }
   }
 </style>
-<style>
+<style lang='less' scoped>
   .h-popup .mint-popup {
     top: 0;
     left: 0;
     -webkit-transform: translate3d(0%, 0%, 0);
     transform: translate3d(0, 0, 0);
     width: 100%;
+  }
+  .messageDiv{
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 1px #dedede;
+    background-color: #fff;
+    &_title{
+      font-size: 16px;
+      text-align: center;
+      font-weight: bold;
+      color: #333333;
+    }
+    &_time{
+      font-size: 12px;
+      text-align: left;
+      color: #868585;
+      margin-top: 15px;
+    }
+    &_text{
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333333;
+      line-height: 30px;
+    }
   }
 </style>
