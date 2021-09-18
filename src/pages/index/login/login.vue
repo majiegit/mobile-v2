@@ -197,6 +197,7 @@
               setStorage('usercode', userinfo.usercode)
               setStorage('userName', data.data.userName)
               setStorage('mobile', data.data.mobile)
+              setStorage('userID', data.data.userId)
               // _this.getUserInfo()
               _this.$router.push('application')
               // TODO 测试和本地开发方便，正式使用应该删除
