@@ -23,7 +23,7 @@
 <script>
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
 
-import {httpRequest} from "../../utils/util";
+import {proveRequest} from "../../utils/util";
 export default {
   name: 'dropdownMenu',
   components: {
@@ -32,17 +32,16 @@ export default {
     return {
         statusArr:[
           {
-            name:'未审核',id:''
+            name:'未审核',id: 0
           },
           {
-            name:'批准',id:1
+            name:'审核通过',id:1
           },
           {
-            name:'不批准',id:2
+            name:'审核不通过',id:2
           }
         ],
-      zmName:[],
-      zmSelect:require('./img/zmSelect.png'),
+      zmName:[]
 
     }
   },
@@ -86,7 +85,7 @@ export default {
         this.getData();
     },
     getData(){
-      httpRequest({
+      proveRequest({
         url : 'prove/proveSubmit/list',
         method : 'POST',
         mock : false,
