@@ -1,7 +1,7 @@
 <!--证明审核-->
 <template>
   　<div style="overflow-y: scroll;overflow-x: hidden">
-  <myHeader :title="title" :status="$route.query.data.status" @saveSubmit="saveSubmit"></myHeader>
+  <myHeader :title="title" ></myHeader>
   <div class="outDiv">
     <div class="divRow">
       <div>审批流程：</div>
@@ -9,11 +9,11 @@
     </div>
     <div class="divRow">
       <div>证明名称：</div>
-      <div class="divRow_picker" @click="picker()">{{pName}}</div>
+      <div class="divRow_picker">{{pName}}</div>
     </div>
     <div class="divRow" style="align-items: start">
-      <div>证明内容：</div>
-      <textarea class="divRow_text" v-model="remark">{{remark}}</textarea>
+      <div>证明说明：</div>
+      <div class="divRow_text">{{remark}}</div>
     </div>
   </div>
   <div class="imgDiv">
@@ -21,8 +21,8 @@
   </div>
   <div style="height: 60px"></div>
   <div class="bottomButtonDiv">
-    <div class="bottomButtonDiv_left" :style="$route.query.data.status=1?'background-color: #bdbdbd;':''" @click="$route.query.data.status !=1 &&pz('delete')">收回</div>
-    <div class="bottomButtonDiv_right" :style="$route.query.data.status==1?'background-color: #bdbdbd;':''" @click="$route.query.data.status == 1&&pz('down')">下载证明</div>
+    <div class="bottomButtonDiv_left" :style="$route.query.data.status == 0 ? '':'background-color: #bdbdbd;'" @click="$route.query.data.status == 0 && pz('delete')">收回</div>
+    <div class="bottomButtonDiv_right" :style="$route.query.data.status == 1 ? '':'background-color: #bdbdbd;'" @click="$route.query.data.status == 1 && pz('down')">下载证明</div>
   </div>
   <picker ref="picker" @pickerClick="pickerClick"></picker>
 </div>
@@ -31,10 +31,10 @@
 <script>
 import picker from '../../components/zykj/picker.vue';
 import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
-import myHeader from '../../components/zykj/zmHeader';
+import myHeader from '../../components/zykj/my-header';
 import { Toast } from 'mint-ui';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
-import {proveRequest} from '../../utils/util'
+import {proveRequest,proveHost} from '../../utils/util'
 import Vue from 'vue';
 import { Search } from 'vant';
 import { Calendar } from 'vant';
@@ -49,7 +49,7 @@ export default {
   },
   data () {
     return {
-      title:'证明申请',
+      title:'证明详情',
       datas:[],
       pName:this.$route.query.data.pName,
       remark:this.$route.query.data.remark,
@@ -93,6 +93,7 @@ export default {
           })
            break;
         case 'down':
+          window.location.href = proveHost + '/prove' + this.$route.query.data.provePath
           break;
       }
 
@@ -145,9 +146,10 @@ export default {
     &_text{
       margin-left: 10px;
       width: 200px;
-      height: 60px;
+      min-height: 60px;
       padding: 10px;
       border: 1px solid #C9C9C9;
+      background: #ffffff;
       border-radius: 3px;
     }
     &_picker{
@@ -160,19 +162,6 @@ export default {
       border-radius: 3px;
       background-color: #fff;
       position: relative;
-      &::after{
-        content: '';
-        display: block;
-        position: absolute;
-        border-bottom: 1px solid #636363;
-        border-right: 1px solid #636363;
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
-        width: 6px;
-        height: 6px;
-        top: 10px;
-        right: 15px;
-      }
     }
   }
 }

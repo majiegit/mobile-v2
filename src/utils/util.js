@@ -18,6 +18,7 @@ function getAuth() {
 }
 
 module.exports = {
+  proveHost: proveHost,
   /**
    * 请求后台接口工具类
    * @author yangyang11@yonyou.com

@@ -8,7 +8,10 @@
       <div style="width: 50%">申请人：{{ d.userName }}</div>
     </div>
     <div class="bodyDiv_child">
-      <div style="width: 50%" >状态：<span v-if="d.status==0">未审核</span><span style="color: #2479ED" v-if="d.status==1">审核通过</span><span style="color: #ED244A " v-if="d.status==2">审核未通过</span></div>
+      <div style="width: 50%" >状态：
+        <span v-if="d.status==0">未审核</span>
+        <span style="color: #2479ED" v-if="d.status==1">审核通过</span>
+        <span style="color: #ED244A " v-if="d.status==2">审核未通过</span></div>
       <div style="width: 50%">申请时间：{{ d.createTime.substring(0,11) }}</div>
     </div>
   </div>
