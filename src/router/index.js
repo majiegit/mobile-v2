@@ -16,6 +16,8 @@ import frontVoice from './frontVoice'
 import commonReports from './commonReports'
 import employeeResume from './employeeResume'
 import attendanceLeave from './attendance-leave/index.js'
+//治宇科技新增路由 ByJack
+import certification from './zykj/certification.js'
 //路由增加"绩效信息" by tianxx5 20180117
 import performanceInfo from './performanceInfo'
 import checkout from './checkout'
@@ -54,7 +56,8 @@ const routeArr = [].concat(
   trns,
   dimission,
   hrpegrow,
-  images
+  images,
+  certification
 )
 Vue.use(Router)
 

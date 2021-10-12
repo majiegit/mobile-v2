@@ -6,7 +6,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Toast, Indicator } from 'mint-ui'
-import { host} from './hostConfig'
+import { host, proveHost} from './hostConfig'
 import { getStorage } from './tools'
 
 // axios.defaults.timeout = 20000
@@ -154,7 +154,87 @@ module.exports = {
     //     // 出错了;等价于 then 的第二个参数,但这样更好用更直观 :(
     //   });
 
-  }  
+  },
+  /**
+   * 请求后台数工具类
+   * @author zykj 治宇科技
+   * @version 2.0
+   * @date 2021/9/17
+   * @param  {参数} request
+   */
+  httpRequest : (request) => {
+    axios.defaults.timeout = 25000
 
+    let param = {},
+      data = request.param,
+      baseURL = host,
+      auth = getAuth()
+    // get请求须将参数设置在axios的params
+    if (request.method.toLocaleUpperCase() == 'GET') {
+      param = request.param
+      data = {}
+    }
+
+    if (request.mock == true) {
+      baseURL = 'https://easy-mock.com/mock/59bb76d1e0dc663341ab689c/'
+    }
+
+    axios({
+      method: request.method,
+      url: `${baseURL}${request.url}`,
+      data: JSON.stringify(data),
+      params : param,
+      // crossDomain : true,
+      // withCredentials:true,
+      headers: {
+        'Content-Type': request.contentType || 'application/json',
+        'Autority' : auth
+      },
+    }).then(res=>{
+      request.success(res.data)
+    }).catch(err=>{
+      if(err.response)Toast(err.response.data.message)
+
+    })
+  },
+  /**
+   * 证明请求接口方法
+   *
+   */
+  proveRequest : (request) => {
+    axios.defaults.timeout = 25000
+
+    let param = {},
+      data = request.param,
+      baseURL = proveHost,
+      auth = getAuth()
+    // get请求须将参数设置在axios的params
+    if (request.method.toLocaleUpperCase() == 'GET') {
+      param = request.param
+      data = {}
+    }
+
+    if (request.mock == true) {
+      baseURL = 'https://easy-mock.com/mock/59bb76d1e0dc663341ab689c/'
+    }
+
+    axios({
+      method: request.method,
+      url: `${baseURL}${request.url}`,
+      data: JSON.stringify(data),
+      params : param,
+      // crossDomain : true,
+      // withCredentials:true,
+      headers: {
+        'Content-Type': request.contentType || 'application/json',
+        'Autority' : auth
+      },
+    }).then(res=>{
+      request.success(res.data)
+    }).catch(err=>{
+      if(err.response)Toast(err.response.data.message)
+
+    })
+  }
 }
 

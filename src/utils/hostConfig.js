@@ -1,10 +1,11 @@
 
 const hostList = {
     'proxy' : '',  // 代理
-    'ceshiHttps': 'https://test.bjcsjs.com:7001/', //测试环境
-    'localhost': 'http://127.0.0.1:80/', //测试环境
+    'ceshiHttps': 'https://test.bjcsjs.com:7001/', //主测试环境
+    'proveHost': 'http://127.0.0.1:7011/', //证明办理环境
 }
 
 module.exports = {
-	host: hostList.ceshiHttps
+	host: hostList.ceshiHttps,
+  proveHost: hostList.proveHost
 }
