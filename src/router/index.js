@@ -30,6 +30,8 @@ import dimission from './dimissionmng'
 import hrpegrow from './hrpegrow'
 // 路由增加静态数据
 import images from './images'
+// 路由增加问卷
+import questionnaire from './questionnaire'
 
 Router.prototype.goBack = function () {
 　　this.isBack = true
@@ -57,7 +59,8 @@ const routeArr = [].concat(
   dimission,
   hrpegrow,
   images,
-  certification
+  certification,
+  questionnaire
 )
 Vue.use(Router)
 

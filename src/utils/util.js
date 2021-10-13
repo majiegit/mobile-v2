@@ -6,7 +6,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Toast, Indicator } from 'mint-ui'
-import { host, proveHost} from './hostConfig'
+import { host, proveHost, questHost} from './hostConfig'
 import { getStorage } from './tools'
 
 // axios.defaults.timeout = 20000
@@ -236,6 +236,45 @@ module.exports = {
       if(err.response)Toast(err.response.data.message)
 
     })
+  },
+  /**
+   * 问卷请求接口方法
+   *
+   */
+  questRequest : (url, method, content, bodyParam, success) =>{
+    //get请求通过params传参 post通过data传参
+    // axios.defaults.withCredentials = true
+    // axios.defaults.crossDomain = true
+    axios.defaults.timeout = 25000
+    let param = {},
+      baseURL = questHost,
+      auth = getAuth()
+
+    if (method.toLocaleUpperCase() == 'GET') {
+      param = bodyParam
+      bodyParam = {}
+    }
+
+    axios({
+      method: method,
+      url: `${baseURL}${url}`,
+      data: bodyParam,
+      params : param,
+      headers: {
+        'Content-Type': content,
+        'Autority' : auth
+      }
+    }).then(response => {
+      if (response.data.statusCode == 100010) {
+        window.close()
+        // login
+        Indicator.close()
+      }
+      success(response.data)
+    }).catch(response => {
+
+      }
+    );
   }
 }
 

@@ -15,6 +15,7 @@ import {
 
 
 module.exports = {
+  questRequest: util.questRequest,
   ajax : util.ajax,
   fetchData : util.fetchData,
   myFetch : util.myFetch,
