@@ -70,7 +70,7 @@
         this.$router.push('application')
       },
       goWriteQuest(item) {
-        var url = 'http://8.140.136.205:8999/s/' + item.questionnaireId + '?userId='+ this.userId
+        var url = 'http://8.140.136.205:8888/s/' + item.questionnaireId + '?userId='+ this.userId
         window.open(url, '_self')
       },
       getQuestList() {
