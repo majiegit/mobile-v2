@@ -26,6 +26,7 @@
 import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
 import myHeader from '../../components/zykj/my-header';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
+import { Indicator } from 'mint-ui';
 import {proveRequest} from '../../utils/util'
 import Vue from 'vue';
 import { Search } from 'vant';
@@ -60,6 +61,7 @@ export default {
 
     },
     init(){
+      Indicator.open()
       proveRequest({
         url : 'prove/proveSubmit/list',
         method : 'POST',
@@ -68,6 +70,7 @@ export default {
         contentType : "application/json; charset=utf-8",
         success :(data)=>{
          this.datas = data.data
+          Indicator.close()
           proveRequest({
             url : 'prove/sysProve/list',
             method : 'GET',

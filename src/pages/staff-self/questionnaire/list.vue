@@ -50,6 +50,8 @@
 <script>
   import {HrHeader} from 'hr-ui'
   import {getStorage, questRequest} from 'hr-utils'
+  import { Indicator } from 'mint-ui';
+  import {questWirtePath} from '@/utils/hostConfig.js'
   export default {
     name: 'salary',
     components: {
@@ -70,10 +72,11 @@
         this.$router.push('application')
       },
       goWriteQuest(item) {
-        var url = 'http://8.140.136.205:8888/s/' + item.questionnaireId + '?userId='+ this.userId
+        var url = questWirtePath + 's/' + item.questionnaireId + '?userId='+ this.userId
         window.open(url, '_self')
       },
       getQuestList() {
+        Indicator.open()
         var _this = this
         questRequest('tduck-api/an/busQuestionnaireUser/getListByUserId',
           'get',
@@ -83,6 +86,7 @@
           },
           function (res) {
             _this.questList = res.data
+            Indicator.close()
           })
       }
     }

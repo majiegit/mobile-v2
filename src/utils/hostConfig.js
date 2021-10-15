@@ -1,13 +1,14 @@
 
 const hostList = {
-    'proxy' : '',  // 代理
-    'ceshiHttps': 'https://test.bjcsjs.com:7001/', //主测试环境
-    'proveHost': 'http://8.140.136.205:7011/', //证明办理环境
-    'questHost': 'http://8.140.136.205:8999/'      // 问卷接口地址
+    'host' : 'https://test.bjcsjs.com:7001/',  // 代理
+    'proveHost': 'https://test.bjcsjs.com:7011/', //证明办理环境
+    'questHost': 'https://test.bjcsjs.com:8999/', // 问卷接口地址
+    'questWirtePath': 'https://test.bjcsjs.com:8888/'  // 问卷填写地址
 }
 
 module.exports = {
-	host: hostList.ceshiHttps,
+	host: hostList.host,
   proveHost: hostList.proveHost,
-  questHost: hostList.questHost
+  questHost: hostList.questHost,
+  questWirtePath: hostList.questWirtePath
 }

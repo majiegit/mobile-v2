@@ -25,7 +25,7 @@
 <script>
 import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
 import myHeader from '../../components/zykj/my-header';
-import { Toast } from 'mint-ui';
+import { Toast,Indicator } from 'mint-ui';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
 import {proveRequest} from '../../utils/util'
 import Vue from 'vue';
@@ -57,6 +57,7 @@ export default {
   },
   methods:{
     init(){
+      Indicator.open()
       proveRequest({
         url : 'prove/sysProve/list',
         method : 'GET',
@@ -65,6 +66,7 @@ export default {
         success :(data)=>{
           this.bqs=data.data
           this.$refs.dropdownMenu.init(data.data)
+          Indicator.close()
         },
       })
 
@@ -91,6 +93,7 @@ export default {
         Toast('请选择证明进行审核')
         return
       }
+      Indicator.open()
       proveRequest({
         url : 'prove/proveSubmit/check',
         method : 'POST',
@@ -98,7 +101,8 @@ export default {
         param:{ids:this.datas.filter(val=>val.flag).map(val1=>val1.id),status:type},
         contentType : "application/json; charset=utf-8",
         success :(data)=>{
-           Toast(data.message)
+          Indicator.close()
+          Toast(data.message)
            this.init();
         },
       })

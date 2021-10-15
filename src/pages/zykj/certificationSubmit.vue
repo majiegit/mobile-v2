@@ -22,7 +22,7 @@
 import picker from '../../components/zykj/picker.vue';
 import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
 import myHeader from '../../components/zykj/my-header';
-import { Toast } from 'mint-ui';
+import { Toast,Indicator } from 'mint-ui';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
 import {proveRequest} from '../../utils/util'
 import Vue from 'vue';
@@ -61,6 +61,7 @@ export default {
   },
   methods:{
     init(){
+      Indicator.open()
       proveRequest({
         url : 'prove/sysProve/list',
         method : 'GET',
@@ -71,6 +72,7 @@ export default {
           this.listSelectedName =  this.lists[0].name
           this.proveId =  this.lists[0].id
           this.imgSrc =  this.lists[0].tpLook
+          Indicator.close()
         },
       })
 
@@ -94,6 +96,7 @@ export default {
             Toast('请描述你开具证明的用途')
             return;
           }
+          Indicator.open()
           proveRequest({
             url : 'prove/proveSubmit/submit',
             method : 'POST',
@@ -101,6 +104,7 @@ export default {
             param:{proveId:this.proveId,remark:this.remark,userId: getStorage('userID'),userName:getStorage('userName')},
             contentType : "application/json; charset=utf-8",
             success :(data)=>{
+              Indicator.close()
               Toast(data.message)
               setTimeout(()=>{
                 this.$router.go(-1);

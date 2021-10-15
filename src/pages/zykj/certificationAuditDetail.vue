@@ -30,7 +30,7 @@
 <script>
 import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
 import myHeader from '../../components/zykj/my-header';
-import { Toast } from 'mint-ui';
+import { Toast, Indicator } from 'mint-ui';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
 import {proveRequest} from '../../utils/util'
 import Vue from 'vue';
@@ -60,6 +60,7 @@ export default {
   methods:{
     //1批准 2不批准
     pz(type){
+      Indicator.open()
       proveRequest({
         url : 'prove/proveSubmit/check',
         method : 'POST',
@@ -67,6 +68,7 @@ export default {
         param:{ids:[this.$route.query.data.id],status:type},
         contentType : "application/json; charset=utf-8",
         success :(data)=>{
+          Indicator.close()
           Toast(data.message)
           setTimeout(()=>{
             this.$router.go(-1);

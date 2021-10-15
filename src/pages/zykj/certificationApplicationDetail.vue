@@ -32,9 +32,10 @@
 import picker from '../../components/zykj/picker.vue';
 import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
 import myHeader from '../../components/zykj/my-header';
-import { Toast } from 'mint-ui';
+import { Toast,Indicator } from 'mint-ui';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
-import {proveRequest,proveHost} from '../../utils/util'
+import {proveRequest} from '../../utils/util'
+import {proveHost,} from '@/utils/hostConfig.js'
 import Vue from 'vue';
 import { Search } from 'vant';
 import { Calendar } from 'vant';
@@ -93,7 +94,7 @@ export default {
           })
            break;
         case 'down':
-          window.location.href = proveHost + '/prove' + this.$route.query.data.provePath
+          window.location.href = proveHost + 'prove' + this.$route.query.data.provePath
           break;
       }
 
