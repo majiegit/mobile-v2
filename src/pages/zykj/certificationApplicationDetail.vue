@@ -5,7 +5,14 @@
   <div class="outDiv">
     <div class="divRow">
       <div>审批流程：</div>
-      <div class="divRow_right">--</div>
+      <div class="divRow_right">
+        <van-steps :active="active">
+          <van-step>买家下单</van-step>
+          <van-step>商家接单</van-step>
+          <van-step>买家提货</van-step>
+          <van-step>交易完成</van-step>
+        </van-steps>
+      </div>
     </div>
     <div class="divRow">
       <div>证明名称：</div>
@@ -39,8 +46,11 @@ import {proveHost,} from '@/utils/hostConfig.js'
 import Vue from 'vue';
 import { Search } from 'vant';
 import { Calendar } from 'vant';
+import { Step, Steps } from 'vant';
 Vue.use(Calendar);
 Vue.use(Search);
+Vue.use(Step);
+Vue.use(Steps);
 export default {
   name: 'certificationApplicationDetail',
   components: {
@@ -52,6 +62,7 @@ export default {
     return {
       title:'证明详情',
       datas:[],
+      active: 1,
       pName:this.$route.query.data.pName,
       remark:this.$route.query.data.remark,
       proveId:this.$route.query.data.proveId,
