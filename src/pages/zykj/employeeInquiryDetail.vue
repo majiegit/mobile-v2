@@ -4,9 +4,9 @@
     <div class="outDiv_body">
       <div class="outDiv_body_first">
         <img src="./img/select.png" class="outDiv_body_first_img">
-        <div>养老-社保转移</div>
+        <div>{{problem.name}}</div>
       </div>
-      <div class="outDiv_body_second">社保转移自20210年起可以在网上自行操作，操 作流程详见操作说明</div>
+      <div class="outDiv_body_second" v-html="problem.content"></div>
       <div class="outDiv_body_third">相关推荐</div>
       <div class="outDiv_body_forth">社保新参保</div>
       <div class="outDiv_body_forth">社保新参保</div>
@@ -36,7 +36,8 @@
 <script>
 import myHeader from '../../components/zykj/my-header';
 import picker from '../../components/zykj/picker';
-import {httpRequest} from "../../utils/util";
+import { Indicator } from 'mint-ui';
+import {proveRequest} from "../../utils/util";
 import {Toast} from "vant";
 import { Dialog } from 'vant';
 export default {
@@ -47,7 +48,8 @@ export default {
   },
   data () {
     return {
-    title:'员工问询'
+    title:'员工问询',
+    problem:[]
     }
   },
   computed:{
@@ -58,7 +60,18 @@ export default {
   },
   methods:{
     init(){
-
+      Indicator.open()
+      proveRequest({
+        url: 'prove/seProblem/getByProblemId',
+        method: 'GET',
+        mock: 'false',
+        param: {problemId: this.$route.query.id },
+        contentType: 'application/json; charset=utf-8',
+        success: (data) => {
+          this.problem= data.data
+          Indicator.close()
+        }
+      })
     },
 
   }
@@ -93,7 +106,7 @@ export default {
       }
     }
     &_second{
-      display: flex;
+      /*display: flex;*/
       align-items: center;
       font-size: 15px;
       margin: 17px 15px;

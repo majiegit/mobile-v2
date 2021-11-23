@@ -28,25 +28,25 @@
       </div>
       <div id="body-before">
         <div class="before">调配前信息</div>
-        <mt-cell v-for="(temp,index) in oldtemplet" :title="temp.itemName" :value="temp.displayname" v-if="temp.datatype!==4"></mt-cell>
-        <mt-cell v-for="(temp,index) in oldtemplet" :title="temp.itemName" :value="temp.displayname==='Y'?'是':'否'" v-if="temp.datatype===4"></mt-cell>
+        <mt-cell v-for="(temp,index) in oldtemplet" :key="index" :title="temp.itemName" :value="temp.displayname" v-if="temp.datatype!==4"></mt-cell>
+        <mt-cell v-for="(temp,index) in oldtemplet" :key="index" :title="temp.itemName" :value="temp.displayname==='Y'?'是':'否'" v-if="temp.datatype===4"></mt-cell>
       </div>
       <div id="body-after">
         <div class="after">调配后信息</div>
 
-        <div v-for="(temp,index) in newtemplet" @click="handleClickref(temp.itemKey)" v-if="temp.datatype===5">
+        <div v-for="(temp,index) in newtemplet" :key="index" @click="handleClickref(temp.itemKey)" v-if="temp.datatype===5">
           <mt-cell :title="temp.itemName" is-link style="color: #333" v-model='temp.displayname'></mt-cell>
         </div>
-        <div v-for="(temp,index) in newtemplet" v-if="temp.datatype===4" @click="handleClickref(temp.itemKey)">
+        <div v-for="(temp,index) in newtemplet" :key="index" v-if="temp.datatype===4" @click="handleClickref(temp.itemKey)">
           <mt-cell is-link :title="temp.itemName" v-model='newpoststatname'></mt-cell>
         </div>
-        <div v-for="(temp,index) in newtemplet" v-if="temp.datatype===0">
+        <div v-for="(temp,index) in newtemplet" :key="index" v-if="temp.datatype===0">
           <mt-field :label="temp.itemName" v-model='temp.displayname' placeholder="请输入..." type="textarea" rows="4"></mt-field>
         </div>
       </div>
       <div id="body-afterorg">
         <div class="compareorg">调配后管理组织</div>
-        <div v-for="(temp,index) in crtmanage">
+        <div v-for="(temp,index) in crtmanage" :key="index">
           <mt-cell title="原组织" style="color: #333" v-model='temp.oldhi_name'></mt-cell>
         </div>
         <div @click="handleClickref('pk_new_hi')">
@@ -55,7 +55,7 @@
       </div>
       <div id="body-compactorg">
         <div class="compactorg">合同管理信息</div>
-        <div v-for="(temp,index) in crtmanage">
+        <div v-for="(temp,index) in crtmanage" :key="index">
           <mt-cell title="原合同组织" style="color: #333" v-model='temp.oldhrcm_name'></mt-cell>
         </div>
         <div @click="handleClickref('pk_new_hrcm')">

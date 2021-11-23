@@ -12,15 +12,18 @@
     <div class="bodyClass">
       <div class="bodyClass_title">猜你想问</div>
       <div class="bodyClass_secondTitle">
-        <div :class="[q.flag?'bodyClass_secondTitle_selected':'bodyClass_secondTitle_noSelected']" :style="index!=0?'margin-left:15px':''"  @click="chooseQuestion(index)" v-for="(q,index) in questionsList">
-          {{q.name}}
+        <div :class="[item.flag?'bodyClass_secondTitle_selected':'bodyClass_secondTitle_noSelected']" :style="index!=0?'margin-left:15px':''"
+             @click="chooseQuestion(item.id)" v-for="(item,index) in questionsList">
+          {{item.typeName}}
         </div>
       </div>
       <div class="bodyClass_body">
-        <div class="bodyClass_body_child">养老-社保转移 </div>
-        <div class="bodyClass_body_child">养老-社保转移 </div>
-        <div class="bodyClass_body_child">养老-社保转移 </div>
+        <div class="bodyClass_body_child" v-for="(item,index) in problem" :key="index" @click="clickProblen(item)">{{item.name}}</div>
       </div>
+      <div v-if="problem.length===0">
+        <van-empty description="暂无内容" />
+      </div>
+
     </div>
   </div>
 </template>
@@ -28,6 +31,8 @@
 <script>
 import myHeader from '../../components/zykj/my-header';
 import picker from '../../components/zykj/picker';
+import { Indicator } from 'mint-ui';
+import {proveRequest} from "../../utils/util";
 import {httpRequest} from "../../utils/util";
 import {Toast} from "vant";
 import { Dialog } from 'vant';
@@ -40,11 +45,8 @@ export default {
   data () {
     return {
       title:'员工问询',
-      questionsList:[
-        {name:'社保办理',flag:true},
-        {name:'公积金办理',flag:false},
-        {name:'极客保',flag:false},
-      ]
+      questionsList:[],
+      problem:''
     }
   },
   computed:{
@@ -54,13 +56,41 @@ export default {
     this.init();
   },
   methods:{
+    //查询问题分类
     init(){
-
+      Indicator.open()
+      proveRequest({
+        url : 'prove/seProblemType/list',
+        method : 'GET',
+        mock : false,
+        param:{isDelete:'Y'},
+        contentType : 'application/json; charset=utf-8',
+        success:(data)=>{
+          this.questionsList=data.data;
+          this.seProble( this.questionsList[0].id)
+          Indicator.close()        }
+      })
+    },
+    //查询问题下内容
+    seProble(id){
+      proveRequest({
+        url:'prove/seProblem/list',
+        method:'GET',
+        mock: 'false',
+        param: {typeId:id,isDelete:'Y'},
+        contentType : 'application/json; charset=utf-8',
+        success:(data)=>{
+          this.problem= data.data
+        }
+      })
+    },
+    //点击问题分类
+    clickProblen(item){
+      this.$router.push({name:'employeeInquiryDetail',query:{id:item.id}})
     },
     //选择标题 索引index
     chooseQuestion(index){
-      this.questionsList.forEach(val=>{val.flag=false})
-      this.questionsList[index].flag=true
+      this.seProble(index)
     },
   }
 }
