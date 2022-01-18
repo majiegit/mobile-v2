@@ -1,16 +1,20 @@
 <!--证明审核-->
 <template>
 　<div style="overflow-y: scroll;overflow-x: hidden">
-  <myHeader :title="title" ></myHeader>
+  <myHeader :title="title"></myHeader>
   <dropdownMenu ref="dropdownMenu" @audit="audit"></dropdownMenu>
-  <div class="bodyDiv" v-for="(d,index) in datas" @click.stop="$router.push({name:'certificationAuditDetail',query:{data:d}})">
+  <div class="bodyDiv" v-for="(d,index) in datas" @click.stop="$router.push({name:'certificationAuditDetail',query:{id:d.id}})">
       <div class="bodyDiv_child">
         <div style="width: 50%">申请人：{{ d.userName }}</div>
         <div style="width: 50%">申请时间：{{ d.createTime.substring(0,11) }}</div>
       </div>
       <div class="bodyDiv_child">
         <div style="width: 50%">证明名称：{{ d.pName }}</div>
-        <div style="width: 50%" >状态：<span v-if="d.status==0">未审核</span><span style="color: #2479ED" v-if="d.status==1">批准</span><span style="color: #2479ED" v-if="d.status==2">不批准</span></div>
+        <div style="width: 50%" >状态：
+          <span v-if="d.status==0" style="color: #ED244A">审核进行中</span>
+          <span style="color: #20D462" v-if="d.status==1">批准</span>
+          <span style="color: #2479ED" v-if="d.status==2">不批准</span>
+        </div>
       </div>
       <img :src="d.flag?zmSelected:zmSelect" class="selectImg" @click.stop="chooseMore(index)">
   </div>
@@ -24,15 +28,10 @@
 
 <script>
 import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
-import myHeader from '../../components/zykj/my-header';
+import myHeader from '../../components/zykj/my-header-lihao';
 import { Toast,Indicator } from 'mint-ui';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
 import {proveRequest} from '../../utils/util'
-import Vue from 'vue';
-import { Search } from 'vant';
-import { Calendar } from 'vant';
-Vue.use(Calendar);
-Vue.use(Search);
 export default {
   name: 'certificationAudit',
   components: {
@@ -41,32 +40,70 @@ export default {
   },
   data () {
     return {
+      checked: true,
       zmSelected:require('../../components/zykj/img/zmSelected.png'),
       zmSelect:require('../../components/zykj/img/zmSelect.png'),
-      title:'证明审核',
+      title:'证明审批',
       datas:[],//全部数据
       bqs:[],//证明名称列表
+      proveListStatus: [
+          {
+            id: '',
+            name: '证明名称'
+          }
+      ],
+      proveId: '',
+      proveList: [],
+      proveStatus: 0,
+      proveStatusList: [
+        {
+          text:'未审核', value: 0
+        },
+        {
+          text:'审核通过', value: 1
+        },
+        {
+          text:'审核不通过', value: 2
+        }
+      ]
     }
   },
   computed:{
 
   },
   mounted (){
-
+    // this.getProveLis()
     this.init()
   },
   methods:{
-    init(){
-      Indicator.open()
+    // 查询证明列表
+    getProveLis() {
+      var _this = this
       proveRequest({
         url : 'prove/sysProve/list',
         method : 'GET',
         mock : false,
         contentType : "application/json; charset=utf-8",
         success :(data)=>{
-          this.bqs=data.data
-          this.$refs.dropdownMenu.init(data.data)
-          Indicator.close()
+        data.data.forEach(function (item) {
+        var prove = {
+          text: item.name,
+          value: item.id,
+        }
+        _this.proveList.push(prove)
+      })
+    }
+    })
+    },
+    init(){
+      proveRequest({
+        url : 'prove/sysProve/list',
+        method : 'GET',
+        mock : false,
+        contentType : "application/json; charset=utf-8",
+        success :(data)=>{
+          this.bqs = this.proveListStatus.concat(data.data)
+          this.$refs.dropdownMenu.init(this.bqs)
         },
       })
 
@@ -98,7 +135,7 @@ export default {
         url : 'prove/proveSubmit/check',
         method : 'POST',
         mock : false,
-        param:{ids:this.datas.filter(val=>val.flag).map(val1=>val1.id),status:type},
+        param:{ids:this.datas.filter(val=>val.flag).map(val1=>val1.id),status:type,checkUserName:getStorage('userName')},
         contentType : "application/json; charset=utf-8",
         success :(data)=>{
           Indicator.close()
@@ -195,7 +232,7 @@ tr>td{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #F50000;
+    background-color: #E04F4F;
     height: 40px;
     border-radius: 20px;
   }

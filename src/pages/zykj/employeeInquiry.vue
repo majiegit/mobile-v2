@@ -1,7 +1,7 @@
 <template>
   <div class="outDiv">
     <myHeader :title="title" :type="1"></myHeader>
-    <div class="headBlue" @click="$router.push('employeeInquiryDetail')">
+    <div class="headBlue" @click="goNext">
       <img src="./img/robort.png" class="headBlue_img">
       <div class="headBlue_text">
         <img src="./img/qp.png" class="headBlue_text_img">
@@ -33,9 +33,6 @@ import myHeader from '../../components/zykj/my-header';
 import picker from '../../components/zykj/picker';
 import { Indicator } from 'mint-ui';
 import {proveRequest} from "../../utils/util";
-import {httpRequest} from "../../utils/util";
-import {Toast} from "vant";
-import { Dialog } from 'vant';
 export default {
   name: 'employeeManagementMenu',
   components: {
@@ -56,6 +53,9 @@ export default {
     this.init();
   },
   methods:{
+    goNext() {
+      this.$router.push({path: 'chatBox'})
+    },
     //查询问题分类
     init(){
       Indicator.open()

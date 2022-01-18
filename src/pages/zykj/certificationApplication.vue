@@ -1,7 +1,7 @@
 <!--证明审核-->
 <template>
   　<div style="overflow-y: scroll;overflow-x: hidden">
-  <myHeader :title="title" ></myHeader>
+  <myHeader :title="title"></myHeader>
   <div class="bodyDiv" v-for="(d,index) in datas" @click.stop="$router.push({name:'certificationApplicationDetail',query:{data:d}})">
     <div class="bodyDiv_child">
       <div style="width: 50%">证明名称：{{ d.pName }}</div>
@@ -9,8 +9,8 @@
     </div>
     <div class="bodyDiv_child">
       <div style="width: 50%" >状态：
-        <span v-if="d.status==0" style="color: #2479ED">未审核</span>
-        <span style="color: #32CD32" v-if="d.status==1">审核通过</span>
+        <span v-if="d.status==0">审核进行中</span>
+        <span v-if="d.status==1" style="color: #2479ED">审核通过</span>
         <span style="color: #ED244A " v-if="d.status==2">审核未通过</span></div>
       <div style="width: 50%">申请时间：{{ d.createTime.substring(0,11) }}</div>
     </div>
@@ -23,8 +23,7 @@
 </template>
 
 <script>
-import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
-import myHeader from '../../components/zykj/my-header';
+import myHeader from '../../components/zykj/my-header-lihao';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
 import { Indicator } from 'mint-ui';
 import {proveRequest} from '../../utils/util'
@@ -36,15 +35,14 @@ Vue.use(Search);
 export default {
   name: 'certificationApplication',
   components: {
-    myHeader,
-    dropdownMenu
+    myHeader
   },
   data () {
     return {
       userId: getStorage("userID"),
       zmSelected:require('../../components/zykj/img/zmSelected.png'),
       yes:require('../../components/zykj/img/yes.png'),
-      title:'证明申请',
+      title:'证明开具',
       datas:[]
     }
   },

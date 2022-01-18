@@ -20,8 +20,7 @@
 
 <script>
 import picker from '../../components/zykj/picker.vue';
-import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
-import myHeader from '../../components/zykj/my-header';
+import myHeader from '../../components/zykj/my-header-lihao';
 import { Toast,Indicator } from 'mint-ui';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
 import {proveRequest} from '../../utils/util'
@@ -37,7 +36,6 @@ export default {
   name: 'certificationSubmit',
   components: {
     myHeader,
-    dropdownMenu,
     picker
   },
   data () {
@@ -105,7 +103,7 @@ export default {
             contentType : "application/json; charset=utf-8",
             success :(data)=>{
               Indicator.close()
-              Toast(data.message)
+              Toast('提交成功')
               setTimeout(()=>{
                 this.$router.go(-1);
               },500)
@@ -275,7 +273,7 @@ tr>td{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #F50000;
+    background-color: #E04F4F;
     height: 40px;
     border-radius: 20px;
   }

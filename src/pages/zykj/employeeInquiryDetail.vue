@@ -1,16 +1,19 @@
 <template>
   <div class="outDiv">
-    <myHeader :title="title" :type="1"></myHeader>
+    <div class="um-header">
+      <a class="um-back"  @click="goToChatBox()"></a>
+      <h3 style="color: #ffffff">{{title}}</h3>
+    </div>
     <div class="outDiv_body">
       <div class="outDiv_body_first">
         <img src="./img/select.png" class="outDiv_body_first_img">
         <div>{{problem.name}}</div>
       </div>
       <div class="outDiv_body_second" v-html="problem.content"></div>
-      <div class="outDiv_body_third">相关推荐</div>
-      <div class="outDiv_body_forth">社保新参保</div>
-      <div class="outDiv_body_forth">社保新参保</div>
-      <div class="outDiv_body_forth">社保新参保</div>
+      <div class="outDiv_body_third">附件</div>
+      <div class="outDiv_body_forth" v-for="item in problemFuJian" @click="clickFuJian(item)">{{item.fileName}}</div>
+      <div class="outDiv_body_third" style="margin-top: 10px;">相关推荐</div>
+      <div class="outDiv_body_forth" v-for="item in problemTuiJian" @click="clickProblen(item)">{{item.name}}</div>
       <div class="outDiv_body_row"></div>
       <div class="outDiv_body_five">
          <div class="outDiv_body_five_first">
@@ -38,8 +41,7 @@ import myHeader from '../../components/zykj/my-header';
 import picker from '../../components/zykj/picker';
 import { Indicator } from 'mint-ui';
 import {proveRequest} from "../../utils/util";
-import {Toast} from "vant";
-import { Dialog } from 'vant';
+import {proveHost,} from '@/utils/hostConfig.js'
 export default {
   name: 'employeeManagementMenu',
   components: {
@@ -48,27 +50,78 @@ export default {
   },
   data () {
     return {
-    title:'员工问询',
-    problem:[]
+      title:'员工问询',
+      problem: [],
+      problemTuiJian: [],
+      problemId: '',
+      arr: [],
+      problemFuJian: []
+    }
+  },
+  watch: {
+    problemId(val) {
+      this.init(val);
+      this.xiangGuanTuiJian(val);
+      this.xiangGuanFuJian(val);
     }
   },
   computed:{
 
   },
   mounted (){
-    this.init();
+    this.problemId = this.$route.query.id
+    this.arr = this.$route.query.arr
   },
   methods:{
-    init(){
+    goToChatBox(){
+      this.$router.push({name:'chatBox',query:{arr: this.arr}})
+    },
+    // 附件管理
+    clickFuJian(item) {
+      window.location.href = proveHost + 'prove' + item.filePath
+    },
+    //点击问题分类
+    clickProblen(item){
+      this.problemId = item.id
+    },
+    init(id){
       Indicator.open()
       proveRequest({
         url: 'prove/seProblem/getByProblemId',
         method: 'GET',
         mock: 'false',
-        param: {problemId: this.$route.query.id },
+        param: {problemId: id },
         contentType: 'application/json; charset=utf-8',
         success: (data) => {
           this.problem= data.data
+          Indicator.close()
+        }
+      })
+    },
+    xiangGuanTuiJian(id) {
+      Indicator.open()
+      proveRequest({
+        url: 'prove/seProblem/getByProblemIdRelevant',
+        method: 'GET',
+        mock: 'false',
+        param: {problemId:  id },
+        contentType: 'application/json; charset=utf-8',
+        success: (data) => {
+        this.problemTuiJian= data.data
+          Indicator.close()
+        }
+      })
+    },
+    xiangGuanFuJian(id) {
+      Indicator.open()
+      proveRequest({
+        url: 'prove/seProblemFile/list',
+        method: 'GET',
+        mock: 'false',
+        param: {problemId:  id },
+        contentType: 'application/json; charset=utf-8',
+        success: (data) => {
+          this.problemFuJian= data.data
           Indicator.close()
         }
       })
@@ -193,4 +246,55 @@ export default {
   }
 }
 
+.um-header {
+  width:100%;
+  position: relative;
+  height: 0.88rem;
+  background: #2479ED;
+  z-index: 5;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-bottom: 1px solid #ececec;
+}
+.um-back, .um-header-left {
+  height: 0.88rem;
+  line-height: 0.88rem;
+  min-width: 40px;
+  padding-top: 4px;
+  left: 15px;
+  position: absolute;
+  top: 0px;
+  font-weight: 500;
+  color: #ffffff;
+  text-decoration: none;
+}
+.um-back:before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-left: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  margin: 0px -3px 0px 0px;
+}
+.um-header h3 {
+  font-size: 17px;
+  text-align: center;
+  display: block;
+  margin: 0;
+  box-sizing: border-box;
+  width: 6.5rem;
+  margin: 0 auto;
+  height: 44px;
+  line-height: 44px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+  pointer-events: none;
+  color: #333333;
+  font-weight: 500;
+}
 </style>

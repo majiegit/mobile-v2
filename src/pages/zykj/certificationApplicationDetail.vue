@@ -1,19 +1,23 @@
 <!--证明审核-->
 <template>
   　<div style="overflow-y: scroll;overflow-x: hidden">
-  <myHeader :title="title" ></myHeader>
-  <div class="outDiv">
-    <div class="divRow">
-      <div>审批流程：</div>
-      <div class="divRow_right">
-        <van-steps :active="active">
-          <van-step>买家下单</van-step>
-          <van-step>商家接单</van-step>
-          <van-step>买家提货</van-step>
-          <van-step>交易完成</van-step>
-        </van-steps>
+    <myHeader :title="title" ></myHeader>
+    <div style="width: 90%; height: 50px; margin:15px 15px 0px 15px;float: left;">
+      <div style="float: left; width: 20%; height: 100%; font-size: 12px;">审批流程：</div>
+      <div class="check_user" style="width: 80%; height: 50px; float:left; overflow-x: auto; overflow-y: hidden;  white-space: nowrap;">
+        <div style="width: 95px; height: 100%; display: inline-block;" v-for="(item,index) in checkList" :key="index">
+          <div style="float: left; width: 100%; height: 50%; ">
+            <div style="width: 20px; height: 20px;  border-radius: 50%; text-align: center; line-height: 20px; float: left; background: #E04F4F; color: #fff;">
+              <van-icon name="success" size="20px"/>
+            </div>
+            <div style="width: 75px; height: 3px; float: left; background: #E04F4F; position: relative; top: 8px" v-if="index !== checkList.length - 1">
+            </div>
+          </div>
+          <div style="width: 100%; float: left; padding-top: 5%; font-size: 12px; position: relative; color: #333333;">{{item.USER_NAME}}</div>
+        </div>
       </div>
     </div>
+  <div class="outDiv">
     <div class="divRow">
       <div>证明名称：</div>
       <div class="divRow_picker">{{pName}}</div>
@@ -37,25 +41,15 @@
 
 <script>
 import picker from '../../components/zykj/picker.vue';
-import dropdownMenu from '../../components/zykj/dropdownMenu.vue';
-import myHeader from '../../components/zykj/my-header';
-import { Toast,Indicator } from 'mint-ui';
+import myHeader from '../../components/zykj/my-header-lihao';
+import { Toast } from 'mint-ui';
 import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
 import {proveRequest} from '../../utils/util'
 import {proveHost,} from '@/utils/hostConfig.js'
-import Vue from 'vue';
-import { Search } from 'vant';
-import { Calendar } from 'vant';
-import { Step, Steps } from 'vant';
-Vue.use(Calendar);
-Vue.use(Search);
-Vue.use(Step);
-Vue.use(Steps);
 export default {
   name: 'certificationApplicationDetail',
   components: {
     myHeader,
-    dropdownMenu,
     picker
   },
   data () {
@@ -68,12 +62,17 @@ export default {
       proveId:this.$route.query.data.proveId,
       imgSrc:this.$route.query.data.proveLook,
       lists:[],//picker
+      checkList: [],
+      prove: {}
     }
   },
   computed:{
 
   },
   mounted (){
+    this.prove = this.$route.query.data
+    console.log(this.prove)
+    this.getCheckStep(this.prove.proveId)
     // console.log(JSON.stringify(this.$route.query.data))
     proveRequest({
       url : 'prove/sysProve/list',
@@ -86,6 +85,18 @@ export default {
     })
   },
   methods:{
+    getCheckStep(proveId){
+      proveRequest({
+        url : 'prove/sysProve/checkUserList',
+        method : 'GET',
+        mock : false,
+        param:{proveId: proveId},
+        contentType : "application/json; charset=utf-8",
+        success :(data)=>{
+          this.checkList = data.data
+        },
+      })
+    },
     //delete收回 down下载
     pz(type){
       switch (type){
@@ -145,6 +156,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .outDiv{
+  float: left;
   margin: 15px;
   .divRow{
     display: flex;

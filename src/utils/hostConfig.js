@@ -1,9 +1,9 @@
 
 const hostList = {
-    'host' : 'https://test.bjcsjs.com:7001/',  // 代理
-    'proveHost': 'http://127.0.0.1:7011/', //证明办理环境
-    'questHost': 'https://test.bjcsjs.com:8999/', // 问卷接口地址
-    'questWirtePath': 'https://test.bjcsjs.com:8888/'  // 问卷填写地址
+    'host' : 'http://8.140.136.205:8080/',  // 代理
+    'proveHost': 'http://8.140.136.205:7011/', //证明办理环境
+    'questHost': 'http://8.140.136.205:8999/', // 问卷接口地址
+    'questWirtePath': 'http://8.140.136.205:8888/'  // 问卷填写地址
 }
 
 module.exports = {
