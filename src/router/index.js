@@ -33,7 +33,7 @@ import hrpegrow from './hrpegrow'
 import images from './images'
 // 路由增加问卷
 import questionnaire from './questionnaire'
-
+import chatBox from './chatBox'
 Router.prototype.goBack = function () {
 　　this.isBack = true
 　　window.history.go(-1)
@@ -62,7 +62,8 @@ const routeArr = [].concat(
   images,
   certification,
   employeeManagement,
-  questionnaire
+  questionnaire,
+  chatBox
 )
 Vue.use(Router)
 
