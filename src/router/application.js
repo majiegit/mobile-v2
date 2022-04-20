@@ -12,6 +12,8 @@ import Frame from '@/pages/index/frame/frame.vue'
 import vuexDemo from '@/store/demo/vuexDemo'
 import SsoLogin from '@/pages/index/login/ssoLogin.vue'  //用于客户单点登录用，请勿删除
 import SpaceSsoLogin from '@/pages/index/login/spaceSsoLogin.vue'  //用于客户单点登录用，请勿删除 针对友空间
+import dingSsoLogin from '@/pages/index/login/dingSsoLogin.vue'  //用于钉钉客户单点登录用，请勿删除 针对钉钉客户
+import weChatSsoLogin from '@/pages/index/login/weChatSsoLogin.vue'  //用于钉钉客户单点登录用，请勿删除 针对企业微信客户
 
 export default	[
   // 动态路径参数 以冒号开头
@@ -32,6 +34,16 @@ export default	[
     path : '/login',
     name: 'login',
     component : Login
+  },
+  {
+    path : '/dingSsoLogin',
+    name: 'dingSsoLogin',
+    component : dingSsoLogin
+  },
+  {
+    path : '/weChatSsoLogin',
+    name: 'weChatSsoLogin',
+    component : weChatSsoLogin
   },
   {
       path : '/ssoLogin',
