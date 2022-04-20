@@ -7,7 +7,7 @@
       >
       </hr-header>
     </header>
-    <section v-show="show">
+    <section v-if="show">
       <div class="postmark" v-show='approve_state == 0'>
         <img src="../../../../../static/img/pages/attendance-leave/nopass.png" >     <!-- 未通过邮戳 -->
       </div>
@@ -238,7 +238,7 @@
           url: 'hrssc/portal/trnquery/validateValidBudget',
           method: 'post',
           param: {
-            billKey: _this.billpk,
+            billKey: this.billpk,
             billtype: 'trns'
           },
           mock: false,
