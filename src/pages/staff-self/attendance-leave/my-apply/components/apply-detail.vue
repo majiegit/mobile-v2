@@ -957,7 +957,7 @@
       sumbitBill(){
         MessageBox.confirm(`确定提交单据?`).then(action => {
           if(action === 'confirm'){
-            this.selectIsZhiPai()
+            this.submit('submit')
           }
         }).catch(err => {
             if(err === 'cancel') {

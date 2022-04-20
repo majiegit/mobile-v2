@@ -308,9 +308,9 @@
             if(operation === 'Reject'){
               this.Reject(value)
             }else if(operation === 'Approve'){
-              this.selectIsZhiPai(value,'Approve')
+              this.Approve(value)
             }else if(operation === 'UnApprove'){
-              this.selectIsZhiPai(value,'UnApprove')
+              this.UnApprove(value)
             }
           }
         }).catch(err => {
