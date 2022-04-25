@@ -122,6 +122,7 @@
   import axios from 'axios'
   import { ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
   import { Toast } from 'mint-ui';
+  import { host } from '@/utils/hostConfig.js'
   export default {
     name: 'performanceCheck',
     data() {
@@ -132,7 +133,7 @@
         checkDisabled: true,
         noCheckDisabled: true,
         jianTouFangXiang:0,
-        windowPageContent: 'https://test.bjcsjs.com:7001/hrssc/hrpe/',
+        windowPageContent: host + 'hrssc/hrpe/',
         grade_items:[],
         checkDataList:[],
         hrpeValue: '',
