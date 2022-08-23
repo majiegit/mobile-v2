@@ -45,7 +45,7 @@
     name: 'login',
     data (){
       return {
-        isIndexShow:false,
+        isIndexShow:true,
         code:"",
         id:'',
         pwd:'',
@@ -64,30 +64,6 @@
 
     },
     mounted(){
-      if (dd.env.platform != "notInDingTalk") {
-        //进行钉钉登录操作
-        dd.ready( () => {
-          dd.runtime.permission.requestAuthCode({
-            corpId: "ding9de32f7f493084d735c2f4657eb6378f",//企业ID，必填
-            onSuccess: (result)=> {
-              //获取到免登录码，我这边是直接弹出弹窗可以直观看到是否获取到code
-             // alert("result=="+result.code);
-              this.noLogin.title = "ding"
-              this.noLogin.code = result.code
-              this.login()
-            }
-          });
-        });
-      }else{
-        if(navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1){
-          var code = this.ssoLogin()
-          this.noLogin.title = "wechat"
-          this.noLogin.code = code.toString()
-          this.login()
-        }else{
-          this.isIndexShow =  true
-        }
-      }
 
       //登陆时清除所有本地存储，以防不测^
       clearStorage()
@@ -112,26 +88,6 @@
       }
     },
     methods : {
-      ssoLogin(){
-        const code = this.getUrlParam("code");
-     /*   var url =host + "hrssc/portal/plantform/ssoLogin"
-        alert(url)
-        var res  = await axios.get(url)
-        alert(JSON.stringify(res));
-        alert(res)*/
-        const local = window.location.href;
-        const APPID = "wwfd76e9da2a6ae357"; // 企业微信
-        if (code == null || code == "") {
-          window.location.href =
-            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
-            APPID +
-            "&redirect_uri=" +
-            encodeURIComponent(local) +
-            "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
-        } else {
-         return code
-        }
-      },
       getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 
