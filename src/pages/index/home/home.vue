@@ -6,7 +6,7 @@
         style="width: 100%; height: .88rem; background: linear-gradient(to right, #1c66ef , #2f95fc); text-align: center; line-height: .88rem; padding: 2px 15px;">
         <span style="color: #fff; font-size: 16px;"> 员工赋能平台</span>
         <span style="float: right;">
-          <van-icon name="chat-o" :badge="newsArray.length == 0 ? '' : newsArray.length " color="#fff" size="25"/>
+          <van-icon name="chat-o" :badge="newsArray.length == 0 ? '' : newsArray.length " color="#fff" size="25" @click="handleMessageClick"/>
         </span>
       </div>
     </header>
