@@ -1,7 +1,3 @@
-/*
- *Created by yangyang11 on 2017/8/17.
- *
- */
 import Vue from 'vue'
 import Router from 'vue-router'
 import application from './application'
@@ -34,6 +30,8 @@ import images from './images'
 // 路由增加问卷
 import questionnaire from './questionnaire'
 import chatBox from './chatBox'
+// 新个人信息路由
+import personalnew from './new/personal'
 Router.prototype.goBack = function () {
 　　this.isBack = true
 　　window.history.go(-1)
@@ -63,7 +61,8 @@ const routeArr = [].concat(
   certification,
   employeeManagement,
   questionnaire,
-  chatBox
+  chatBox,
+  personalnew
 )
 Vue.use(Router)
 

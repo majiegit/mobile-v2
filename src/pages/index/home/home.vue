@@ -6,16 +6,17 @@
         style="width: 100%; height: .88rem; background: linear-gradient(to right, #1c66ef , #2f95fc); text-align: center; line-height: .88rem; padding: 2px 15px;">
         <span style="color: #fff; font-size: 16px;"> 员工赋能平台</span>
         <span style="float: right;">
-          <van-icon name="chat-o" :badge="newsArray.length == 0 ? '' : newsArray.length " color="#fff" size="25" @click="handleMessageClick"/>
+          <van-icon name="chat-o" :badge="newsArray.length == 0 ? '' : newsArray.length " color="#fff" size="25"
+                    @click="handleMessageClick"/>
         </span>
       </div>
     </header>
-    <section>
+    <div class="body">
       <div class="personalInfo-bar" id='' style="height: 3rem;
       background: linear-gradient(to right, #1c66ef , #2f95fc);
       position: relative;
-      border-bottom-right-radius: 320px 50px;
-      border-bottom-left-radius: 320px 50px;">
+      border-bottom-right-radius: 400px 150px;
+      border-bottom-left-radius: 400px 150px;">
         <div class="photo">
           <img v-if="userinfo.photo" v-bind:src="userinfo.photo"/>
           <i v-if="!userinfo.photo" class="icon hrfont hr-head"></i>
@@ -23,11 +24,12 @@
         <div class="personalInfo-entries" v-if='userinfo.name'>
           <div class="name">
             <span class="r-border" v-show='userinfo.postname'> </span>
-            {{ userinfo.postname }}
+
           </div>
           <div style="margin-left: 1.5rem">
             <div class="tittles">
-              <span class="orgname">{{ userinfo.name }} | 人力资源总监</span>
+              <span class="orgname">{{ userinfo.name }} </span>
+              <span v-show='userinfo.postname'> | {{ userinfo.postname }}</span>
             </div>
             <div class="days">
               {{ userinfo.orgname }} <br/> {{ userinfo.deptname }}
@@ -35,22 +37,25 @@
           </div>
         </div>
         <div class="dateEntry">
-          <span> 今天是您加入{{ userinfo.orgname }}的第{{ userinfo.joinsysyear }}年{{ userinfo.joinsysdate }}天</span>
+          <!--<span> 今天是您加入{{ userinfo.orgname }}的第{{ userinfo.joinsysyear }}年{{ userinfo.joinsysdate }}天</span>-->
+          <span> 今天是您加入第{{ userinfo.joinsysyear }}年{{ userinfo.joinsysdate }}天</span>
         </div>
       </div>
-      <figure v-for='(menu, index) in menuData' :key="index">
-        <ul>
-          <label>{{ menu.template.name }}</label>
-          <template v-for="(item, index) in menu.menuList">
-            <li @click='routerpush(item.phoneurl)' :key="index">
-              <i :class='item.icon' class="icon hrfont" v-bind:style="{color :item.iconcolor }"></i>
-              <span> {{ item.name }} </span>
-            </li>
-          </template>
-          <div class='clear'></div>
-        </ul>
-      </figure>
-    </section>
+
+      <div style="color: #000;">
+        <van-row type="flex" v-for="(menu, index1) in menuData" :key="index1" style="background: #fff; margin-top: 12px; padding: 10px">
+          <van-col :span="24" style="padding: 5px 0px; font-size: 16px;">{{ menu.template.name }}</van-col>
+          <van-col :span="6" v-for="(item, index) in menu.menuList" style="text-align: center; padding: 10px 0px;" :key="index">
+            <div style="width: 100%; height: 45px;">
+              <div style="height: 40px; width: 40px; margin: 0 auto;border-radius: 10px;" @click='routerpush(item.phoneurl)' v-bind:style="{ background: item.iconcolor }">
+                <i :class='item.icon' class="icon hrfont" style=" display: block;text-align: center; font-size: 35px; color: #fff;"></i>
+              </div>
+            </div>
+            <div style="font-size: 13px; width: 100%; height: 30px; text-align: center; line-height: 30px;">{{ item.name }}</div>
+          </van-col>
+        </van-row>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -249,7 +254,7 @@
           margin-left: 25%;
         }
       }
-      section {
+      .body {
         height: calc(~'100% - 0.88rem');
         color: #fff;
         .personalInfo-bar {
@@ -286,70 +291,18 @@
             }
           }
           .personalInfo-entries {
-            font-size: 14px;
+            font-size: 15px;
             .tittles {
               line-height: 24px;
             }
           }
-          //.personalInfo-entries {
-          //  float: left;
-          //  width: 76%;
-          //  margin-left: 0.2rem;
-          //
-          //  .name {
-          //    font-size: 0.32rem;
-          //    color: #fff;
-          //    letter-spacing: 0;
-          //    text-align: left;
-          //
-          //    .r-border {
-          //      display: inline-block;
-          //      height: .28rem;
-          //      border-right: 1px solid #c5c5c5;
-          //    }
-          //  }
-          //
-          //  .tittles {
-          //    width: 100%;
-          //    font-size: 0.28rem;
-          //    letter-spacing: 0;
-          //    text-align: left;
-          //    overflow-x: scroll;
-          //    white-space: nowrap;
-          //
-          //    .orgname {
-          //      display: block;
-          //      width: 100%;
-          //      padding-right: 0.08rem;
-          //      overflow-x: hidden;
-          //      white-space: nowrap;
-          //      word-break: break-all;
-          //      text-overflow: ellipsis
-          //    }
-          //
-          //    .postname {
-          //      margin-left: 0.1rem;
-          //    }
-          //  }
-          //
-          //  .days {
-          //    // overflow-x: scroll;
-          //    // white-space:nowrap;
-          //    width: 100%;
-          //    font-size: 0.24rem;
-          //    color: #888888;
-          //    letter-spacing: 0;
-          //    text-align: left;
-          //
-          //    span {
-          //      color: #0caef5;
-          //    }
-          //  }
-          //}
         }
         .dateEntry {
-          width: 85%;
+          /*max-width: 70%;*/
+          width: 50%;
           display: block;
+          overflow: auto;
+          white-space: nowrap;
           text-align: center;
           margin: 0 auto;
           color: #0B0306;
@@ -358,59 +311,8 @@
           border-radius: 20px;
           padding: 10px;
           position: absolute;
-          bottom: -5px;
-        }
-        figure {
-          //margin-top: -0.5rem;
-          label {
-            display: block;
-            width: 100%;
-            line-height: 1.2;
-            font-size: 0.28rem;
-            padding-left: 0.22rem;
-            color: @333-color;
-            margin: 0.1rem;
-          }
-          ul {
-            width: 100%;
-            margin: 0.2rem 0rem;
-            padding: .2rem 0 .1rem 0;
-            background: #ffffff;
-            border-radius: 4px;
-            label {
-              display: block;
-              line-height: 1.2;
-              font-size: 0.3rem;
-              padding-left: 0.22rem;
-              color: @333-color;
-              margin: 0.1rem;
-            }
-            li {
-              float: left;
-              display: block;
-              height: 23.4%;
-              width: 23%;
-              margin-left: 0.1rem;
-              margin-bottom: .2rem;
-              i {
-                display: block;
-                //margin-top: .2rem;
-                text-align: center;
-                font-size: 1rem;
-              }
-              span {
-                display: block;
-                font-size: 0.26rem;
-                color: #888888;
-                letter-spacing: 0;
-                text-align: center;
-                //margin-top: .1rem;
-              }
-            }
-            .clear {
-              clear: both;
-            }
-          }
+          left: 25%;
+          bottom: -7px;
         }
       }
     }
