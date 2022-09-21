@@ -3,9 +3,8 @@
  *
  */
 
-import Vue from 'vue'
 import axios from 'axios'
-import { Toast, Indicator } from 'mint-ui'
+import { Toast } from 'vant';
 import { host, proveHost, questHost} from './hostConfig'
 import { getStorage } from './tools'
 
@@ -28,13 +27,13 @@ module.exports = {
    * @param  {string} method    请求方式
    * @param  {string} content   content-type
    * @param  {object} bodyParam 参数
-   * @param  {function} success 成功回调          
+   * @param  {function} success 成功回调
    * @param  {function} error   失败回调
    * @param  {string} mock      是否开启mock服务
    */
   ajax : (url, method, content, bodyParam, success, error, mock) =>{
     //get请求通过params传参 post通过data传参
-    // axios.defaults.withCredentials = true   
+    // axios.defaults.withCredentials = true
     // axios.defaults.crossDomain = true
     axios.defaults.timeout = 25000
     let param = {},
@@ -49,7 +48,7 @@ module.exports = {
     if (mock == 'mock') {
       baseURL = 'https://easy-mock.com/mock/59bb76d1e0dc663341ab689c/'
     }
-  
+
     axios({
       method: method,
       url: `${baseURL}${url}`,
@@ -64,25 +63,24 @@ module.exports = {
     }).then(response => {
         if (response.data.statusCode == 100010) {
             window.close()
-            // login 
-            Indicator.close()
+            // login
         }
           success(response.data)
         }).catch(response => {
           error(response);192
         });
   },
-  
+
   /**
    * 请求后台数工具类
    * @author yangyang11@yongyou.com
    * @version 2.0
    * @date 2017/9/26
-   * @param  {参数} request 
+   * @param  {参数} request
    */
   fetchData : (request) => {
     axios.defaults.timeout = 25000
-    
+
     let param = {},
         data = request.param,
         baseURL = host,
@@ -96,13 +94,13 @@ module.exports = {
     if (request.mock == true) {
       baseURL = 'https://easy-mock.com/mock/59bb76d1e0dc663341ab689c/'
     }
-    
+
     axios({
       method: request.method,
       url: `${baseURL}${request.url}`,
       data: JSON.stringify(data),
       params : param,
-      // crossDomain : true,  
+      // crossDomain : true,
       // withCredentials:true,
       headers: {
         'Content-Type': request.contentType || 'application/json',
@@ -117,7 +115,7 @@ module.exports = {
       } else {
         if (!res.data.message) {
           res.data.message = '服务异常'
-        } 
+        }
         request.error(res.data)
       }
     }).catch(err=>{
@@ -125,7 +123,7 @@ module.exports = {
     })
   },
 
-    
+
 
   myFetch : async(url, request) =>{
 
@@ -268,7 +266,6 @@ module.exports = {
       if (response.data.statusCode == 100010) {
         window.close()
         // login
-        Indicator.close()
       }
       success(response.data)
     }).catch(response => {

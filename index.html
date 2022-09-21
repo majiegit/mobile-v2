@@ -5,7 +5,7 @@
     <title>员工赋能平台</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <link rel="stylesheet" href="./static/hrfonts/iconfont.css">
-    <meta name="format-detection" content="telephone=no" />
+    <!--<meta name="format-detection" content="telephone=no" />-->
     <!-- <link rel="stylesheet" href="https://unpkg.com/mint-ui@2.2.9/lib/style.css"> -->
    <!--  <script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script> -->
@@ -15,22 +15,6 @@
   </head>
   <script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.10.3/dingtalk.open.js"></script>
   <script type="text/javascript">
-    (function (doc, win) {
-             var docEl = doc.documentElement,
-                  resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
-                  recalc    = function () {
-                         var clientWidth = docEl.clientWidth;
-                         if (clientWidth>=750) {
-                            clientWidth = 750;
-                         };
-                         if (!clientWidth) return;
-                       docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
-                       window.fontSize = 100 * (clientWidth / 750)
-                  };
-                  if (!doc.addEventListener) return;
-                  win.addEventListener(resizeEvt, recalc, false);
-                  doc.addEventListener('DOMContentLoaded', recalc, false);
-        })(document, window);
   </script>
   <body>
     <div id="app">

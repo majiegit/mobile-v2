@@ -1,5 +1,4 @@
 import util from './util'
-import upload from './upload'
 import {
   setStorage,
   getStorage,
@@ -28,7 +27,5 @@ module.exports = {
   emojiFilter : emojiFilter,
   setPhotoColorByName: setPhotoColorByName,
   clearWaterMark: clearWaterMark,
-  waterMark: waterMark,
-  imguploads : upload.imguploads,
-  fileloads : upload.fileloads
+  waterMark: waterMark
 }
