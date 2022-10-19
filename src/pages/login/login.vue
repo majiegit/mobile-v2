@@ -1,53 +1,61 @@
 <template>
-  <div class="body" style="background-image:url(./static/img/pages/login/login-bg2.png)"
+  <div class="body" style="background-image:url(./static/img/login/background.png)"
        :style="{ height: currentHeight}">
-    <!-- logo-->
+    <!--logo-->
     <div class="logo">
-      <img src="../../../static/img/pages/login/newlogog2.png" id="logo"/>
+      <img src="../../../static/img/login/logo.png" id="logo"/>
     </div>
     <!--登录表单-->
     <div class="login">
       <van-form @submit="login">
         <van-field
-          style="background: none; color: #fff;"
+          style="background: rgba(3,214,223,0.1); border: 1px solid #04CBE2; border-radius: 48px;color: #fff;"
           clearable
-          v-model="username"
+          v-model="usercode"
           placeholder="请输入用户名"
-          left-icon="manager-o"
+          left-icon="manager"
           :rules="[{ required: true, message: '' }]"
         />
         <van-field
           :key="passwordType"
-          style="background: none; color: #fff;"
-          clearable
+          style="background: rgba(3,214,223,0.1); border: 1px solid #04CBE2; border-radius: 48px;color: #fff; margin-top: 15px;"
           v-model="password"
           :type="passwordType"
           placeholder="请输入登录密码"
-          left-icon="sign"
-          right-icon="eye-o"
+          left-icon="lock"
+          right-icon="eye"
           @click-right-icon="handleClick"
           :rules="[{ required: true, message: '' }]"
         />
-        <div style="margin: 16px;" class="login_button">
-          <van-button round block native-type="submit">
+        <div class="login_button">
+          <van-button round block native-type="submit" color="linear-gradient(90deg, #0769E9, #0511A5)">
             <span>登 录</span>
           </van-button>
         </div>
       </van-form>
+    </div>
+
+    <div class="threeLogin">
+      <p>第三方账号登录</p>
+      <p>
+        <van-icon name="wechat" size="30"/>
+        <van-icon name="alipay" size="30"/>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
   import {Toast} from 'vant';
-  import {ajax, fetchData, getStorage, setStorage, clearStorage} from 'hr-utils'
-
+  import {loginByUserCodePassword} from '@/api/login'
+  import storage from 'store'
+  import {ACCESS_TOKEN, REFRESH_TOKEN, TOKEN_TIME_EXP} from '@/utils/mutation-types'
   export default {
     name: 'login',
     data() {
       return {
         currentHeight: '',
-        username: '',
+        usercode: '',
         password: '',
         passwordType: 'password'
       }
@@ -57,51 +65,24 @@
     },
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight) + 'px'
-      //登陆时清除所有本地存储，以防不测^
-      clearStorage()
     },
-    watch: {
-    },
+    watch: {},
     methods: {
       // 密码眼睛
       handleClick() {
-       this.passwordType === 'text' ?  this.passwordType = 'password' :  this.passwordType = 'text'
+        this.passwordType === 'text' ? this.passwordType = 'password' : this.passwordType = 'text'
       },
       //登录
       login() {
-        let _this = this,
-          userinfo = {},
-          param = {
-            "userName": this.username,
-            "password": this.password
+         let param = {
+            usercode: this.usercode,
+            password: this.password
           }
-
-        //登录成功，本地存储sessionId
-        fetchData({
-          url: 'hrssc/portal/plantform/loginByPassword',
-          method: 'POST',
-          param: param,
-          mock: false,
-          contentType: "application/json",
-          success: function (data) {
-            if (data.data.loginSuccess == true) {
-              Toast.success({ message: '登录成功', duration: 500})
-              userinfo.usercode = data.data.usercode
-              userinfo.sessionId = data.data.sessionId
-              userinfo.userRole = data.data.userRole
-              setStorage('userinfo', userinfo)
-              setStorage('usercode', userinfo.usercode)
-              setStorage('userName', data.data.userName)
-              setStorage('mobile', data.data.mobile)
-              setStorage('userID', data.data.userID)
-              _this.$router.push('application')
-            }else {
-              Toast(data.data.message)
-            }
-          },
-          error: function (error) {
-            Toast(error.data.message)
-          }
+        loginByUserCodePassword(param).then(res => {
+          storage.set(ACCESS_TOKEN, res.data.accessToken, TOKEN_TIME_EXP)
+          storage.set(REFRESH_TOKEN, res.data.refreshToken, TOKEN_TIME_EXP)
+          this.$router.push("application")
+          Toast(res.message)
         })
       }
     }
@@ -117,23 +98,50 @@
   }
 
   .logo {
-    width: 100%;
-    padding: 21% 18%;
+    width: 70%;
+    padding: 30% 15%;
     img {
-      width: 64%;
+      width: 100%;
     }
   }
 
   .login {
-    width: 80%;
-    padding: 10%;
+    width: 70%;
+    padding: 0px 15%;
+
   }
 
   .login_button {
+    margin-top: 50px;
     span {
       font-size: 16px;
-      font-weight: bolder;
-      color: rgb(0, 162, 255);
+      color: #ffffff;
     }
+  }
+
+  .threeLogin {
+    position: absolute;
+    bottom: 15%;
+    width: 100%;
+    text-align: center;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    font-size: 12px;
+    color: #ffffff;
+    height: 50px;
+  }
+</style>
+
+<style>
+  .login input {
+    color: #ffffff;
+  }
+
+  .login .van-icon {
+    color: #0C89F1;
+  }
+
+  .login .van-cell::after {
+    border: none;
   }
 </style>
