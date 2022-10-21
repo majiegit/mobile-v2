@@ -31,7 +31,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/hrshc': {
-        target: 'http://localhost:2111',
+        target: 'http://8.140.136.205:2121',
         ws: false,
         changeOrigin: true,
         '^hrshc': '/hrshc',
