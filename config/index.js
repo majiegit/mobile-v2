@@ -25,13 +25,13 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8081,
+    port: 8082,
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/hrshc': {
-        target: 'http://8.140.136.205:2121',
+        target: 'http://127.0.0.1:2111',
         ws: false,
         changeOrigin: true,
         '^hrshc': '/hrshc',

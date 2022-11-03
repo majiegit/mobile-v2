@@ -24,7 +24,7 @@
         </div>
         <div style="width: 80%; height: 100%; float: left; cursor: pointer; font-size: 15px;">
           <p style="color:#000;position: relative;">
-            <span style="color: #000; font-weight: bold; font-size: 15px;">{{item.checknameml}}</span>
+            <span style="color: #000; font-weight: bold; font-size: 15px;">{{item.checkmanname}}</span>
             <span style="color: #999999; position: absolute; right: 0px; font-size: 13px;" v-if="item.dealdate"> 时间：{{item.dealdate}}</span>
           </p>
           <p style="color:#999; font-size: 13px;">

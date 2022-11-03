@@ -82,7 +82,7 @@
           storage.set(ACCESS_TOKEN, res.data.accessToken, TOKEN_TIME_EXP)
           storage.set(REFRESH_TOKEN, res.data.refreshToken, TOKEN_TIME_EXP)
           this.$router.push("application")
-          Toast(res.message)
+          Toast.success(res.message)
         })
       }
     }

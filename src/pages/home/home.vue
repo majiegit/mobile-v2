@@ -5,7 +5,7 @@
       <div
         class="header">
         <span class="headerTitle"> 员工赋能平台</span>
-        <span style="float: right;">
+        <span style="float: right; margin-top: 5px;">
             <van-icon name="bell" :badge="messageTotal" color="#fff" size="25"
                       @click="handleMessageClick"/>
           </span>
@@ -59,7 +59,9 @@
 <script>
   import storage from 'store'
   import {queryUserRoleMenu, queryPsndocInfo} from '@/api/home'
+  import {queryIsReadMessageCount} from '@/api/message'
   import {USERINFO, TOKEN_TIME_EXP} from '@/utils/mutation-types'
+
   export default {
     name: 'application',
     data() {
@@ -73,7 +75,6 @@
     created() {
       this.getUserInfo()
       this.getMenus()
-      // this.initData()
     },
     mounted() {
     },
@@ -89,13 +90,20 @@
         })
       },
       // 消息个数统计
-      initData() {
+      getMessageNumber(userId) {
+        let params = {
+          userId: userId
+        }
+        queryIsReadMessageCount(params).then(res => {
+          this.messageTotal = res.data
+        })
       },
       // 获取用户详细资料
       getUserInfo() {
         queryPsndocInfo().then(res => {
           this.userInfo = res.data
-          storage.set(USERINFO,  this.userInfo, TOKEN_TIME_EXP)
+          storage.set(USERINFO, this.userInfo, TOKEN_TIME_EXP)
+          this.getMessageNumber(res.data.user_id)
         })
       },
       routerpush(router) {
@@ -157,8 +165,8 @@
   }
 
   .menuListItem {
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
     margin: 0 auto;
     border-radius: 10px;
     text-align: center;
@@ -207,7 +215,7 @@
   }
 
   .menuIcon svg {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
   }
 </style>
