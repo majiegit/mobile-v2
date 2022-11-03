@@ -14,6 +14,21 @@ export const approveStateColorList = {
   '-1': '#2479ED'
 }
 
+export const whetherYN = {
+  'N' : '否',
+  'Y' : '是',
+}
+
+export const dateTimeType = {
+  '1' : '小时',
+  '2' : '天',
+}
+
+export const LastAfter = {
+  '1' : '上午',
+  '2' : '下午',
+}
+
 // 我的申请 审批中心使用
 export const BillTypeList = [
   {
@@ -25,28 +40,52 @@ export const BillTypeList = [
     billtype: '6QQJ'
   },
   {
+    billtypename: '销假单',
+    billtype: '6QXJ',
+  },
+  {
     billtypename: '加班单',
     billtype: '6QJB',
   },
   {
     billtypename: '出差单',
     billtype: '6QCC',
-  }
+  },
+  {
+    billtypename: '销差单',
+    billtype: '6QXC',
+  },
+
 ]
 
 // 工作任务、 审批中心、我的申请使用
 export const BillTypeMap = {
   '6QQJ': {
     billtypename: '请假单',  // 单据名称
-    routerPath: '',          // 单据路由
+    routerDetailPath: 'leaveDetail',  // 请假明细页路由
+    routerApprovePath: 'leaveApprove',  // 请假审核页路由
+  },
+  '6QXJ': {
+    billtypename: '销假单',
+    routerDetailPath: 'leaveoffDetail',  // 请假明细页路由
+    routerApprovePath: 'leaveoffApprove',  // 请假审核页路由
   },
   '6QJB': {
     billtypename: '加班单',
-    routerPath: '',
+    routerDetailPath: 'overtimeDetail',  // 请假明细页路由
+    routerApprovePath: 'overtimeApprove',  // 请假审核页路由
   },
   '6QCC': {
     billtypename: '出差单',
-    routerPath: '',
+    routerDetailPath: 'awayDetail',  // 请假明细页路由
+    routerApprovePath: 'awayApprove',  // 请假审核页路由
   },
+
+  '6QXC': {
+    billtypename: '销差单',
+    routerDetailPath: 'awayoffDetail',  // 请假明细页路由
+    routerApprovePath: 'awayoffApprove',  // 请假审核页路由
+  }
+
 }
 
