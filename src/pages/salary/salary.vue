@@ -242,7 +242,6 @@
             }
           }
         }
-        // TODO 查询数据
         this.datePickShow = false
         this.querySalaryData()
       },
