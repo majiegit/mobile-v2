@@ -3,16 +3,26 @@
     <Header :title="title" @clickLeft="clickLeft" :rightIcon="rightIcon" @clickRight="deleteBill"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
+        <p class="item_body_title">出差信息</p>
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.pk_psndoc"/>
+          <van-cell title="出差类型：" :value="billInfo.triptypename"/>
+          <van-cell title="申请人：" :value="billInfo.psndocname"/>
           <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
-          <van-cell title="加班说明：" :value="billInfo.remark"/>
-          <van-cell title="审批状态：" :value="billInfo.approvestatus"/>
+          <van-cell title="开始时间：" :value="billInfo.tripoffbegintime"/>
+          <van-cell title="结束时间：" :value="billInfo.tripendtime"/>
+<!--          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="LastAfter[billInfo.start_day_type]"/>-->
+<!--          <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="LastAfter[billInfo.end_day_type]"/>-->
+          <van-cell title="出差时长：" :value="billInfo.tripday + dateTimeType[billInfo.minunit]"/>
+          <van-cell title="出差目的地：" :value="billInfo.otapplylength"/>
+          <van-cell title="出差费用：" :value="billInfo.cost"/>
+          <van-cell title="销差原因：" :value="billInfo.remark"/>
+          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
-
+        <p class="item_body_title">销假信息</p>
+        <van-cell title="销差理由：" :value="billInfo.tripoffremark"/>
+        <van-cell title="实际开始时间：" :value="billInfo.tripoffbegintime"/>
+        <van-cell title="实际结束时间：" :value="billInfo.tripoffendtime"/>
+        <van-cell title="实际出差时长：" :value="billInfo.tripoffday + dateTimeType[billInfo.minunit]"/>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
         <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
@@ -49,13 +59,16 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getBillInfo} from '@/api/my-apply'
+  import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",
     components: {Header, ApproveProcess},
     data() {
       return {
-        title: '加班申请',
+        dateTimeType: dateTimeType,
+        approveStateName: approveStateName,
+        title: '销差申请',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},

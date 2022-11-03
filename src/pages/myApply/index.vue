@@ -43,7 +43,7 @@
   import {Toast} from 'vant';
   import {getMyApplication} from '@/api/my-apply'
   import {userInfoPkPsndoc} from '@/utils/storageUtils'
-  import {approveStateName, approveStateColorList, BillTypeList} from '@/utils/ConstantUtils'
+  import {approveStateName, approveStateColorList, BillTypeList, BillTypeMap} from '@/utils/ConstantUtils'
 
   export default {
     watch: {
@@ -80,15 +80,12 @@
         this.billTypeModel = index
       },
       // 跳转单据
-      toApply(applyObj) {
+      toApply(item) {
         this.$router.push({
-          name: 'apply-detail',
+          name: BillTypeMap[item.billtype].routerDetailPath,
           query: {
-            pk_h: applyObj.pk_h,
-            approve_state: applyObj.approve_state,
-            tbm_h_name: applyObj.tbm_h_name,
-            billtype: applyObj.billtype,
-            bill_code: applyObj.bill_code
+            pk_h: item.pk_h,
+            billtype: item.billtype
           }
         })
       },

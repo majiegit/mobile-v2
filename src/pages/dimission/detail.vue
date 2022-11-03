@@ -10,7 +10,7 @@
           <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
           <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
           <van-cell title="加班说明：" :value="billInfo.remark"/>
-          <van-cell title="审批状态：" :value="billInfo.approvestatus"/>
+          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
 
         <p class="fileClass" @click="fileManager">附件管理</p>
@@ -49,13 +49,15 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getBillInfo} from '@/api/my-apply'
+  import {approveStateName} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",
     components: {Header, ApproveProcess},
     data() {
       return {
-        title: '加班申请',
+        approveStateName: approveStateName,
+        title: '离职申请',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},

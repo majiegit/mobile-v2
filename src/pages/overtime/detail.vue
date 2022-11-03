@@ -4,7 +4,7 @@
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.pk_psndoc"/>
+          <van-cell title="申请人：" :value="billInfo.psndocname"/>
           <van-cell title="申请时间：" :value="billInfo.applydate"/>
           <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
           <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>

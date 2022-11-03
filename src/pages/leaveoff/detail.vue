@@ -3,16 +3,27 @@
     <Header :title="title" @clickLeft="clickLeft" :rightIcon="rightIcon" @clickRight="deleteBill"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
+        <p class="item_body_title">请假信息</p>
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.pk_psndoc"/>
-          <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
-          <van-cell title="加班说明：" :value="billInfo.remark"/>
-          <van-cell title="审批状态：" :value="billInfo.approvestatus"/>
+          <van-cell title="请假类别：" :value="billInfo.leavetypename"/>
+          <van-cell title="申请人：" :value="billInfo.psndocname"/>
+<!--          <van-cell title="申请时间：" :value="billInfo.applydate"/>-->
+          <van-cell title="开始日期：" :value="billInfo.leavebegintime"/>
+          <van-cell title="结束日期：" :value="billInfo.leaveendtime"/>
+          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="LastAfter[billInfo.start_day_type]"/>
+          <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="LastAfter[billInfo.end_day_type]"/>
+          <van-cell title="请假时长：" :value="billInfo.leaveday + dateTimeType[billInfo.minunit]"/>
+          <van-cell title="休假说明：" :value="billInfo.leaveremark"/>
+          <van-cell title="是否销假：" :value="whetherYN[billInfo.isrevoked]"/>
+          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
-
+        <p class="item_body_title">销假信息</p>
+        <van-cell-group>
+          <van-cell title="销假理由：" :value="billInfo.leaveoffremark"/>
+          <van-cell title="实际开始时间：" :value="billInfo.leaveoffbegintime"/>
+          <van-cell title="实际结束时间：" :value="billInfo.leaveoffendtime"/>
+          <van-cell title="实际销假时长：" :value="billInfo.leaveoffday + dateTimeType[billInfo.minunit]"/>
+        </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
         <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
@@ -49,13 +60,19 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getBillInfo} from '@/api/my-apply'
+  import {approveStateName, whetherYN, LastAfter, dateTimeType} from '@/utils/ConstantUtils'
+
 
   export default {
     name: "edit",
     components: {Header, ApproveProcess},
     data() {
       return {
-        title: '加班申请',
+        approveStateName: approveStateName,
+        whetherYN: whetherYN,
+        LastAfter: LastAfter,
+        dateTimeType: dateTimeType,
+        title: '销假申请',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},

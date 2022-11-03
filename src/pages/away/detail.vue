@@ -4,13 +4,17 @@
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.pk_psndoc"/>
-          <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
-          <van-cell title="加班说明：" :value="billInfo.remark"/>
-          <van-cell title="审批状态：" :value="billInfo.approvestatus"/>
+          <van-cell title="出差类型：" :value="billInfo.triptypename"/>
+          <van-cell title="申请人：" :value="billInfo.psndocname"/>
+          <van-cell title="出差类别：" :value="billInfo.applydate"/>
+          <van-cell title="开始时间：" :value="billInfo.tripbegintime"/>
+          <van-cell title="结束时间：" :value="billInfo.tripendtime"/>
+          <van-cell title="出差时长：" :value="billInfo.tripday	+ dateTimeType[billInfo.minunit]"/>
+          <van-cell title="出差费用：" :value="billInfo.cost"/>
+          <van-cell title="交接人：" :value="billInfo.handover"/>
+          <van-cell title="目的地：" :value="billInfo.destination"/>
+          <van-cell title="出差理由：" :value="billInfo.remark"/>
+          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
 
         <p class="fileClass" @click="fileManager">附件管理</p>
@@ -49,13 +53,17 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getBillInfo} from '@/api/my-apply'
+  import {approveStateName,dateTimeType} from '@/utils/ConstantUtils'
+
 
   export default {
     name: "edit",
     components: {Header, ApproveProcess},
     data() {
       return {
-        title: '加班申请',
+        dateTimeType: dateTimeType,
+        approveStateName: approveStateName,
+        title: '出差申请',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},
