@@ -3,16 +3,18 @@
     <Header :title="title" @clickLeft="clickLeft" :rightIcon="rightIcon" @clickRight="deleteBill"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
+        <p class="item_body_title">人员信息</p>
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.pk_psndoc"/>
-          <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
-          <van-cell title="加班说明：" :value="billInfo.remark"/>
+          <van-cell title="离职类型：" :value="billInfo.pk_trnstype"/>
+          <van-cell title="申请人：" :value="billInfo.billmaker"/>
+          <van-cell title="离职人员：" :value="billInfo.pk_psndoc"/>
+          <van-cell title="申请日期：" :value="billInfo.apply_date"/>
+          <van-cell title="生效日期：" :value="billInfo.effectdate"/>
+          <van-cell title="离职原因：" :value="billInfo.sreason"/>
+          <van-cell title="离职说明：" :value="billInfo.memo"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
-
+        <p class="item_body_title">离职前信息</p>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
         <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
@@ -75,7 +77,8 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
+      this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -89,13 +92,19 @@
        * 返回事件
        */
       clickLeft() {
-        this.$router.push({name: 'application'})
+        this.$router.go(-1)
       },
       /**
        * 附件管理
        */
       fileManager() {
-        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h}})
+        // 如果等于 1  附件禁止操作
+        let disabled = 1
+        if (['3', '-1'].includes(this.approvestate)) {
+          // 提交 自由态 附件可操作
+          disabled = 0
+        }
+        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
       },
       /**
        * 编辑单据

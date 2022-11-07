@@ -95,7 +95,7 @@
        * 返回事件
        */
       clickLeft() {
-        this.$router.push({name: 'application'})
+        this.$router.go(-1)
       },
       /**
        * 附件管理

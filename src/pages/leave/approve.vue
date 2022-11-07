@@ -62,7 +62,7 @@
         LastAfter: LastAfter, // 上下午
         whetherYN: whetherYN, // 是否YN
         approveStateName: approveStateName, // 审批状态
-        title: '请假申请单',
+        title: '请假审批单',
         check: {
           show: false,
           title: '',
@@ -78,7 +78,8 @@
     },
     watch: {},
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
+      this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }

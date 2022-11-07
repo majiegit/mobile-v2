@@ -8,7 +8,8 @@
           <van-cell title="申请时间：" :value="billInfo.applydate"/>
           <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
           <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
+          <van-cell title="是否通宵：" :value="whetherYN[billInfo.isallnight]"/>
+          <van-cell title="加班时长：" :value="billInfo.otapplylength + '小时'"/>
           <van-cell title="加班说明：" :value="billInfo.remark"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
@@ -49,13 +50,15 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getBillInfo} from '@/api/my-apply'
-  import {approveStateName} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN} from '@/utils/ConstantUtils'
+
 
   export default {
     name: "edit",
     components: {Header, ApproveProcess},
     data() {
       return {
+        whetherYN: whetherYN,
         approveStateName: approveStateName,
         title: '加班申请',
         currentHeight: '',
@@ -75,7 +78,8 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
+      this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -89,13 +93,19 @@
        * 返回事件
        */
       clickLeft() {
-        this.$router.push({name: 'application'})
+        this.$router.go(-1)
       },
       /**
        * 附件管理
        */
       fileManager() {
-        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h}})
+        // 如果等于 1  附件禁止操作
+        let disabled = 1
+        if (['3', '-1'].includes(this.approvestate)) {
+          // 提交 自由态 附件可操作
+          disabled = 0
+        }
+        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
       },
       /**
        * 编辑单据

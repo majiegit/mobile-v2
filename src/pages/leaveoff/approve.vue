@@ -59,13 +59,19 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getBillInfo} from '@/api/my-apply'
+  import {approveStateName, whetherYN, LastAfter, dateTimeType} from '@/utils/ConstantUtils'
+
 
   export default {
     name: "approve",
     components: {Header, ApproveProcess},
     data() {
       return {
-        title: '销假申请单',
+        approveStateName: approveStateName,
+        whetherYN: whetherYN,
+        LastAfter: LastAfter,
+        dateTimeType: dateTimeType,
+        title: '销假审批单',
         check: {
           show: false,
           title: '',

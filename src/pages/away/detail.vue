@@ -81,7 +81,8 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
+      this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -95,13 +96,19 @@
        * 返回事件
        */
       clickLeft() {
-        this.$router.push({name: 'application'})
+        this.$router.go(-1)
       },
       /**
        * 附件管理
        */
       fileManager() {
-        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h}})
+        // 如果等于 1  附件禁止操作
+        let disabled = 1
+        if (['3', '-1'].includes(this.approvestate)) {
+          // 提交 自由态 附件可操作
+          disabled = 0
+        }
+        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
       },
       /**
        * 编辑单据

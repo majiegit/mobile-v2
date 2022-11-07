@@ -38,7 +38,7 @@
     <div class="threeLogin">
       <p>第三方账号登录</p>
       <p>
-        <van-icon name="wechat" size="30"/>
+        <van-icon style="margin-right:10px" name="wechat" size="30"/>
         <van-icon name="alipay" size="30"/>
       </p>
     </div>
