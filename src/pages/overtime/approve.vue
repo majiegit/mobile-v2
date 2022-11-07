@@ -21,25 +21,8 @@
         <van-empty description="暂无数据"/>
       </div>
     </div>
-
-
-    <!-- 按钮区域-->
-    <van-row type="flex" justify="space-around" class="button_bottom" v-if="['2','3'].includes(approvestate)">
-      <van-col :span="8">
-        <van-button round block type="info" @click="checkBill('Y')">通 过</van-button>
-      </van-col>
-      <van-col :span="8">
-        <van-button round block type="info" @click="checkBill('N')">不通过</van-button>
-      </van-col>
-      <van-col :span="7">
-        <van-button round block type="info" @click="checkBill('R')">驳 回</van-button>
-      </van-col>
-    </van-row>
-
-    <!--审批弹框-->
-    <van-dialog v-model="check.show" title="审批意见" show-cancel-button @confirm="checkConfirm">
-      <van-field v-model="check.node" label="" placeholder="请输入审批意见"/>
-    </van-dialog>
+    <!--审核按钮-->
+    <ApproveButton :pk_h="pk_h" :approvestate="approvestate" v-if="pk_h && approvestate"/>
   </div>
 </template>
 
@@ -47,24 +30,19 @@
   import {Toast} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
+  import ApproveButton from '@/components/ApproveButton/ApproveButton'
   import {getBillInfo} from '@/api/my-apply'
   import {approveStateName, whetherYN} from '@/utils/ConstantUtils'
 
 
   export default {
     name: "approve",
-    components: {Header, ApproveProcess},
+    components: {Header, ApproveProcess, ApproveButton},
     data() {
       return {
         whetherYN: whetherYN,
         approveStateName: approveStateName,
         title: '加班申请单',
-        check: {
-          show: false,
-          title: '',
-          node: '',
-          action: '',
-        },
         currentHeight: '',
         billInfo: {},
         approvestate: '',
@@ -74,8 +52,7 @@
     },
     watch: {},
     mounted() {
-      let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
-      this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -114,36 +91,7 @@
        */
       clickLeft() {
         this.$router.push({name: 'application'})
-      },
-      /**
-       * 审核确认
-       */
-      checkConfirm() {
-        Toast.loading({
-          message: '审批中...',
-          duration: 0
-        })
-      },
-
-      /**
-       * 单据审核
-       */
-      checkBill(type) {
-        this.check.show = true
-        if (type == 'Y') {
-          // 审核通过
-          this.check.action = 'Y'
-          this.check.title = '审核通过'
-        } else if (type == 'N') {
-          // 审核不通过
-          this.check.action = 'N'
-          this.check.title = '审核不通过'
-        } else if (type == 'R') {
-          // 驳回
-          this.check.action = 'R'
-          this.check.title = '驳回'
-        }
-      },
+      }
     }
   }
 </script>
@@ -158,13 +106,6 @@
       padding-left: 10px;
       color: #999;
     }
-  }
-
-  .button_bottom {
-    position: fixed;
-    width: 100%;
-    height: 50px;
-    padding: 5px 0px;
   }
 
   .fileClass {

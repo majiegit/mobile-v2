@@ -23,24 +23,8 @@
       </div>
     </div>
 
-    <!-- 按钮区域-->
-    <!--自由态-->
-    <van-row type="flex" justify="space-around" class="button_bottom" v-if="['-1'].includes(approvestate)">
-      <van-col :span="11">
-        <van-button round block type="info" @click="submitBill">提 交</van-button>
-      </van-col>
-      <van-col :span="11">
-        <van-button round block type="info" @click="editBill">编 辑</van-button>
-      </van-col>
-    </van-row>
-
-    <!--提交态-->
-    <van-row type="flex" justify="space-around" class="button_bottom" v-if="['3'].includes(approvestate)">
-      <van-col :span="23">
-        <van-button round block type="info" @click="rollbackBill">收 回</van-button>
-      </van-col>
-    </van-row>
-
+    <!--单据操作按钮-->
+    <ApplyButton :pk_h="pk_h" :billtype="BillTypeCode.overtime.billtypecode" :approvestate="approvestate" v-if="pk_h && approvestate"/>
   </div>
 </template>
 
@@ -49,17 +33,19 @@
   import {Dialog} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
+  import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import {getBillInfo} from '@/api/my-apply'
-  import {approveStateName, whetherYN} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN, BillTypeCode} from '@/utils/ConstantUtils'
 
 
   export default {
     name: "edit",
-    components: {Header, ApproveProcess},
+    components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
         whetherYN: whetherYN,
         approveStateName: approveStateName,
+        BillTypeCode: BillTypeCode,
         title: '加班申请',
         currentHeight: '',
         rightIcon: '',
@@ -78,8 +64,7 @@
       }
     },
     mounted() {
-      let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
-      this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -106,34 +91,6 @@
           disabled = 0
         }
         this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
-      },
-      /**
-       * 编辑单据
-       */
-      editBill() {
-      },
-
-      /**
-       * 提交单据
-       */
-      submitBill() {
-        Dialog.confirm({
-          title: '提交单据',
-          message: '是否确定提交单据?',
-        }).then(() => {
-        }).catch(() => {
-        })
-      },
-      /**
-       * 收回单据
-       */
-      rollbackBill() {
-        Dialog.confirm({
-          title: '收回单据',
-          message: '是否确定收回单据?',
-        }).then(() => {
-        }).catch(() => {
-        })
       },
       /**
        * 删除单据
@@ -183,13 +140,6 @@
       padding-left: 10px;
       color: #999;
     }
-  }
-
-  .button_bottom {
-    position: fixed;
-    width: 100%;
-    height: 50px;
-    padding: 5px 0px;
   }
 
   .fileClass {

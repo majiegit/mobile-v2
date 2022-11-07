@@ -15,18 +15,18 @@ export const approveStateColorList = {
 }
 
 export const whetherYN = {
-  'N' : '否',
-  'Y' : '是',
+  'N': '否',
+  'Y': '是',
 }
 
 export const dateTimeType = {
-  '1' : '小时',
-  '2' : '天',
+  '1': '小时',
+  '2': '天',
 }
 
 export const LastAfter = {
-  '1' : '上午',
-  '2' : '下午',
+  '1': '上午',
+  '2': '下午',
 }
 
 // 我的申请 审批中心使用
@@ -89,3 +89,25 @@ export const BillTypeMap = {
 
 }
 
+export const BillTypeCode = {
+  leave: {
+    billtypecode: '6QQJ',  // 单据编码
+    billtypename: '请假单'  // 单据名称
+  },
+  leaveOff: {
+    billtypecode: '6QXJ',  // 单据编码
+    billtypename: '销假单' // 单据名称
+  },
+  overtime: {
+    billtypecode: '6QJB',  // 单据编码
+    billtypename: '加班单'
+  },
+  away: {
+    billtypecode: '6QCC',  // 单据编码
+    billtypename: '出差单'
+  },
+  awayOff: {
+    billtypecode: '6QXC',  // 单据编码
+    billtypename: '销差单'
+  }
+}

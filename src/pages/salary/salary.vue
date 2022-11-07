@@ -15,7 +15,7 @@
             {{ endDate }}
           </span>
           <span style="font-size: 20px; float: right; margin-right: 10px;" @click="selectDate('beginDate','开始日期')"><van-icon
-              name="notes-o"/></span>
+            name="notes-o"/></span>
         </div>
       </van-col>
     </van-row>
@@ -78,41 +78,48 @@
 
     <!--薪资明细弹框-->
     <van-popup
-        v-model="salaryDetailShow"
-        round
-        :style="{ height: '70%', width: '90%', background: 'white'}"
+      v-model="salaryDetailShow"
+      lock-scroll
+      closeable
+      :style="{ height: '100%', width: '100%', background: 'white'}"
     >
-      <div class="top-back1">
-        <div class="top-back2"></div>
-      </div>
-      <div style="">
-        <van-row type="flex">
-          <van-col span="24" class="detail_title_class">
-            <van-row>
-              <van-col span="24" class="salary_title">2022年3月薪资已发放</van-col>
-            </van-row>
-            <van-row style="font-size: 14px;" v-for="(item, index) in salaryDetailKeyList" :key="index">
-              <van-divider :style="index == 0 ?{ borderColor: 'grey', margin: '12px' }: { borderColor: 'grey'}"
-                           dashed></van-divider>
-              <van-col span="16" style="padding-left: 20px;font-size: 16px">{{ item.title }}</van-col>
-              <van-col span="8" style="padding-left: 20px;font-size: 16px">{{ item.content }}</van-col>
-            </van-row>
-            <!--            <div class="detail_item_class" v-for="(key, index) in salaryDetailKeyList" :key="index">-->
-            <!--              <span  class="detail_item_class_span1">{{salaryDetail.salaryList[key].title}}</span>-->
-            <!--              <span  class="detail_item_class_span2">{{salaryDetail.salaryList[key].content}}</span>-->
-            <!--            </div>-->
-          </van-col>
-        </van-row>
+      <div style="padding: 15% 2%;">
+        <!-- 标题-->
+        <div style="width: 100%; height: 56px; border-top-left-radius: 16px; border-top-right-radius: 16px; background: #2479ed; position: relative;">
+          <div
+            style="width: 100%; height: 51px; border-top-left-radius: 11px; border-top-right-radius: 11px; background: #fff;  position: absolute; top: 6px;">
+            <p style="margin-left: 20px;">2012年2月工资发放</p>
+          </div>
+        </div>
+        <div>
+          <van-row type="flex">
+            <van-col span="24">
+              <!-- 数据内容-->
+              <van-row style="font-size: 14px; padding: 0 20px;" v-for="(item, index) in salaryDetailKeyList"
+                       :key="index">
+                <van-divider :style="{ borderColor: 'grey'}"
+                             dashed></van-divider>
+                <van-col span="12">
+                <span>{{ item.title }}
+              </span>
+                </van-col>
+                <van-col span="12">
+                  <span style="float: right;">{{ item.content }}</span>
+                </van-col>
+              </van-row>
+            </van-col>
+          </van-row>
+        </div>
       </div>
     </van-popup>
 
     <!--日期选择框-->
     <van-popup v-model="datePickShow" position="bottom">
       <van-datetime-picker
-          @confirm="confirmDate"
-          v-model="dateModel"
-          type="year-month"
-          :title="'选择'+ fieldName"
+        @confirm="confirmDate"
+        v-model="dateModel"
+        type="year-month"
+        :title="'选择'+ fieldName"
       />
     </van-popup>
   </div>
@@ -136,6 +143,26 @@
         salaryDetail: {},
         // salaryDetailKeyList: [],
         salaryDetailKeyList: [
+          {
+            title: '社保',
+            content: '600'
+          },
+          {
+            title: '公积金',
+            content: '800'
+          },
+          {
+            title: '个人所得税',
+            content: '800'
+          },
+          {
+            title: '税前收入',
+            content: '800'
+          },
+          {
+            title: '公积金',
+            content: '800'
+          },
           {
             title: '社保',
             content: '600'
@@ -336,27 +363,25 @@
   };
 </script>
 <style>
-    .top-back1 {
-        width: 100%;
-        background: #2479ed;
-        height: 20px;
-        position: relative
-    }
+  .top-back1 {
+    width: 100%;
+    background: #2479ed;
+    height: 20px;
+  }
 
-    .top-back2 {
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
-        height: 30px;
-        background: white;
-        position: relative;
-        top: 6px;
-    }
+  .top-back2 {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    height: 30px;
+    background: white;
+    position: relative;
+    top: 6px;
+  }
 
-    .salary_title {
-        padding: 10px 0 0 20px;
-        font-weight: bolder;
-        font-size: 22px
-    }
+  .salary_title {
+    padding: 0 20px;
+    font-size: 22px
+  }
 </style>
 
 <style lang='less' scoped>
@@ -387,7 +412,6 @@
     padding-left: 20%;
     color: #999999;
   }
-
 
   .salary_total_div {
     width: 92%;
@@ -421,19 +445,13 @@
   }
 
   .detail_title_class {
-    //border-radius: 10px;
-    //padding: 20px;
     background: #ffffff;
-    //line-height: 30px;
     font-size: 20px;
     color: #000;
     font-family: "Microsoft YaHei";
     font-weight: 500;
-    //color: #666;
-
     p {
       font-size: 20px;
-      font-weight: bolder;
     }
   }
 
