@@ -61,8 +61,8 @@
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       this.uploadButtonWidth = (document.documentElement.clientWidth - 20) + 'px'
-      this.filePath = this.$route.query.filePath;
-      if(this.$route.query.disabled === 'true') {
+      this.filePath = this.$route.query.filePath
+      if(this.$route.query.disabled == 1){
         this.disabled = true
       }
       this.queryFileList(this.$route.query.filePath, true)

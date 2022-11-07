@@ -101,7 +101,13 @@
        * 附件管理
        */
       fileManager() {
-        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h}})
+        // 如果等于 1  附件禁止操作
+        let disabled = 1
+        if (['3', '-1'].includes(this.approvestate)) {
+          // 提交 自由态 附件可操作
+          disabled = 0
+        }
+        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
       },
       /**
        * 编辑单据
