@@ -9,7 +9,7 @@
             required
             readonly
             v-model="overtimeData.begintime"
-            @click="selectDate('begintime')"
+            @click="selectDate(overtimeData.begintime,'begintime','对对对')"
             label="开始时间"
             placeholder="请选择开始时间"
           />
@@ -41,15 +41,7 @@
         </van-form>
       </div>
       <!-- 日期选择器-->
-      <van-popup v-model="pickerDateShow" position="bottom">
-        <van-datetime-picker
-          @confirm="onConfirmDate"
-          @cancel="pickerDateShow = false"
-          v-model="initDate"
-          type="datetime"
-          title="请选择加班时间"
-        />
-      </van-popup>
+      <SelectDate ref="selectorDate" @dateOk="dateOk"/>
     </div>
   </div>
 </template>
@@ -69,31 +61,38 @@
         pickerDateShow: false,
         initDate: new Date(),
         checked: true,
-        overtimeData: {}
+        overtimeData: {
+          begintime: '2022-08-02'
+        }
       }
     },
     components: {Header, Select, SelectDate},
     created() {
     },
     methods: {
+      /**
+       * 时间选择器确认回调
+       * @param selector
+       * @param item
+       */
+      dateOk(selector) {
+        console.log(selector)
+        this.$set(this.regData, selector.field, selector.value)
+      },
+      /**
+       * 选择时间
+       */
+      selectDate(value, field, title) {
+        let selector = {
+          title: title,
+          field: field,
+          value: value,
+          type: 'date'
+        }
+        this.$refs.selectorDate.openSelect(selector)
+      },
       clickLeft() {
         this.$router.push({name: 'application'})
-      },
-      // 日期按钮
-      selectDate(field) {
-        this.clickDateField = field
-        if (this.overtimeData[field]) {
-          this.initDate = new Date(this.overtimeData[field])
-        }
-        this.pickerDateShow = true
-      },
-      // 确认日期
-      onConfirmDate(value) {
-        let timeValue = ''
-        timeValue = this.formatTime(value)
-        this.overtimeData[this.clickDateField] = timeValue
-        this.pickerDateShow = false
-        this.checkValue()
       },
       // // 校验值是否存在
       checkValue() {

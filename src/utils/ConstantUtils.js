@@ -74,7 +74,7 @@ export const BillTypeMap = {
   },
   '6QJB': {
     billtypename: '加班单',
-    routerEditPath: 'overtimrEdit',  // 加班编辑页路由
+    routerEditPath: 'overtimeEdit',  // 加班编辑页路由
     routerDetailPath: 'overtimeDetail',  // 加班明细页路由
     routerApprovePath: 'overtimeApprove',  // 加班审核页路由
   },

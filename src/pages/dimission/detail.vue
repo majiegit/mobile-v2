@@ -24,7 +24,7 @@
       </div>
     </div>
     <!-- 按钮区域-->
-    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="BillTypeCode.dimission.billtype"/>
+    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
   </div>
 </template>
 
@@ -42,7 +42,6 @@
     data() {
       return {
         approveStateName: approveStateName,
-        BillTypeCode: BillTypeCode,
         title: '离职申请',
         currentHeight: '',
         rightIcon: '',

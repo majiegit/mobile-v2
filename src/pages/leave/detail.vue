@@ -25,7 +25,7 @@
       </div>
     </div>
     <!-- 按钮区域-->
-    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="BillTypeCode.leaveOff.billtype"/>
+    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
   </div>
 </template>
 
@@ -33,18 +33,18 @@
   import {Toast, Dialog} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
+  import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import {getBillInfo} from '@/api/my-apply'
-  import {approveStateName, whetherYN, LastAfter, BillTypeCode} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN, LastAfter} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",
-    components: {Header, ApproveProcess},
+    components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
         LastAfter: LastAfter, // 上下午
         whetherYN: whetherYN, // 是否YN
         approveStateName: approveStateName, // 审批状态
-        BillTypeCode: BillTypeCode, // 单据类型
         title: '请假申请',
         currentHeight: '',
         rightIcon: '',

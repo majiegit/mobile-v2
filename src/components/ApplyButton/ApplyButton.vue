@@ -63,7 +63,8 @@
        * 编辑单据
        */
       editBill() {
-        let routerPath = BillTypeMap[this.billtype].routerDetailPath
+        let routerPath = BillTypeMap[this.billtype].routerEditPath
+        alert(routerPath)
         this.$router.push({name: routerPath, query: {pk_h: this.pk_h}})
       },
 

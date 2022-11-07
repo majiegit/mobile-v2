@@ -32,7 +32,7 @@
       </div>
     </div>
     <!-- 按钮区域-->
-    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="BillTypeCode.awayOff.billtype"/>
+    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
   </div>
 </template>
 
@@ -42,7 +42,7 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import {getBillInfo} from '@/api/my-apply'
-  import {approveStateName, dateTimeType, BillTypeCode} from '@/utils/ConstantUtils'
+  import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",
@@ -51,7 +51,6 @@
       return {
         dateTimeType: dateTimeType,
         approveStateName: approveStateName,
-        BillTypeCode: BillTypeCode,
         title: '销差申请',
         currentHeight: '',
         rightIcon: '',

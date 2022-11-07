@@ -24,7 +24,7 @@
     </div>
 
     <!--单据操作按钮-->
-    <ApplyButton :pk_h="pk_h" :billtype="BillTypeCode.overtime.billtypecode" :approvestate="approvestate" v-if="pk_h && approvestate"/>
+    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate"/>
   </div>
 </template>
 
@@ -35,7 +35,7 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import {getBillInfo} from '@/api/my-apply'
-  import {approveStateName, whetherYN, BillTypeCode} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN} from '@/utils/ConstantUtils'
 
 
   export default {
@@ -45,7 +45,6 @@
       return {
         whetherYN: whetherYN,
         approveStateName: approveStateName,
-        BillTypeCode: BillTypeCode,
         title: '加班申请',
         currentHeight: '',
         rightIcon: '',

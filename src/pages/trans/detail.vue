@@ -23,7 +23,7 @@
     </div>
 
     <!-- 按钮区域-->
-    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="BillTypeCode.signcard.billtype"/>
+    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
   </div>
 </template>
 
@@ -34,7 +34,6 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import {getBillInfo} from '@/api/my-apply'
-  import {BillTypeCode} from '@/utils/ConstantUtils'
 
 
   export default {
@@ -42,7 +41,6 @@
     components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
-        BillTypeCode: BillTypeCode,
         title: '调动申请',
         currentHeight: '',
         rightIcon: '',
