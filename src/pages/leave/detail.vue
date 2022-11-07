@@ -13,7 +13,7 @@
           <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="LastAfter[billInfo.end_day_type]"/>
           <van-cell title="请假时长：" :value="billInfo.leaveday"/>
           <van-cell title="休假说明：" :value="billInfo.leaveremark"/>
-<!--          <van-cell title="是否销假：" :value="whetherYN[billInfo.isrevoked]"/>-->
+          <!--          <van-cell title="是否销假：" :value="whetherYN[billInfo.isrevoked]"/>-->
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
@@ -80,7 +80,8 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
+      this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
