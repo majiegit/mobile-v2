@@ -3,12 +3,26 @@
   <div>
     <van-collapse v-model="arrowShow">
       <van-collapse-item title="审批流程" name="1">
-        <van-steps direction="vertical" :active="0" active-color="#2479ed" >
-          <van-step  v-for=" (item ,index) in workflownote" :key="index">
-            <p>{{item.checkmanname}}</p>
-            <p>{{item.approveresult}}</p>
-            <p>{{item.checknote}}</p>
-            <p>{{item.dealdate}}</p>
+        <van-steps direction="vertical" :active="active" active-color="#2479ed">
+          <van-step v-for=" (item ,index) in workflownote" :key="index">
+            <!--提交人-->
+            <div v-if="index == 0">
+              <p>
+                <span>{{item.sendermanname}}</span>
+                <span>提交</span>
+              </p>
+              <p>{{item.senddate}}</p>
+            </div>
+            <!--审批人-->
+            <div v-else>
+              <p>
+                <span>{{item.checkmanname}}</span>
+                <span v-if="item.approveresult == 'Y'">审批通过</span>
+                <span v-if="item.approveresult == 'N'">审批不通过</span>
+              </p>
+              <p>{{item.checknote}}</p>
+              <p>{{item.dealdate}}</p>
+            </div>
           </van-step>
         </van-steps>
       </van-collapse-item>
@@ -29,15 +43,18 @@
     data() {
       return {
         arrowShow: ['1'],
+        active: 0
       }
     },
     watch: {},
     computed: {},
     mounted() {
       console.log(this.workflownote)
+      if (this.workflownote) {
+        this.active = this.workflownote.length - 1
+      }
     },
-    methods: {
-    }
+    methods: {}
   }
 </script>
 <style lang="less" scoped>
