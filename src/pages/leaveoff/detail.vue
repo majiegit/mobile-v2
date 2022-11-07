@@ -32,25 +32,8 @@
         <van-empty description="暂无数据"/>
       </div>
     </div>
-
     <!-- 按钮区域-->
-    <!--自由态-->
-    <van-row type="flex" justify="space-around" class="button_bottom" v-if="['-1'].includes(approvestate)">
-      <van-col :span="11">
-        <van-button round block type="info" @click="submitBill">提 交</van-button>
-      </van-col>
-      <van-col :span="11">
-        <van-button round block type="info" @click="editBill">编 辑</van-button>
-      </van-col>
-    </van-row>
-
-    <!--提交态-->
-    <van-row type="flex" justify="space-around" class="button_bottom" v-if="['3'].includes(approvestate)">
-      <van-col :span="23">
-        <van-button round block type="info" @click="rollbackBill">收 回</van-button>
-      </van-col>
-    </van-row>
-
+    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="BillTypeCode.leaveOff.billtype"/>
   </div>
 </template>
 
@@ -59,19 +42,21 @@
   import {Dialog} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
+  import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import {getBillInfo} from '@/api/my-apply'
-  import {approveStateName, whetherYN, LastAfter, dateTimeType} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN, LastAfter, dateTimeType,BillTypeCode} from '@/utils/ConstantUtils'
 
 
   export default {
     name: "edit",
-    components: {Header, ApproveProcess},
+    components: {Header, ApproveProcess,ApplyButton},
     data() {
       return {
         approveStateName: approveStateName,
         whetherYN: whetherYN,
         LastAfter: LastAfter,
         dateTimeType: dateTimeType,
+        BillTypeCode: BillTypeCode,
         title: '销假申请',
         currentHeight: '',
         rightIcon: '',

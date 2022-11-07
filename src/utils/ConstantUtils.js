@@ -109,5 +109,17 @@ export const BillTypeCode = {
   awayOff: {
     billtypecode: '6QXC',  // 单据编码
     billtypename: '销差单'
+  },
+  dimission: {
+    billtypecode: '6QLZ',  // 单据编码
+    billtypename: '离职单'
+  },
+  signcard: {
+    billtypecode: '6QQK',  // 单据编码
+    billtypename: '离职单'
+  },
+  trans: {
+    billtypecode: '6QDP',  // 单据编码
+    billtypename: '离职单'
   }
 }

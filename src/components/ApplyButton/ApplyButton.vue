@@ -23,6 +23,8 @@
 <script>
   import {Toast} from 'vant';
   import {Dialog} from 'vant';
+  import {BillTypeMap} from '@/utils/ConstantUtils'
+
 
   export default {
     name: "ApplyButton",
@@ -42,6 +44,7 @@
     },
     data() {
       return {
+        BillTypeMap: BillTypeMap,
         check: {
           show: false,
           title: '',
@@ -60,7 +63,8 @@
        * 编辑单据
        */
       editBill() {
-        this.$router.push({name: 'overtimeEdit', query: {pk_h: this.pk_h}})
+        let routerPath = BillTypeMap[this.billtype].routerDetailPath
+        this.$router.push({name: routerPath, query: {pk_h: this.pk_h}})
       },
 
       /**

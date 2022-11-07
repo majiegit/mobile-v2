@@ -27,42 +27,27 @@
     </div>
 
     <!-- 按钮区域-->
-    <!--自由态-->
-    <van-row type="flex" justify="space-around" class="button_bottom" v-if="['-1'].includes(approvestate)">
-      <van-col :span="11">
-        <van-button round block type="info" @click="submitBill">提 交</van-button>
-      </van-col>
-      <van-col :span="11">
-        <van-button round block type="info" @click="editBill">编 辑</van-button>
-      </van-col>
-    </van-row>
-
-    <!--提交态-->
-    <van-row type="flex" justify="space-around" class="button_bottom" v-if="['3'].includes(approvestate)">
-      <van-col :span="23">
-        <van-button round block type="info" @click="rollbackBill">收 回</van-button>
-      </van-col>
-    </van-row>
-
+    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="BillTypeCode.away.billtype"/>
   </div>
 </template>
 
 <script>
-  import {Toast} from 'vant';
-  import {Dialog} from 'vant';
+  import {Toast, Dialog} from 'vant';
   import Header from '@/components/Header/Index'
+  import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getBillInfo} from '@/api/my-apply'
-  import {approveStateName,dateTimeType} from '@/utils/ConstantUtils'
+  import {approveStateName, dateTimeType, BillTypeCode} from '@/utils/ConstantUtils'
 
 
   export default {
     name: "edit",
-    components: {Header, ApproveProcess},
+    components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
         dateTimeType: dateTimeType,
         approveStateName: approveStateName,
+        BillTypeCode: BillTypeCode,
         title: '出差申请',
         currentHeight: '',
         rightIcon: '',
@@ -81,8 +66,7 @@
       }
     },
     mounted() {
-      let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
-      this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -180,6 +164,7 @@
   .item_body {
     width: 100%;
     overflow-y: auto;
+
     &_title {
       font-size: 14px;
       line-height: 14px;
