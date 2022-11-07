@@ -62,29 +62,51 @@ export const BillTypeList = [
 export const BillTypeMap = {
   '6QQJ': {
     billtypename: '请假单',  // 单据名称
+    routerEditPath: 'leaveEdit',  // 请假编辑页路由
     routerDetailPath: 'leaveDetail',  // 请假明细页路由
     routerApprovePath: 'leaveApprove',  // 请假审核页路由
   },
   '6QXJ': {
     billtypename: '销假单',
-    routerDetailPath: 'leaveoffDetail',  // 请假明细页路由
-    routerApprovePath: 'leaveoffApprove',  // 请假审核页路由
+    routerEditPath: 'leaveoffEdit',  // 销假编辑页路由
+    routerDetailPath: 'leaveoffDetail',  // 销假明细页路由
+    routerApprovePath: 'leaveoffApprove',  // 销假审核页路由
   },
   '6QJB': {
     billtypename: '加班单',
-    routerDetailPath: 'overtimeDetail',  // 请假明细页路由
-    routerApprovePath: 'overtimeApprove',  // 请假审核页路由
+    routerEditPath: 'overtimrEdit',  // 加班编辑页路由
+    routerDetailPath: 'overtimeDetail',  // 加班明细页路由
+    routerApprovePath: 'overtimeApprove',  // 加班审核页路由
   },
   '6QCC': {
     billtypename: '出差单',
-    routerDetailPath: 'awayDetail',  // 请假明细页路由
-    routerApprovePath: 'awayApprove',  // 请假审核页路由
+    routerEditPath: 'awayEdit',  // 出差编辑页路由
+    routerDetailPath: 'awayDetail',  // 出差明细页路由
+    routerApprovePath: 'awayApprove',  // 出差审核页路由
   },
-
   '6QXC': {
     billtypename: '销差单',
-    routerDetailPath: 'awayoffDetail',  // 请假明细页路由
-    routerApprovePath: 'awayoffApprove',  // 请假审核页路由
+    routerEditPath: 'awayoffEdit',  // 销差编辑页路由
+    routerDetailPath: 'awayoffDetail',  // 销差明细页路由
+    routerApprovePath: 'awayoffApprove',  //销差审核页路由
+  },
+  '6QLZ': {
+    billtypename: '离职单',
+    routerEditPath: 'dimissionEdit',  // 离职编辑页路由
+    routerDetailPath: 'dimissionDetail',  // 离职明细页路由
+    routerApprovePath: 'dimissionApprove',  //离职审核页路由
+  },
+  '6QQK': {
+    billtypename: '签卡单',
+    routerEditPath: 'signcardEdit',  // 签卡编辑页路由
+    routerDetailPath: 'signcardDetail',  // 签卡明细页路由
+    routerApprovePath: 'signcardApprove',  // 签卡审核页路由
+  },
+  '6QDP': {
+    billtypename: '调配单',
+    routerEditPath: 'transEdit',  // 调配编辑页路由
+    routerDetailPath: 'transDetail',  // 调配明细页路由
+    routerApprovePath: 'transApprove',  // 调配审核页路由
   }
 
 }
@@ -116,10 +138,10 @@ export const BillTypeCode = {
   },
   signcard: {
     billtypecode: '6QQK',  // 单据编码
-    billtypename: '离职单'
+    billtypename: '签卡单'
   },
   trans: {
     billtypecode: '6QDP',  // 单据编码
-    billtypename: '离职单'
+    billtypename: '调配'
   }
 }
