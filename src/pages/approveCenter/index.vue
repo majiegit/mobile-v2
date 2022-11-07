@@ -2,7 +2,7 @@
   <div>
     <Header title="审批中心" @clickLeft="clickLeft"></Header>
     <div class="checkStatus">
-      <van-tabs v-model="approveStatus" color="#2479ED" title-active-color="#2479ED" title-inactive-color="#000">
+      <van-tabs v-model="approveStatus" color="#2479ED" title-active-color="#2479ED" title-inactive-color="#000" line-width="100px">
         <van-tab title="待办" name="N" :title-style="{'font-size': '16px','font-weight': 'bolder'}" style="background: #fff;"/>
         <van-tab title="已办" name="Y" :title-style="{'font-size': '16px','font-weight': 'bolder'}"/>
       </van-tabs>
@@ -17,31 +17,21 @@
       <!--内容区域-->
       <div class="item" v-for="(item, index) in ApplyList" :key="index"
            :style="index == 0 ? 'margin-top: 0px' : 'margin-top: 20px'">
-        <div class="item_left" :style="{background: approveStateColorList[item.approve_state]}"/>
+        <div class="item_left" :style="{background: approveStatus == 'N' ?  '#2479ED': '#E9AE24'}"/>
         <div class="item_right" @click="toApply(item)">
           <van-row type="flex" style="height: 30px; padding-top: 10px;" justify="center">
-            <van-col span="9">
+            <van-col span="14">
                   <span>{{item.billtypename}}
                   <span v-if="item.tbmtype_name">-</span>
                     {{item.tbmtype_name}}
                   </span>
             </van-col>
-            <van-col span="7">
-              <span>提交人</span>
-            </van-col>
-            <van-col span="7">
-              <span :style="{color: approveStateColorList[item.approve_state]}"
-                    style="float: right;">{{approveStateName[item.approvestatus]}}</span>
-            </van-col>
-          </van-row>
-          <van-row type="flex" style="height: 30px; padding-top: 10px;" justify="center">
             <van-col span="9">
               <span>{{item.sendtime}}</span>
             </van-col>
-            <van-col span="4">
-              <span>{{item.psnname}}</span>
-            </van-col>
-            <van-col span="10">
+          </van-row>
+          <van-row type="flex" style="height: 30px; " justify="center">
+            <van-col span="23">
               <span>{{item.subject}}</span>
             </van-col>
           </van-row>
@@ -60,7 +50,7 @@
   import {Toast} from 'vant'
   import {getMyApplication} from '@/api/my-apply'
   import {userInfoUserId} from '@/utils/storageUtils'
-  import {approveStateName, approveStateColorList,BillTypeList} from '@/utils/ConstantUtils'
+  import {approveStateName, approveStateColorList,BillTypeList,BillTypeMap} from '@/utils/ConstantUtils'
   export default {
     watch: {
       billTypeModel(val) {
@@ -100,15 +90,12 @@
         this.billTypeModel = index
       },
       // 跳转单据
-      toApply(applyObj) {
+      toApply(item) {
         this.$router.push({
-          name: 'apply-detail',
+          name: BillTypeMap[item.billtype].routerApprovePath,
           query: {
-            pk_h: applyObj.pk_h,
-            approve_state: applyObj.approve_state,
-            tbm_h_name: applyObj.tbm_h_name,
-            billtype: applyObj.billtype,
-            bill_code: applyObj.bill_code
+            pk_h: item.billid,
+            billtype: item.billtype
           }
         })
       },
