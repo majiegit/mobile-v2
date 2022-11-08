@@ -15,7 +15,7 @@
             {{ endDate }}
           </span>
           <span style="font-size: 20px; float: right; margin-right: 10px;" @click="selectDate('beginDate','开始日期')"><van-icon
-            name="notes-o"/></span>
+              name="notes-o"/></span>
         </div>
       </van-col>
     </van-row>
@@ -75,19 +75,81 @@
     <div v-else>
       <van-empty description="暂无数据"/>
     </div>
+    <!--  二次密码验证  -->
+    <van-popup v-model="pwdCheckShow" round style="width: 70%;height: 35%">
+      <!-- 输入密码 -->
+      <van-form @submit="onSubmit" style="text-align: center;">
+        <p style="padding: 10px 20px;">密码验证</p>
+        <div style="width: 100%">
+          <van-field style="height: 40px;
+            width: 80%;
+            margin: 0 10%;
+            border-radius: 10px;
+            border: 1px solid grey;"
+                     v-model="password"
+                     type="password"
+                     placeholder="请输入查询密码"
+          />
+        </div>
+        <div style="margin: 16px;">
+          <van-button block type="info" round native-type="submit">查询</van-button>
+          <div class="moreEvent">
+            <p style="margin-top: 14px;font-size: 14px;color: #888">首次使用请先重置密码 </p>
+            <span @click="updateShow">修改密码</span>
+            <span @click="resetPwd">重置密码</span>
+          </div>
+<!--          <van-button style="width: 30%" round type="info" @click="resetPwd">重置</van-button>-->
+<!--          <van-button style="width: 30%" round type="info" @click="updateShow">修改</van-button>-->
+        </div>
+      </van-form>
+    </van-popup>
+
+    <!--    修改密码-->
+    <van-popup v-model="updatePwdShow" round style="width: 70%;height: 35%">
+      <van-form @submit="updatePwd" style="">
+        <p style="padding: 10px;">密码验证</p>
+        <van-field
+            name="oldPassword"
+            v-model="oldPassword"
+            label="旧密码"
+            placeholder="请输入旧密码"
+            type="password"
+        />
+        <van-field
+            name="newPassword"
+            v-model="newPassword"
+            label="新密码"
+            placeholder="请输入新密码"
+            type="password"
+        />
+        <!--@blur="checknewPassword" -->
+        <van-field
+            name="confirmPassword"
+            v-model="confirmPassword"
+            label="确认密码"
+            placeholder="请确认密码"
+            type="password"
+        />
+        <div style="margin: 16px">
+          <van-button round block type="info" native-type="submit">确认</van-button>
+        </div>
+
+      </van-form>
+    </van-popup>
 
     <!--薪资明细弹框-->
     <van-popup
-      v-model="salaryDetailShow"
-      lock-scroll
-      closeable
-      :style="{ height: '100%', width: '100%', background: 'white'}"
+        v-model="salaryDetailShow"
+        lock-scroll
+        closeable
+        :style="{ height: '100%', width: '100%', background: 'white'}"
     >
       <div style="padding: 15% 2%;">
         <!-- 标题-->
-        <div style="width: 100%; height: 56px; border-top-left-radius: 16px; border-top-right-radius: 16px; background: #2479ed; position: relative;">
+        <div
+            style="width: 100%; height: 56px; border-top-left-radius: 16px; border-top-right-radius: 16px; background: #2479ed; position: relative;">
           <div
-            style="width: 100%; height: 51px; border-top-left-radius: 11px; border-top-right-radius: 11px; background: #fff;  position: absolute; top: 6px;">
+              style="width: 100%; height: 51px; border-top-left-radius: 11px; border-top-right-radius: 11px; background: #fff;  position: absolute; top: 6px;">
             <p style="margin-left: 20px;">2012年2月工资发放</p>
           </div>
         </div>
@@ -112,14 +174,13 @@
         </div>
       </div>
     </van-popup>
-
     <!--日期选择框-->
     <van-popup v-model="datePickShow" position="bottom">
       <van-datetime-picker
-        @confirm="confirmDate"
-        v-model="dateModel"
-        type="year-month"
-        :title="'选择'+ fieldName"
+          @confirm="confirmDate"
+          v-model="dateModel"
+          type="year-month"
+          :title="'选择'+ fieldName"
       />
     </van-popup>
   </div>
@@ -129,7 +190,7 @@
 <script>
   import Header from '@/components/Header/Index'
   // import {fetchData} from 'hr-utils'
-  import {Toast} from 'vant';
+  import {Toast, Dialog} from 'vant';
   import {querySalaryData} from '@/api/salary'
 
   export default {
@@ -139,7 +200,13 @@
     },
     data() {
       return {
-        salaryDetailShow: true,
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+        updatePwdShow: false,
+        password: '',
+        pwdCheckShow: true,
+        salaryDetailShow: false,
         salaryDetail: {},
         // salaryDetailKeyList: [],
         salaryDetailKeyList: [
@@ -204,10 +271,40 @@
       this.initYearMonth()
     },
     beforeDestroy() {
-      clearWaterMark()
+      // clearWaterMark()
     },
     methods: {
-
+      // 重置密码
+      resetPwd() {
+        Dialog.alert({
+          title: '重置密码?',
+          message: '确认重置密码吗',
+        }).then(() => {
+          // on close
+        })
+      },
+      // 二次密码输入验证一致
+      checkTwoPwd() {
+        if (this.oldPassword === '' || this.newPassword === '' || this.confirmPassword === '') {
+          Toast('必填项不能为空')
+        } else if (this.newPassword !== this.confirmPassword) {
+          Toast('两次密码输入不一致，请重新输入！')
+        }
+      },
+      //
+      updateShow() {
+        this.pwdCheckShow = false
+        this.updatePwdShow = true
+      },
+      // 修改密码
+      updatePwd() {
+        this.checkTwoPwd()
+        this.updatePwdShow = false
+      },
+      // 二次密码验证
+      onSubmit(values) {
+        console.log('submit', values);
+      },
       salaryDetailClick(item) {
         this.salaryDetail = item
         this.salaryDetailKeyList = Object.keys(item.salaryList)
@@ -363,25 +460,20 @@
   };
 </script>
 <style>
-  .top-back1 {
-    width: 100%;
-    background: #2479ed;
-    height: 20px;
-  }
-
-  .top-back2 {
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-    height: 30px;
-    background: white;
-    position: relative;
-    top: 6px;
-  }
-
-  .salary_title {
-    padding: 0 20px;
-    font-size: 22px
-  }
+    .moreEvent{
+        color: #0CAEF5;
+        font-size: 12px;
+    }
+    span{
+        display: block;
+        float: right;
+        margin-left: 6px;
+    }
+    .van-field__body {
+        /*height: 40px;*/
+        /*border-radius: 10px;*/
+        /*border: 1px solid grey;*/
+    }
 </style>
 
 <style lang='less' scoped>
@@ -450,6 +542,7 @@
     color: #000;
     font-family: "Microsoft YaHei";
     font-weight: 500;
+
     p {
       font-size: 20px;
     }

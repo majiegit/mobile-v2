@@ -2,7 +2,7 @@
   <div>
     <!--导航栏区域-->
     <div ref="header">
-      <Header title="个人信息" left_text="返回" @clickLeft="clickLeft" right_text="附件管理" @clickRight="clickRight"/>
+      <Header title="个人信息" leftText="返回" @clickLeft="clickLeft" rightText="附件管理" @clickRight="clickRight"/>
     </div>
     <!--主内容区域-->
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">
@@ -101,6 +101,7 @@
     },
     data() {
       return {
+        userInfoPkPsndoc: userInfoPkPsndoc,
         photoShow: false,
         activeNames: [0],
         isWater: false,
@@ -130,10 +131,12 @@
       },
       // 头部右上角点击事件
       clickRight() {
+        // this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
         this.$router.push({
-          name: 'personalEnclosure',
+          name: 'enclosure',
           query: {
-            pk_psndoc: this.userdata.pk_psndoc
+            filePath: this.userInfoPkPsndoc,
+            disabled: 0
           }
         })
       },

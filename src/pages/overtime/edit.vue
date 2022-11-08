@@ -9,7 +9,7 @@
             required
             readonly
             v-model="overtimeData.begintime"
-            @click="selectDate(overtimeData.begintime,'begintime','对对对')"
+            @click="selectDate(overtimeData.begintime,'begintime','开始时间', 'datetime')"
             label="开始时间"
             placeholder="请选择开始时间"
           />
@@ -18,7 +18,7 @@
             required
             readonly
             v-model="overtimeData.endtime"
-            @click="selectDate('endtime')"
+            @click="selectDate(overtimeData.endtime,'endtime','结束时间', 'datetime')"
             label="结束时间"
             placeholder="请选择结束时间"
           />
@@ -59,10 +59,9 @@
         overtitle: '', // 日期标题
         isAllNight: false, // 是否通宵
         pickerDateShow: false,
-        initDate: new Date(),
         checked: true,
         overtimeData: {
-          begintime: '2022-08-02'
+
         }
       }
     },
@@ -77,17 +76,17 @@
        */
       dateOk(selector) {
         console.log(selector)
-        this.$set(this.regData, selector.field, selector.value)
+        this.$set(this.overtimeData, selector.field, selector.value)
       },
       /**
        * 选择时间
        */
-      selectDate(value, field, title) {
+      selectDate(value, field, title, type) {
         let selector = {
           title: title,
           field: field,
           value: value,
-          type: 'date'
+          type: type
         }
         this.$refs.selectorDate.openSelect(selector)
       },
@@ -105,16 +104,6 @@
         }
         console.log(22222)
         this.isAllNight = true
-      },
-      // 格式化时间
-      formatTime(timeStamp) {
-        let t = timeStamp.getFullYear()
-          + '-' + (((timeStamp.getMonth() + 1) < 10) ? ('0' + (timeStamp.getMonth() + 1)) : (timeStamp.getMonth() + 1))
-          + '-' + ((timeStamp.getDate() < 10) ? ('0' + timeStamp.getDate()) : timeStamp.getDate())
-          + ' ' + ((timeStamp.getHours() < 10) ? ('0' + timeStamp.getHours()) : timeStamp.getHours())
-          + ':' + ((timeStamp.getMinutes() < 10) ? ('0' + timeStamp.getMinutes()) : timeStamp.getMinutes())
-          + ':00'
-        return t
       },
       //
       saveBillInfo() {
