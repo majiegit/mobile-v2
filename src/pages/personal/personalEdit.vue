@@ -1,14 +1,7 @@
 <template>
   <div>
     <!--导航栏区域-->
-    <div ref="header">
-      <navnar :title="tempData.name"
-              left_text="返回"
-              right_text=""
-              @clickRight="clickRight"
-              @clickLeft="clickLeft"
-      />
-    </div>
+    <Header :title="tempData.name" leftText="返回" @clickLeft="clickLeft"></Header>
     <!--主内容区域-->
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">
       <van-form colon label-width="100" input-align="right" ref="formData" :disabled="isCheck ">
@@ -76,13 +69,14 @@
 </template>
 
 <script>
-  import Navnar from "../navnar/navnar";
   import Selector from "./components/selector";
-  import {fetchData} from 'hr-utils'
+  import Header from '@/components/Header/Index'
   import {Toast, Dialog} from 'vant'
+  import {queryReferencePsn, saveSubInfo, revokeLisn} from '@/api/psndoc'
+
   export default {
     name: "edit",
-    components: {Navnar, Selector},
+    components: {Header, Selector},
     data() {
       return {
         loadingButton: false,
@@ -100,7 +94,7 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - this.$refs.header.offsetHeight - this.$refs.footer.offsetHeight) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - this.$refs.footer.offsetHeight) + 'px'
     },
     created() {
       if (this.$route.params.tempData) {
@@ -159,21 +153,11 @@
           message: '加载中...',
           duration: 0
         })
-        fetchData({
-          url: 'hrssc/portal/psnbase/queryReferencePsn',
-          method: 'POST',
-          param: param,
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            selectorParam.data = res.data.body
-            selectorParam.datatype = res.data.datatype
-            Toast.clear()
-            this.$refs.selector.openComponent(selectorParam)
-          },
-          error: res => {
-            console.log(res)
-          }
+        queryReferencePsn(param).then(res => {
+          selectorParam.data = res.data.body
+          selectorParam.datatype = res.data.datatype
+          Toast.clear()
+          this.$refs.selector.openComponent(selectorParam)
         })
       },
       // 日期时间确认
@@ -201,6 +185,7 @@
       },
       // 参照类型处理
       getReference(field) {
+        console.log(field)
         if (this.isCheck) {
           return
         }
@@ -219,21 +204,11 @@
           message: '加载中...',
           duration: 0
         })
-        fetchData({
-          url: 'hrssc/portal/psnbase/queryReferencePsn',
-          method: 'POST',
-          param: param,
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            selectorParam.data = res.data.body
-            selectorParam.datatype = res.data.datatype
-            Toast.clear()
-            this.$refs.selector.openComponent(selectorParam)
-          },
-          error: res => {
-            console.log(res)
-          }
+        queryReferencePsn(param).then(res => {
+          selectorParam.data = res.data.body
+          selectorParam.datatype = res.data.datatype
+          Toast.clear()
+          this.$refs.selector.openComponent(selectorParam)
         })
       },
       // 获取字段规则
@@ -270,19 +245,15 @@
       // 撤回
       rollbackData() {
         this.loadingButton = true
-        fetchData({
-          url: 'hrssc/portal/psnbase/revokeLisn',
-          method: 'POST',
-          param: {tableCode: this.tempData.table_code},
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            Toast({message: '撤回成功', duration: 500})
-            this.loadingButton = false
-            setTimeout(res => {
-              this.clickLeft()
-            }, 500)
-          }
+        let params = {
+          tableCode: this.tempData.table_code
+        }
+        revokeLisn(params).then(res => {
+          Toast({message: '撤回成功', duration: 500})
+          this.loadingButton = false
+          setTimeout(res => {
+            this.clickLeft()
+          }, 500)
         })
       },
       // 提交
@@ -328,23 +299,18 @@
       // 提交保存
       checkSubmit() {
         this.loadingButton = true
-        fetchData({
-          url: 'hrssc/portal/psnbase/saveSubInfo',
-          method: 'POST',
-          param: {data: this.infoData},
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            this.loadingButton = false
-            Toast({message: '提交成功', duration: 500})
-            setTimeout(res => {
-              this.clickLeft()
-            }, 500)
-          },
-          error: res => {
-            this.loadingButton = false
-            Toast({message: res.message, duration: 1000})
-          }
+        let params = {
+          data: this.infoData
+        }
+        saveSubInfo(params).then(res => {
+          this.loadingButton = false
+          Toast({message: '提交成功', duration: 500})
+          setTimeout(res => {
+            this.clickLeft()
+          }, 500)
+        }).catch(res => {
+          this.loadingButton = false
+          Toast({message: res.message, duration: 1000})
         })
       },
       // 判断需要审核的字段信息
@@ -359,7 +325,7 @@
             }
           })
         })
-        if(str !== '') {
+        if (str !== '') {
           str = str.substring(0, str.length - 1)
         }
         return str
@@ -374,7 +340,7 @@
         return fieldsName
       },
       clickLeft() {
-        this.$router.push({name: 'personalNew'})
+        this.$router.push({name: 'personal'})
       },
     }
   }

@@ -52,6 +52,7 @@ request.interceptors.response.use(
     } else {
       // 弹出错误消息
       Toast(res.message)
+      return Promise.reject(res);
     }
   },
   error => {

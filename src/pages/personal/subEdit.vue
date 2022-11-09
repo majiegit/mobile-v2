@@ -1,14 +1,7 @@
 <template>
   <div>
     <!--导航栏区域-->
-    <div ref="header">
-      <navnar :title="tempData.name"
-              left_text="返回"
-              right_text=""
-              @clickRight="clickRight"
-              @clickLeft="clickLeft"
-      />
-    </div>
+    <Header :title="tempData.name" leftText="返回" @clickLeft="clickLeft"/>
     <!--主内容区域-->
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">
       <van-form colon label-width="100" input-align="right" ref="formData">
@@ -71,13 +64,13 @@
 </template>
 
 <script>
-  import Navnar from "../navnar/navnar";
+  import Header from '@/components/Header/Index'
   import Selector from "./components/selector";
-  import {fetchData} from 'hr-utils'
   import {Dialog, Toast} from 'vant'
+  import {queryReferencePsn} from '@/api/psndoc'
   export default {
     name: "edit",
-    components: {Navnar, Selector},
+    components: {Header, Selector},
     data() {
       return {
         type: '',
@@ -93,7 +86,7 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - this.$refs.header.offsetHeight - this.$refs.footer.offsetHeight) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - this.$refs.footer.offsetHeight) + 'px'
     },
     created() {
       // 子集传过来的数据
@@ -141,21 +134,11 @@
           message: '加载中...',
           duration: 0
         })
-        fetchData({
-          url: 'hrssc/portal/psnbase/queryReferencePsn',
-          method: 'POST',
-          param: param,
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            selectorParam.data = res.data.body
-            selectorParam.datatype = res.data.datatype
-            Toast.clear()
-            this.$refs.selector.openComponent(selectorParam)
-          },
-          error: res => {
-            console.log(res)
-          }
+        queryReferencePsn(param).then(res => {
+          selectorParam.data = res.data.body
+          selectorParam.datatype = res.data.datatype
+          Toast.clear()
+          this.$refs.selector.openComponent(selectorParam)
         })
       },
       // 日期时间确认
@@ -195,21 +178,11 @@
           message: '加载中...',
           duration: 0
         })
-        fetchData({
-          url: 'hrssc/portal/psnbase/queryReferencePsn',
-          method: 'POST',
-          param: param,
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            selectorParam.data = res.data.body
-            selectorParam.datatype = res.data.datatype
-            Toast.clear()
-            this.$refs.selector.openComponent(selectorParam)
-          },
-          error: res => {
-            console.log(res)
-          }
+        queryReferencePsn(param).then(res => {
+          selectorParam.data = res.data.body
+          selectorParam.datatype = res.data.datatype
+          Toast.clear()
+          this.$refs.selector.openComponent(selectorParam)
         })
       },
       // 获取字段规则

@@ -1,14 +1,7 @@
 <template>
   <div>
     <!--导航栏区域-->
-    <div ref="header">
-      <navnar :title="tempData.name"
-              left_text="返回"
-              :right_text="right_text"
-              @clickRight="clickRight"
-              @clickLeft="clickLeft"
-      />
-    </div>
+    <Header :title="tempData.name" leftText="返回" @clickLeft="clickLeft"  :rightText="right_text" @clickRight="clickRight"/>
     <!--主内容区域-->
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto; padding: 0px 10px;">
       <div class="info_class"
@@ -44,13 +37,13 @@
 </template>
 
 <script>
-  import Navnar from "../navnar/navnar";
-  import {fetchData} from 'hr-utils'
-  import {Toast} from 'mint-ui';
+  import Header from '@/components/Header/Index'
+  import {Toast} from 'vant'
+  import {saveSubInfo, revokeLisn} from '@/api/psndoc'
 
   export default {
     name: "edit",
-    components: {Navnar},
+    components: {Header},
     data() {
       return {
         loadingButton: false,
@@ -67,7 +60,7 @@
     },
     watch: {},
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - this.$refs.header.offsetHeight - this.$refs.footer.offsetHeight) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - this.$refs.footer.offsetHeight) + 'px'
     },
     created() {
       // 完整的模板数据
@@ -148,19 +141,15 @@
       // 撤回
       rollbackData() {
         this.loadingButton = true
-        fetchData({
-          url: 'hrssc/portal/psnbase/revokeLisn',
-          method: 'POST',
-          param: {tableCode: this.tempData.table_code},
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            this.loadingButton = false
-            Toast({message: '撤回成功', duration: 500})
-            setTimeout(res => {
-              this.clickLeft()
-            }, 500)
-          }
+        let params = {
+          tableCode: this.tempData.table_code
+        }
+        revokeLisn(params).then(res => {
+          this.loadingButton = false
+          Toast({message: '撤回成功', duration: 500})
+          setTimeout(res => {
+            this.clickLeft()
+          }, 500)
         })
       },
       // 提交
@@ -172,26 +161,19 @@
           return
         }
         this.loadingButton = true
-        fetchData({
-          url: 'hrssc/portal/psnbase/saveSubInfo',
-          method: 'POST',
-          param: {data: data},
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            this.loadingButton = false
-            Toast({message: '提交成功', duration: 500})
-            setTimeout(res => {
-              this.clickLeft()
-            }, 500)
-          },
-          error: res => {
-            this.loadingButton = false
-            Toast({message: res.message, duration: 1000})
-          }
+        let params = {
+          data: data
+        }
+        saveSubInfo(params).then(res => {
+          this.loadingButton = false
+          Toast({message: '提交成功', duration: 500})
+          setTimeout(res => {
+            this.clickLeft()
+          }, 500)
+        }).catch(res => {
+          this.loadingButton = false
+          Toast({message: res.message, duration: 1000})
         })
-
-
       },
       // 删除
       deleteInfo(index) {
@@ -215,7 +197,7 @@
       },
       // 头部左上角点击事件
       clickLeft() {
-        this.$router.push({name: 'personalNew'})
+        this.$router.push({name: 'personal'})
       },
       // 获取字段值
       getFieldValue(field, info) {
@@ -307,22 +289,22 @@
 
 <style scoped>
   .info_class {
-    width: 100%;
+    width: 96%;
     border-radius: 6px;
     background: #fff;
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 0px 10px;
+    padding: 0px 2%;
   }
 
   .add_button {
     margin-bottom: 10px;
     text-align: center;
     font-family: 微软雅黑;
-    width: 100%;
+    width: 96%;
     background: #fff;
     margin-top: 10px;
-    padding: 10px 10px;
+    padding: 10px 2%;
     color: #0276fd;
     border-radius: 5px;
     font-weight: bold;

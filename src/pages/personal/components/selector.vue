@@ -29,12 +29,7 @@
     <van-popup v-model="cascade.show" position="top" :close-on-click-overlay="close_on_click_overlay">
       <!--导航栏区域-->
       <div ref="header">
-        <navnar :title="cascade.title"
-                left_text="返回"
-                right_text="确定"
-                @clickRight="clickRight"
-                @clickLeft="clickLeft"
-        />
+        <Header :title="cascade.title" leftText="返回"  rightText="确定" @clickRight="clickRight" @clickLeft="clickLeft"/>
       </div>
       <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">
         <!-- 已选择数据区域-->
@@ -66,7 +61,7 @@
 </template>
 
 <script>
-  import Navnar from "../../navnar/navnar"
+  import Header from '@/components/Header/Index'
   import dayjs from 'dayjs'
   import {Dialog} from 'vant'
   import {Toast} from 'vant'
@@ -74,7 +69,7 @@
   export default {
     name: "selector",
     components: {
-      Navnar,
+      Header,
       [Dialog.Component.name]: Dialog.Component
     },
     data() {

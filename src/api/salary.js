@@ -11,3 +11,39 @@ export function querySalaryData(params) {
     params: params
   })
 }
+
+/**
+ * 薪资密码修改
+ * @param parameter
+ */
+export function updatePwd(data) {
+  return request({
+    url: "/hrsh/salary/updatePwd",
+    method: 'post',
+    data: data
+  })
+}
+
+/**
+ * 薪资密码重置
+ * @param parameter
+ */
+export function restPwd(data){
+  return request({
+    url: "/hrsh/salary/restPwd",
+    method: 'post',
+    data: data
+  })
+}
+
+/**
+ * 薪资密码验证
+ * @param parameter
+ */
+export function checkPwd(data) {
+  return request({
+    url: "/hrsh/salary/checkPwd",
+    method: 'post',
+    data: data
+  })
+}

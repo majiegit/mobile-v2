@@ -15,7 +15,7 @@
             {{ endDate }}
           </span>
           <span style="font-size: 20px; float: right; margin-right: 10px;" @click="selectDate('beginDate','开始日期')"><van-icon
-              name="notes-o"/></span>
+            name="notes-o"/></span>
         </div>
       </van-col>
     </van-row>
@@ -75,81 +75,20 @@
     <div v-else>
       <van-empty description="暂无数据"/>
     </div>
-    <!--  二次密码验证  -->
-    <van-popup v-model="pwdCheckShow" round style="width: 70%;height: 35%">
-      <!-- 输入密码 -->
-      <van-form @submit="onSubmit" style="text-align: center;">
-        <p style="padding: 10px 20px;">密码验证</p>
-        <div style="width: 100%">
-          <van-field style="height: 40px;
-            width: 80%;
-            margin: 0 10%;
-            border-radius: 10px;
-            border: 1px solid grey;"
-                     v-model="password"
-                     type="password"
-                     placeholder="请输入查询密码"
-          />
-        </div>
-        <div style="margin: 16px;">
-          <van-button block type="info" round native-type="submit">查询</van-button>
-          <div class="moreEvent">
-            <p style="margin-top: 14px;font-size: 14px;color: #888">首次使用请先重置密码 </p>
-            <span @click="updateShow">修改密码</span>
-            <span @click="resetPwd">重置密码</span>
-          </div>
-<!--          <van-button style="width: 30%" round type="info" @click="resetPwd">重置</van-button>-->
-<!--          <van-button style="width: 30%" round type="info" @click="updateShow">修改</van-button>-->
-        </div>
-      </van-form>
-    </van-popup>
-
-    <!--    修改密码-->
-    <van-popup v-model="updatePwdShow" round style="width: 70%;height: 35%">
-      <van-form @submit="updatePwd" style="">
-        <p style="padding: 10px;">密码验证</p>
-        <van-field
-            name="oldPassword"
-            v-model="oldPassword"
-            label="旧密码"
-            placeholder="请输入旧密码"
-            type="password"
-        />
-        <van-field
-            name="newPassword"
-            v-model="newPassword"
-            label="新密码"
-            placeholder="请输入新密码"
-            type="password"
-        />
-        <!--@blur="checknewPassword" -->
-        <van-field
-            name="confirmPassword"
-            v-model="confirmPassword"
-            label="确认密码"
-            placeholder="请确认密码"
-            type="password"
-        />
-        <div style="margin: 16px">
-          <van-button round block type="info" native-type="submit">确认</van-button>
-        </div>
-
-      </van-form>
-    </van-popup>
 
     <!--薪资明细弹框-->
     <van-popup
-        v-model="salaryDetailShow"
-        lock-scroll
-        closeable
-        :style="{ height: '100%', width: '100%', background: 'white'}"
+      v-model="salaryDetailShow"
+      lock-scroll
+      closeable
+      :style="{ height: '100%', width: '100%', background: 'white'}"
     >
       <div style="padding: 15% 2%;">
         <!-- 标题-->
         <div
-            style="width: 100%; height: 56px; border-top-left-radius: 16px; border-top-right-radius: 16px; background: #2479ed; position: relative;">
+          style="width: 100%; height: 56px; border-top-left-radius: 16px; border-top-right-radius: 16px; background: #2479ed; position: relative;">
           <div
-              style="width: 100%; height: 51px; border-top-left-radius: 11px; border-top-right-radius: 11px; background: #fff;  position: absolute; top: 6px;">
+            style="width: 100%; height: 51px; border-top-left-radius: 11px; border-top-right-radius: 11px; background: #fff;  position: absolute; top: 6px;">
             <p style="margin-left: 20px;">2012年2月工资发放</p>
           </div>
         </div>
@@ -174,14 +113,81 @@
         </div>
       </div>
     </van-popup>
+
     <!--日期选择框-->
     <van-popup v-model="datePickShow" position="bottom">
       <van-datetime-picker
-          @confirm="confirmDate"
-          v-model="dateModel"
-          type="year-month"
-          :title="'选择'+ fieldName"
+        @confirm="confirmDate"
+        v-model="dateModel"
+        type="year-month"
+        :title="'选择'+ fieldName"
       />
+    </van-popup>
+
+    <!--  二次密码验证  -->
+    <van-popup v-model="isNeedSalaryPassword"
+               :close-on-click-overlay="false"
+               round
+               style="width: 80%;height: 30%">
+      <div style="width: 90%; text-align: center; margin: 0 5%;">
+        <!-- 验证密码 -->
+        <div v-if="checkPwdShow">
+          <p style="line-height: 25px;">薪资密码验证</p>
+          <van-field style="width: 100%; margin: 10px 0%; border-radius: 10px; border: 1px solid grey;"
+                     v-model="password"
+                     type="password"
+                     placeholder="请输入薪资密码"
+          />
+          <van-button block type="info" round @click="checkPwdClick">验 证</van-button>
+          <van-row>
+            <van-col :span="12" class="moreEvent1">
+              <span>首次使用请先重置密码 </span>
+            </van-col>
+            <van-col :span="12" class="moreEvent2">
+              <span @click="updateShow">修改密码</span>
+              <span @click="resetPwd">重置密码</span>
+            </van-col>
+          </van-row>
+        </div>
+        <!-- 修改密码 -->
+        <div v-if="updatePwdShow">
+          <van-form @submit="updatePwd" colon>
+            <p style="line-height: 25px;">
+              <span>修改薪资密码</span>
+              <span style="float: right;">
+                <van-icon name="cross"  @click="clickCloseIcon"/>
+              </span>
+            </p>
+            <van-field
+              name="oldPassword"
+              required
+              v-model="oldPassword"
+              label="旧密码"
+              placeholder="请输入旧密码"
+              type="password"
+            />
+            <van-field
+              name="newPassword"
+              required
+              v-model="newPassword"
+              label="新密码"
+              placeholder="请输入新密码"
+              type="password"
+            />
+            <van-field
+              name="confirmPassword"
+              required
+              v-model="confirmPassword"
+              label="确认密码"
+              placeholder="请确认密码"
+              type="password"
+            />
+            <div style="margin: 16px">
+              <van-button round block type="info" native-type="submit">确认</van-button>
+            </div>
+          </van-form>
+        </div>
+      </div>
     </van-popup>
   </div>
 </template>
@@ -189,9 +195,9 @@
 
 <script>
   import Header from '@/components/Header/Index'
-  // import {fetchData} from 'hr-utils'
   import {Toast, Dialog} from 'vant';
-  import {querySalaryData} from '@/api/salary'
+  import {querySalaryData,updatePwd,restPwd,checkPwd} from '@/api/salary'
+  import {userInfoPkPsndoc} from "@/utils/storageUtils";
 
   export default {
     name: 'salary',
@@ -200,57 +206,20 @@
     },
     data() {
       return {
+        // 二次密码验证
+        // 修改密码
         oldPassword: '',
         newPassword: '',
         confirmPassword: '',
         updatePwdShow: false,
+        // 验证密码
+        checkPwdShow: true,
         password: '',
-        pwdCheckShow: true,
+        isNeedSalaryPassword: true,  // 是否需要薪资密码验证
+        // 薪资明细
         salaryDetailShow: false,
         salaryDetail: {},
-        // salaryDetailKeyList: [],
-        salaryDetailKeyList: [
-          {
-            title: '社保',
-            content: '600'
-          },
-          {
-            title: '公积金',
-            content: '800'
-          },
-          {
-            title: '个人所得税',
-            content: '800'
-          },
-          {
-            title: '税前收入',
-            content: '800'
-          },
-          {
-            title: '公积金',
-            content: '800'
-          },
-          {
-            title: '社保',
-            content: '600'
-          },
-          {
-            title: '公积金',
-            content: '800'
-          },
-          {
-            title: '个人所得税',
-            content: '800'
-          },
-          {
-            title: '税前收入',
-            content: '800'
-          },
-          {
-            title: '公积金',
-            content: '800'
-          }
-        ],
+        salaryDetailKeyList: [],
         // username: getStorage("userinfo").name,
         // orgname: getStorage("userinfo").orgname ,
         salaryData: [],
@@ -274,36 +243,73 @@
       // clearWaterMark()
     },
     methods: {
+      // 验证密码
+      checkPwdClick(){
+        if(this.password === ''){
+          Toast("请输入薪资密码")
+          return
+        }
+        let params = {
+          password: this.password
+        }
+        checkPwd(params).then(res => {
+          Toast.success(res.message)
+          this.isNeedSalaryPassword = false
+        })
+      },
       // 重置密码
       resetPwd() {
-        Dialog.alert({
-          title: '重置密码?',
-          message: '确认重置密码吗',
+        let params = {
+          pk_psndoc: userInfoPkPsndoc
+        }
+        Dialog.confirm({
+          title: '重置密码',
+          message: '确定要重置密码吗?'
         }).then(() => {
-          // on close
+          restPwd(params).then(res => {
+            Toast.success(res.message)
+          })
+        }).catch(err =>{
         })
       },
       // 二次密码输入验证一致
       checkTwoPwd() {
+        let ischeck = true
         if (this.oldPassword === '' || this.newPassword === '' || this.confirmPassword === '') {
           Toast('必填项不能为空')
+          ischeck = false
         } else if (this.newPassword !== this.confirmPassword) {
-          Toast('两次密码输入不一致，请重新输入！')
+          Toast('密码输入不一致')
+          ischeck = false
         }
+        return ischeck
       },
-      //
+      // 修改密码点击
       updateShow() {
-        this.pwdCheckShow = false
+        this.checkPwdShow = false
         this.updatePwdShow = true
       },
-      // 修改密码
-      updatePwd() {
-        this.checkTwoPwd()
+      // 修改密码关闭
+      clickCloseIcon() {
+        this.checkPwdShow = true
         this.updatePwdShow = false
+        this.oldPassword = ''
+        this.newPassword = ''
+        this.confirmPassword = ''
       },
-      // 二次密码验证
-      onSubmit(values) {
-        console.log('submit', values);
+      // 修改密码确认
+      updatePwd() {
+        if(this.checkTwoPwd()){
+          let params = {
+            pk_psndoc: userInfoPkPsndoc,
+            oldPassword: this.oldPassword,
+            newPassword: this.newPassword
+          }
+          updatePwd(params).then(res => {
+            Toast.success(res.message)
+            this.clickCloseIcon()
+          })
+        }
       },
       salaryDetailClick(item) {
         this.salaryDetail = item
@@ -459,24 +465,27 @@
     }
   };
 </script>
-<style>
-    .moreEvent{
-        color: #0CAEF5;
-        font-size: 12px;
-    }
-    span{
-        display: block;
-        float: right;
-        margin-left: 6px;
-    }
-    .van-field__body {
-        /*height: 40px;*/
-        /*border-radius: 10px;*/
-        /*border: 1px solid grey;*/
-    }
-</style>
 
 <style lang='less' scoped>
+  .moreEvent1 {
+    margin-top: 20px;
+    font-size: 12px;
+    span {
+      color: #888;
+      float: left;
+    }
+  }
+
+  .moreEvent2 {
+    margin-top: 20px;
+    font-size: 12px;
+    span {
+      float: right;
+      color: #2479ed;
+      margin-left: 15px;
+    }
+  }
+
   .van-divider {
     margin: 12px 0px;
   }
