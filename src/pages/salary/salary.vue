@@ -14,7 +14,7 @@
           <span @click="selectDate('endDate','结束日期')">
             {{ endDate }}
           </span>
-          <span style="font-size: 20px; float: right; margin-right: 10px;" @click="selectDate('beginDate','开始日期')"><van-icon
+          <span style="font-size: 20px; float: right; margin-right: 20px;" @click="selectDate('beginDate','开始日期')"><van-icon
             name="notes-o"/></span>
         </div>
       </van-col>
@@ -39,8 +39,8 @@
       <!--薪资数据 标题-->
       <van-row type="flex">
         <van-col :span="24" class="salary_username">
-          <!--          <span>{{username}}</span>-->
-          <!--          <span style="font-size: 14px; margin-left: 20px; color: #999999;">{{orgname}}</span>-->
+                    <span>{{userInfo.name}}</span>
+                    <span style="font-size: 14px; margin-left: 20px; color: #999999;">{{userInfo.orgname}}</span>
         </van-col>
       </van-row>
       <!--薪资数据 内容-->
@@ -76,23 +76,23 @@
           style="width: 100%; height: 56px; border-top-left-radius: 16px; border-top-right-radius: 16px; background: #2479ed; position: relative;">
           <div
             style="width: 100%; height: 51px; border-top-left-radius: 11px; border-top-right-radius: 11px; background: #fff;  position: absolute; top: 6px;">
-            <p style="margin-left: 20px;">2012年2月工资发放</p>
+            <p style="margin-left: 20px;">{{salaryDetail.cyear}}年{{salaryDetail.cperiod}}月   {{salaryDetail.waClassName}}</p>
           </div>
         </div>
         <div>
           <van-row type="flex">
             <van-col span="24">
               <!-- 数据内容-->
-              <van-row style="font-size: 14px; padding: 0 20px;" v-for="(item, index) in salaryDetailKeyList"
+              <van-row style="font-size: 14px; padding: 0 20px;" v-for="(row, index) in salaryDetail.paySlipVOs"
                        :key="index">
                 <van-divider :style="{ borderColor: 'grey'}"
                              dashed></van-divider>
                 <van-col span="12">
-                <span>{{ salaryDetail[item] }}
+                <span>{{ row.name }}
               </span>
                 </van-col>
                 <van-col span="12">
-                  <span style="float: right;">{{ salaryDetail[item] }}</span>
+                  <span style="float: right;">{{ row.value }}</span>
                 </van-col>
               </van-row>
             </van-col>
@@ -185,6 +185,7 @@
   import {Toast, Dialog} from 'vant';
   import {querySalaryData,updatePwd,restPwd,checkPwd,enablePwd} from '@/api/salary'
   import {userInfoPkPsndoc} from "@/utils/storageUtils";
+  import {userInfo} from "@/utils/storageUtils";
 
   export default {
     name: 'salary',
@@ -193,6 +194,7 @@
     },
     data() {
       return {
+        userInfo,
         // 二次密码验证
         // 修改密码
         oldPassword: '',
@@ -206,7 +208,6 @@
         // 薪资明细
         salaryDetailShow: false,
         salaryDetail: {},
-        salaryDetailKeyList: [],
         // username: getStorage("userinfo").name,
         // orgname: getStorage("userinfo").orgname ,
         salaryData: [],
@@ -331,9 +332,10 @@
         }
       },
       salaryDetailClick(item) {
-        this.salaryDetail = item
-        this.salaryDetailKeyList = Object.keys(item)
-        this.salaryDetailShow = true
+        if(item.salaryListItem){
+          this.salaryDetail = item.salaryListItem
+          this.salaryDetailShow = true
+        }
       },
       toDecimal2(x) {
         var f = parseFloat(x)
