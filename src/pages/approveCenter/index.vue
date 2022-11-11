@@ -17,7 +17,7 @@
       <!--内容区域-->
       <div class="item" v-for="(item, index) in ApplyList" :key="index"
            :style="index == 0 ? 'margin-top: 0px' : 'margin-top: 20px'">
-        <div class="item_left" :style="{background: approveStatus == 'N' ?  '#2479ED': '#E9AE24'}"/>
+        <div class="item_left" :style="{background: approveStatus == 'N' ?  '#2479ED': '#3FC691'}"/>
         <div class="item_right" @click="toApply(item)">
           <van-row type="flex" style="height: 30px; padding-top: 10px;" justify="center">
             <van-col span="14">

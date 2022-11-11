@@ -1,7 +1,8 @@
 <template>
   <div class="message">
     <Header title="消息中心" @clickLeft="clickLeft" @clickRight="clickRight" rightIcon="bars"></Header>
-    <van-tabs v-model="messageType" color="#2479ED" title-active-color="#2479ED" title-inactive-color="#000">
+    <van-tabs v-model="messageType" color="#2479ED" title-active-color="#2479ED" title-inactive-color="#000"
+              @change="changeTab">
       <!--通知消息-->
       <van-tab title="通知消息" name="notice">
         <van-cell-group>
@@ -124,11 +125,18 @@
         BillTypeMap
       }
     },
+    created() {
+    },
     mounted() {
       this.queryNotiveMessage()
       this.queryApproveMessage()
     },
     methods: {
+      // 改变标签事件
+      changeTab(name) {
+        // console.log(name)
+        // storage.set(MESSAGETYPE, name)
+      },
       /**
        * 标记为已读
        */
