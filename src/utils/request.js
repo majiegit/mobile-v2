@@ -1,7 +1,7 @@
 import axios from 'axios'
 import storage from 'store'
 import {VueAxios} from './axios'
-import {ACCESS_TOKEN, REFRESH_TOKEN, TOKEN_TIME_EXP} from '@/utils/mutation-types'
+import {ACCESS_TOKEN, REFRESH_TOKEN,USERINFO, TOKEN_TIME_EXP} from '@/utils/mutation-types'
 import {Toast} from 'vant';
 // 创建 axios 实例
 const request = axios.create({
@@ -48,7 +48,10 @@ request.interceptors.response.use(
     if (res.code === 200) {
       return res
     } else if (res.code === 401) {
-      // token 失效
+      // token 失效,删除token
+      storage.remove(ACCESS_TOKEN)
+      storage.remove(REFRESH_TOKEN)
+      storage.remove(USERINFO)
     } else {
       // 弹出错误消息
       Toast(res.message)

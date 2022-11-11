@@ -30,7 +30,8 @@
       <van-tab title="工作任务" name="approve">
         <van-cell-group>
           <van-cell v-for="(approve,index) in approveMessageList" :key="index"
-                    :is-link="approve.isread === 'N' ? true: false">
+                    :to="{ name: BillTypeMap[approve.billtype].routerApprovePath, query: { pk_h: approve.billid, billtype: approve.billtype}}"
+                    is-link>
             <template #title>
               <van-icon name="records"/>
               <span>{{approve.subject}}</span>
@@ -78,6 +79,7 @@
 <script>
   import Header from '@/components/Header/Index'
   import {queryNoticeMessageList, queryApproveMessageList, updateNoticeMessageIsRead} from '@/api/message'
+  import {approveStateName, approveStateColorList, BillTypeList, BillTypeMap} from '@/utils/ConstantUtils'
   import {userInfoUserId} from '@/utils/storageUtils'
   import {Toast} from 'vant';
 
@@ -118,7 +120,8 @@
         ],
         messageType: 'notice',
         noticeMessageList: [],
-        approveMessageList: []
+        approveMessageList: [],
+        BillTypeMap
       }
     },
     mounted() {
@@ -132,10 +135,10 @@
       isreadActionClick(message) {
         let params = {
           pk_message: message.pk_message,
-          isread: message.isread === 'Y' ? 'N': 'Y'
+          isread: message.isread === 'Y' ? 'N' : 'Y'
         }
         updateNoticeMessageIsRead(params).then(res => {
-          message.isread = message.isread === 'Y' ? 'N': 'Y'
+          message.isread = message.isread === 'Y' ? 'N' : 'Y'
         })
       },
       /**

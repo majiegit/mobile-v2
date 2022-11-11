@@ -2,14 +2,19 @@
   <div class="bodyDiv">
     <!--顶部区域-->
     <div class="top">
-      <div
-        class="header">
-        <span class="headerTitle"> 员工赋能平台</span>
-        <span style="float: right; margin-top: 5px;">
-            <van-icon name="bell" :badge="messageTotal" color="#fff" size="25"
-                      @click="handleMessageClick"/>
-          </span>
-      </div>
+      <van-row type="flex" class="header">
+        <van-col :span="8">
+          <van-icon name="bars" color="#fff" size="25" class="header_icon_left"
+                    @click="openSetting"/>
+        </van-col>
+        <van-col :span="8">
+          <span class="headerTitle"> 员工赋能平台</span>
+        </van-col>
+        <van-col :span="8">
+          <van-icon name="bell" :badge="messageTotal" color="#fff" size="25" class="header_icon_right"
+                    @click="handleMessageClick"/>
+        </van-col>
+      </van-row>
       <div>
         <van-row type="flex">
           <van-col :span="5" offset="2">
@@ -54,14 +59,15 @@
         </van-col>
       </van-row>
     </div>
+
+
+    <Setting ref="setting"/>
   </div>
 </template>
 <script>
-  import storage from 'store'
   import {queryUserRoleMenu, queryPsndocInfo} from '@/api/home'
   import {queryIsReadMessageCount} from '@/api/message'
-  import {USERINFO, TOKEN_TIME_EXP} from '@/utils/mutation-types'
-
+  import Setting from '@/pages/home/component/setting'
   export default {
     name: 'application',
     data() {
@@ -71,7 +77,9 @@
         messageTotal: ''
       }
     },
-    components: {},
+    components: {
+      Setting
+    },
     created() {
       this.getUserInfo()
       this.getMenus()
@@ -102,15 +110,19 @@
       getUserInfo() {
         queryPsndocInfo().then(res => {
           this.userInfo = res.data
-          storage.set(USERINFO, this.userInfo, TOKEN_TIME_EXP)
           this.getMessageNumber(res.data.user_id)
         })
       },
       routerpush(router) {
         this.$router.push(router)
       },
+      // 消息点击
       handleMessageClick() {
         this.$router.push('message')
+      },
+      // 打开设置
+      openSetting(){
+        this.$refs.setting.open()
       }
     }
   }
@@ -133,13 +145,24 @@
   }
 
   .header {
-    width: 94%;
     height: 50px;
     text-align: center;
     line-height: 50px;
-    padding: 0 3%;
   }
 
+  .header_icon_left {
+    position: relative;
+    top: 10px;
+    left: 5px;
+    float: left;
+  }
+
+  .header_icon_right {
+    position: relative;
+    top: 13px;
+    right: 13px;
+    float: right;
+  }
   .headerTitle {
     color: #fff;
     font-size: 16px;

@@ -47,3 +47,15 @@ export function checkPwd(data) {
     data: data
   })
 }
+
+/**
+ * 是否启用薪资密码二次验证
+ * @param parameter
+ */
+export function enablePwd(data) {
+  return request({
+    url: "/hrsh/salary/enablePwd",
+    method: 'post',
+    data: data
+  })
+}

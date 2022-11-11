@@ -2,7 +2,6 @@ import Personal from '@/pages/personal/personal.vue'
 import PersonalEdit from '@/pages/personal/personalEdit.vue'
 import personalSubEdit from '@/pages/personal/subEdit.vue'
 import personalSubList from '@/pages/personal/subList.vue'
-// import personalEnclosure from '@/pages/personal/components/enclosure.vue'
 
 export default [
   {
@@ -24,10 +23,5 @@ export default [
     path: '/personalSubEdit',
     name: 'personalSubEdit',
     component: personalSubEdit
-  },
-  // {
-  //   path: '/personalEnclosure',
-  //   name: 'personalEnclosure',
-  //   component: personalEnclosure
-  // }
+  }
 ]

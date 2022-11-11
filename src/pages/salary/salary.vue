@@ -30,7 +30,7 @@
         <van-row type="flex">
           <van-col :span="12" class="item_col" v-for="(item,index) in summarizing" :key=index>
             <span>{{ item.title }} : </span>
-            <span>{{ item.number }}</span>
+            <span>{{ salaryData.summarySalary[item.field] }}</span>
           </van-col>
         </van-row>
       </div>
@@ -44,36 +44,23 @@
         </van-col>
       </van-row>
       <!--薪资数据 内容-->
-      <div class="salary_div" v-for="(list,index) in salaryData" :key="index" @click="salaryDetailClick(list)">
+      <div class="salary_div" v-for="(list,index) in salaryData.salaryList" :key="index" @click="salaryDetailClick(list)">
         <van-row type="flex">
-          <van-col :span="12" class="item_col" style="font-size: 20px;">
-            {{ list.salaryList[list.countItem[0]].content.slice(0, 7) }}
+          <van-col :span="12" class="item_col" style="font-size: 19px;">
+            {{ list.cyear }}年{{list.cperiod}}月
           </van-col>
           <van-col :span="12" class="item_col">
-            <span>发放日期 :</span>
-            <span>{{ list.salaryList[list.countItem[0]].content }}</span>
+            <span>{{list.name}}</span>
           </van-col>
-          <van-col :span="12" class="item_col">
-            <span>{{ list.salaryList[list.countItem[2]].title }} : </span>
-            <span>{{ list.salaryList[list.countItem[2]].content }}</span>
-          </van-col>
-          <van-col :span="12" class="item_col">
-            <span>{{ list.salaryList[list.countItem[1]].title }} : </span>
-            <span>{{ list.salaryList[list.countItem[1]].content }}</span>
-          </van-col>
-          <van-col :span="12" class="item_col">
-            <span>{{ list.salaryList[list.countItem[4]].title }} : </span>
-            <span>{{ list.salaryList[list.countItem[4]].content }}</span>
-          </van-col>
-          <van-col :span="12" class="item_col">
-            <span>{{ list.salaryList[list.countItem[3]].title }} : </span>
-            <span>{{ list.salaryList[list.countItem[3]].content }}</span>
+          <van-col :span="12" class="item_col" v-for="(item,index2) in summarizing" :key="index2" >
+            <span>{{item.title}}:</span>
+            <span>{{list[item.field]}}</span>
           </van-col>
         </van-row>
       </div>
     </div>
     <div v-else>
-      <van-empty description="暂无数据"/>
+      <van-empty description="暂无薪资数据"/>
     </div>
 
     <!--薪资明细弹框-->
@@ -101,11 +88,11 @@
                 <van-divider :style="{ borderColor: 'grey'}"
                              dashed></van-divider>
                 <van-col span="12">
-                <span>{{ item.title }}
+                <span>{{ salaryDetail[item] }}
               </span>
                 </van-col>
                 <van-col span="12">
-                  <span style="float: right;">{{ item.content }}</span>
+                  <span style="float: right;">{{ salaryDetail[item] }}</span>
                 </van-col>
               </van-row>
             </van-col>
@@ -125,7 +112,7 @@
     </van-popup>
 
     <!--  二次密码验证  -->
-    <van-popup v-model="isNeedSalaryPassword"
+    <van-popup v-model="enableSalaryPwd"
                :close-on-click-overlay="false"
                round
                style="width: 80%;height: 30%">
@@ -196,7 +183,7 @@
 <script>
   import Header from '@/components/Header/Index'
   import {Toast, Dialog} from 'vant';
-  import {querySalaryData,updatePwd,restPwd,checkPwd} from '@/api/salary'
+  import {querySalaryData,updatePwd,restPwd,checkPwd,enablePwd} from '@/api/salary'
   import {userInfoPkPsndoc} from "@/utils/storageUtils";
 
   export default {
@@ -215,7 +202,7 @@
         // 验证密码
         checkPwdShow: true,
         password: '',
-        isNeedSalaryPassword: true,  // 是否需要薪资密码验证
+        enableSalaryPwd: true,  // 是否需要薪资密码验证
         // 薪资明细
         salaryDetailShow: false,
         salaryDetail: {},
@@ -223,7 +210,24 @@
         // username: getStorage("userinfo").name,
         // orgname: getStorage("userinfo").orgname ,
         salaryData: [],
-        summarizing: [],
+        summarizing: [
+          {
+            title: '应发汇总',
+            field: 'f_1',
+          },
+          {
+            title: '实发汇总',
+            field: 'f_3',
+          },
+          {
+            title: '扣税汇总',
+            field: 'f_5',
+          },
+          {
+            title: '扣款汇总',
+            field: 'f_2',
+          },
+        ],
         field: '',
         fieldName: '',
         datePickShow: false,
@@ -236,13 +240,27 @@
     updated() {
       // waterMark({watermark_txt: localStorage.getItem('userName').split('-')[1] + ' ' + localStorage.getItem('usercode').split('-')[1]})
     },
+    watch:{
+    },
     mounted() {
+      // 判断是否启用薪资密码验证
+      this.queryEnablePwd()
+      // 初始化查询日期
       this.initYearMonth()
     },
     beforeDestroy() {
       // clearWaterMark()
     },
     methods: {
+      // 是否启用薪资二次密码
+      queryEnablePwd(){
+        enablePwd().then(res => {
+          this.enableSalaryPwd = res.data
+          if(!this.enableSalaryPwd){
+            this.querySalaryData()
+          }
+        })
+      },
       // 验证密码
       checkPwdClick(){
         if(this.password === ''){
@@ -254,7 +272,8 @@
         }
         checkPwd(params).then(res => {
           Toast.success(res.message)
-          this.isNeedSalaryPassword = false
+          this.enableSalaryPwd = false
+          this.querySalaryData()
         })
       },
       // 重置密码
@@ -313,9 +332,7 @@
       },
       salaryDetailClick(item) {
         this.salaryDetail = item
-        this.salaryDetailKeyList = Object.keys(item.salaryList)
-        console.log(this.salaryDetailKeyList)
-        console.log(this.salaryDetail)
+        this.salaryDetailKeyList = Object.keys(item)
         this.salaryDetailShow = true
       },
       toDecimal2(x) {
@@ -335,26 +352,6 @@
         }
         return s
       },
-      totalChange(data) {
-        var shouldTotal = 0
-        var practicalTotal = 0
-        var chargeTotal = 0
-        var taxTotal = 0
-        for (var i = 0; i < data.length; i++) {
-          shouldTotal += parseFloat(data[i].salaryList.wa_dataf_1.content)
-          practicalTotal += parseFloat(data[i].salaryList.wa_dataf_3.content)
-          chargeTotal += parseFloat(data[i].salaryList.wa_dataf_2.content)
-          taxTotal += parseFloat(data[i].salaryList.wa_dataf_5.content)
-        }
-        if (data.length !== 0) {
-          this.summarizing = [
-            {title: '应发汇总', number: this.toDecimal2(shouldTotal)},
-            {title: '实发汇总', number: this.toDecimal2(practicalTotal)},
-            {title: '扣税合计', number: this.toDecimal2(taxTotal)},
-            {title: '扣款合计', number: this.toDecimal2(chargeTotal)}
-          ]
-        }
-      },
       // 查询薪资数据
       querySalaryData() {
         Toast.loading({
@@ -362,12 +359,11 @@
           duration: 0
         })
         let params = {
-          'userId': '1001A9100000000007PX',
-          'beginDate': this.beginDate,
-          'endDate': this.endDate
+          'beginDate': this.beginDate.replace("-",""),
+          'endDate': this.endDate.replace("-","")
         }
         querySalaryData(params).then(res => {
-          console.log(res)
+          this.salaryData = res.data
           Toast.clear()
         })
         // fetchData({
@@ -390,8 +386,8 @@
         //   }
         // })
       },
-      // 校验日期
-      checkDate(date) {
+      // 选择日期确认
+      confirmDate(date) {
         this[this.field] = this.dateFormatter(date)
         if (this.beginDate && this.endDate) {
           let beginDateArr = this.beginDate.split('-')
@@ -400,10 +396,6 @@
           let endDateArr = this.endDate.split('-')
           let endDateYear = Number(endDateArr[0])
           let endDateMonth = Number(endDateArr[1])
-          // console.log(beginDateYear)
-          // console.log(beginDateMonth)
-          // console.log(endDateYear)
-          // console.log(endDateMonth)
           if (beginDateYear > endDateYear) {
             Toast("开始日期不能大于结束日期")
             return
@@ -416,10 +408,6 @@
         }
         this.datePickShow = false
         this.querySalaryData()
-      },
-      // 选择日期确认
-      confirmDate(date) {
-        this.checkDate(date)
       },
       // 选择日期
       selectDate(field, fieldName) {
@@ -520,7 +508,7 @@
     background: #2479ed;
     padding: 4%;
     color: #ffffff;
-    border-radius: 5px;
+    border-radius: 15px;
     box-shadow: 0px 8px 15px 1px rgba(198, 198, 198, 0.3);
   }
 
@@ -530,7 +518,7 @@
     min-height: 90px;
     background: #fff;
     padding: 4%;
-    border-radius: 5px;
+    border-radius: 15px;
     box-shadow: 0px 8px 15px 1px rgba(198, 198, 198, 0.3);
   }
 

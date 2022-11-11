@@ -1,6 +1,5 @@
 <template>
-  <div class="body" style="background-image:url(./static/img/login/background.png)"
-       :style="{ height: currentHeight}">
+  <div class="body" style="background-image:url(./static/img/login/background.png)">
     <!--logo-->
     <div class="logo">
       <img src="../../../static/img/login/logo.png" id="logo"/>
@@ -54,7 +53,6 @@
     name: 'login',
     data() {
       return {
-        currentHeight: '',
         usercode: '',
         password: '',
         passwordType: 'password'
@@ -64,7 +62,6 @@
 
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight) + 'px'
     },
     watch: {},
     methods: {
@@ -81,8 +78,10 @@
         loginByUserCodePassword(param).then(res => {
           storage.set(ACCESS_TOKEN, res.data.accessToken, TOKEN_TIME_EXP)
           storage.set(REFRESH_TOKEN, res.data.refreshToken, TOKEN_TIME_EXP)
-          this.$router.push("application")
-          Toast.success(res.message)
+          // setTimeout(eeee =>  {
+            this.$router.push("application")
+            Toast.success(res.message)
+          // },200)
         })
       }
     }
@@ -94,21 +93,25 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
   }
 
   .logo {
-    width: 70%;
-    padding: 30% 15%;
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    text-align: center;
     img {
-      width: 100%;
+      min-width: 270px;
+      max-width: 50%;
     }
   }
 
   .login {
     width: 70%;
     padding: 0px 15%;
-
+    position: absolute;
+    top: 30%;
   }
 
   .login_button {
@@ -128,7 +131,6 @@
     font-weight: 400;
     font-size: 12px;
     color: #ffffff;
-    height: 50px;
   }
 </style>
 

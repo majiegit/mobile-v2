@@ -27,7 +27,7 @@
                   </span>
             </van-col>
             <van-col span="9">
-              <span>{{item.sendtime}}</span>
+              <span style="float: right;">{{item.sendtime}}</span>
             </van-col>
           </van-row>
           <van-row type="flex" style="height: 30px; " justify="center">
