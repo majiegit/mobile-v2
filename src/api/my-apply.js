@@ -23,3 +23,15 @@ export function getBillInfo(params) {
     params: params
   })
 }
+
+/**
+ * 删除我的单据
+ * @param parameter
+ */
+export function deleteBill(params) {
+  return request({
+    url: "/hrsh/myapply/deleteBill",
+    method: 'post',
+    params: params
+  })
+}

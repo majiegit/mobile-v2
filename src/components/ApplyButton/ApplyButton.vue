@@ -72,23 +72,13 @@
        * 提交单据
        */
       submitBill() {
-        Dialog.confirm({
-          title: '提交单据',
-          message: '是否确定提交单据?',
-        }).then(() => {
-        }).catch(() => {
-        })
+        this.$emit("submit")
       },
       /**
        * 收回单据
        */
       rollbackBill() {
-        Dialog.confirm({
-          title: '收回单据',
-          message: '是否确定收回单据?',
-        }).then(() => {
-        }).catch(() => {
-        })
+        this.$emit("rollback")
       },
     }
   }

@@ -80,15 +80,15 @@ export const BillTypeMap = {
   },
   '6QCC': {
     billtypename: '出差单',
-    routerEditPath: 'awayEdit',  // 出差编辑页路由
-    routerDetailPath: 'awayDetail',  // 出差明细页路由
-    routerApprovePath: 'awayApprove',  // 出差审核页路由
+    routerEditPath: 'tripEdit',  // 出差编辑页路由
+    routerDetailPath: 'tripDetail',  // 出差明细页路由
+    routerApprovePath: 'tripApprove',  // 出差审核页路由
   },
   '6QXC': {
     billtypename: '销差单',
-    routerEditPath: 'awayoffEdit',  // 销差编辑页路由
-    routerDetailPath: 'awayoffDetail',  // 销差明细页路由
-    routerApprovePath: 'awayoffApprove',  //销差审核页路由
+    routerEditPath: 'tripoffEdit',  // 销差编辑页路由
+    routerDetailPath: 'tripoffDetail',  // 销差明细页路由
+    routerApprovePath: 'tripoffApprove',  //销差审核页路由
   },
   '6QLZ': {
     billtypename: '离职单',
@@ -124,11 +124,11 @@ export const BillTypeCode = {
     billtypecode: '6QJB',  // 单据编码
     billtypename: '加班单'
   },
-  away: {
+  trip: {
     billtypecode: '6QCC',  // 单据编码
     billtypename: '出差单'
   },
-  awayOff: {
+  tripOff: {
     billtypecode: '6QXC',  // 单据编码
     billtypename: '销差单'
   },

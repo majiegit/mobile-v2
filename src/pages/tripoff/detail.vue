@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :title="title" @clickLeft="clickLeft"></Header>
+    <Header :title="title" @clickLeft="clickLeft" :rightIcon="rightIcon" @clickRight="deleteBill"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
         <p class="item_body_title">出差信息</p>
@@ -18,7 +18,7 @@
           <van-cell title="销差原因：" :value="billInfo.remark"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
-        <p class="item_body_title">销差信息</p>
+        <p class="item_body_title">销假信息</p>
         <van-cell title="销差理由：" :value="billInfo.tripoffremark"/>
         <van-cell title="实际开始时间：" :value="billInfo.tripoffbegintime"/>
         <van-cell title="实际结束时间：" :value="billInfo.tripoffendtime"/>
@@ -31,40 +31,43 @@
         <van-empty description="暂无数据"/>
       </div>
     </div>
-
-
-    <!--  审核按钮  -->
-    <ApproveButton :pk_h="pk_h" :approvestate="approvestate" v-if="pk_h && approvestate" />
+    <!-- 按钮区域-->
+    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
   </div>
 </template>
 
 <script>
-  import {Toast} from 'vant';
+  import {Toast, Dialog} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import ApproveButton from '@/components/ApproveButton/ApproveButton'
-  import {getBillInfo} from '@/api/my-apply'
+  import ApplyButton from '@/components/ApplyButton/ApplyButton'
+  import {getTripoffBill,deleteTripoffBill} from '@/api/tripoff'
+  import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
 
   export default {
-    name: "approve",
-    components: {Header, ApproveProcess, ApproveButton},
+    name: "edit",
+    components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
-        title: '销差申请单',
-        check: {
-          show: false,
-          title: '',
-          node: '',
-          action: '',
-        },
+        dateTimeType: dateTimeType,
+        approveStateName: approveStateName,
+        title: '销差申请',
         currentHeight: '',
+        rightIcon: '',
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: ''
+        billtype: '',
       }
     },
-    watch: {},
+    watch: {
+      approvestate(val) {
+        // 只有自由态可删除
+        if (val == '-1') {
+          this.rightIcon = 'delete-o'
+        }
+      }
+    },
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       if (this.$route.query.pk_h) {
@@ -73,9 +76,15 @@
       if (this.$route.query.billtype) {
         this.billtype = this.$route.query.billtype
       }
-      this.queryBillInfo(this.$route.query.pk_h, this.$route.query.billtype)
+      this.queryBillInfo(this.$route.query.pk_h)
     },
     methods: {
+      /**
+       * 返回事件
+       */
+      clickLeft() {
+        this.$router.go(-1)
+      },
       /**
        * 附件管理
        */
@@ -89,58 +98,75 @@
         this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
       },
       /**
+       * 编辑单据
+       */
+      editBill() {
+      },
+
+      /**
+       * 提交单据
+       */
+      submitBill() {
+        Dialog.confirm({
+          title: '提交单据',
+          message: '是否确定提交单据?',
+        }).then(() => {
+        }).catch(() => {
+        })
+      },
+      /**
+       * 收回单据
+       */
+      rollbackBill() {
+        Dialog.confirm({
+          title: '收回单据',
+          message: '是否确定收回单据?',
+        }).then(() => {
+        }).catch(() => {
+        })
+      },
+      /**
+       * 删除单据
+       */
+      deleteBill() {
+        if (this.approvestate == '-1') {
+          let params = {
+            billid: this.pk_h
+          }
+          Dialog.confirm({
+            title: '删除单据',
+            message: '是否确定删除单据?',
+          }).then(() => {
+            Toast.loading({
+              message: '删除中...',
+              duration: 0
+            })
+            deleteTripoffBill(params).then(res => {
+              Toast.success(res.message)
+              setTimeout(() => {
+                this.$router.go(-1)
+              },500)
+            })
+          })
+        }
+      },
+      /**
        * 查询单据
        */
-      queryBillInfo(pk_h, billtype) {
+      queryBillInfo(pk_h) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
         let params = {
-          billid: pk_h,
-          billtype: billtype
+          billid: pk_h
         }
-        getBillInfo(params).then(res => {
+        getTripoffBill(params).then(res => {
           this.billInfo = res.data
           this.approvestate = res.data.approvestatus
           Toast.clear()
         })
-      },
-      /**
-       * 返回事件
-       */
-      clickLeft() {
-        this.$router.go(-1)
-      },
-      /**
-       * 审核确认
-       */
-      checkConfirm() {
-        Toast.loading({
-          message: '审批中...',
-          duration: 0
-        })
-      },
-
-      /**
-       * 单据审核
-       */
-      checkBill(type) {
-        this.check.show = true
-        if (type == 'Y') {
-          // 审核通过
-          this.check.action = 'Y'
-          this.check.title = '审核通过'
-        } else if (type == 'N') {
-          // 审核不通过
-          this.check.action = 'N'
-          this.check.title = '审核不通过'
-        } else if (type == 'R') {
-          // 驳回
-          this.check.action = 'R'
-          this.check.title = '驳回'
-        }
-      },
+      }
     }
   }
 </script>
@@ -149,6 +175,7 @@
   .item_body {
     width: 100%;
     overflow-y: auto;
+
     &_title {
       font-size: 14px;
       line-height: 14px;

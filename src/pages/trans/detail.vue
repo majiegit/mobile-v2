@@ -33,7 +33,7 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/ApplyButton/ApplyButton'
-  import {getBillInfo} from '@/api/my-apply'
+import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
 
 
   export default {
@@ -66,7 +66,7 @@
       if (this.$route.query.billtype) {
         this.billtype = this.$route.query.billtype
       }
-      this.queryBillInfo(this.$route.query.pk_h, this.$route.query.billtype)
+      this.queryBillInfo(this.$route.query.pk_h)
     },
     methods: {
       /**
@@ -134,7 +134,7 @@
       /**
        * 查询单据
        */
-      queryBillInfo(pk_h, billtype) {
+      queryBillInfo(pk_h) {
         Toast.loading({
           message: '加载中...',
           duration: 0

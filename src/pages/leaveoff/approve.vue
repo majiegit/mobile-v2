@@ -43,8 +43,7 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/ApproveButton/ApproveButton'
-
-  import {getBillInfo} from '@/api/my-apply'
+  import {getLeaveoffBill} from '@/api/leaveoff'
   import {approveStateName, whetherYN, LastAfter, dateTimeType} from '@/utils/ConstantUtils'
 
 
@@ -80,7 +79,7 @@
       if (this.$route.query.billtype) {
         this.billtype = this.$route.query.billtype
       }
-      this.queryBillInfo(this.$route.query.pk_h, this.$route.query.billtype)
+      this.queryBillInfo(this.$route.query.pk_h)
     },
     methods: {
       /**
@@ -98,16 +97,15 @@
       /**
        * 查询单据
        */
-      queryBillInfo(pk_h, billtype) {
+      queryBillInfo(pk_h) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
         let params = {
-          billid: pk_h,
-          billtype: billtype
+          billid: pk_h
         }
-        getBillInfo(params).then(res => {
+        getLeaveoffBill(params).then(res => {
           this.billInfo = res.data
           this.approvestate = res.data.approvestatus
           Toast.clear()

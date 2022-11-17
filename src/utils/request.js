@@ -48,10 +48,12 @@ request.interceptors.response.use(
     if (res.code === 200) {
       return res
     } else if (res.code === 401) {
-      // token 失效,删除token
+      // token 失效,删除token,跳转到登录页
       storage.remove(ACCESS_TOKEN)
       storage.remove(REFRESH_TOKEN)
       storage.remove(USERINFO)
+      Toast(res.message)
+      window.location.href = '/'
     } else {
       // 弹出错误消息
       Toast(res.message)
@@ -62,10 +64,6 @@ request.interceptors.response.use(
     if (error.response) {
       const data = error.response.data
       if (error.response.status === 403) {
-
-      }
-      if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-
       }
       if (error.response.status === 500) {
       }

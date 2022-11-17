@@ -9,8 +9,8 @@ import approveCenter from './pages/approveCenter'
 import salary from './pages/salary'
 import reg from './pages/reg'
 import overtime from './pages/overtime'
-import away from './pages/away'
-import awayoff from './pages/awayoff'
+import trip from './pages/trip'
+import tripoff from './pages/tripoff'
 import leave from './pages/leave'
 import leaveoff from './pages/leaveoff'
 import trans from './pages/trans'
@@ -29,8 +29,8 @@ export const AllRouterList = [].concat(
   salary,
   reg,
   overtime,
-  away,
-  awayoff,
+  trip,
+  tripoff,
   leave,
   leaveoff,
   trans,

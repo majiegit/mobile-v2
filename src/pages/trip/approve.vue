@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :title="title" @clickLeft="clickLeft" :rightIcon="rightIcon" @clickRight="deleteBill"></Header>
+    <Header :title="title" @clickLeft="clickLeft"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
         <van-cell-group>
@@ -16,7 +16,6 @@
           <van-cell title="出差理由：" :value="billInfo.remark"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
-
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
         <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
@@ -25,46 +24,45 @@
         <van-empty description="暂无数据"/>
       </div>
     </div>
-
-    <!-- 按钮区域-->
-    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
+    <!--  审核按钮  -->
+    <ApproveButton :pk_h="pk_h" :approvestate="approvestate" v-if="pk_h && approvestate" />
   </div>
 </template>
 
 <script>
-  import {Toast, Dialog} from 'vant';
+  import {Toast} from 'vant';
   import Header from '@/components/Header/Index'
-  import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import {getBillInfo} from '@/api/my-apply'
+  import ApproveButton from '@/components/ApproveButton/ApproveButton'
+  import {getTripBill} from '@/api/trip'
   import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
 
 
   export default {
-    name: "edit",
-    components: {Header, ApproveProcess, ApplyButton},
+    name: "approve",
+    components: {Header, ApproveProcess, ApproveButton},
     data() {
       return {
-        dateTimeType: dateTimeType,
         approveStateName: approveStateName,
-        title: '出差申请',
+        dateTimeType: dateTimeType,
+        title: '出差申请单',
+        check: {
+          show: false,
+          title: '',
+          node: '',
+          action: '',
+        },
         currentHeight: '',
-        rightIcon: '',
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: '',
+        billtype: ''
       }
     },
-    watch: {
-      approvestate(val) {
-        // 只有自由态可删除
-        if (val == '-1') {
-          this.rightIcon = 'delete-o'
-        }
-      }
-    },
+    watch: {},
     mounted() {
+      // let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
+      // this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
       this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
@@ -72,15 +70,9 @@
       if (this.$route.query.billtype) {
         this.billtype = this.$route.query.billtype
       }
-      this.queryBillInfo(this.$route.query.pk_h, this.$route.query.billtype)
+      this.queryBillInfo(this.$route.query.pk_h)
     },
     methods: {
-      /**
-       * 返回事件
-       */
-      clickLeft() {
-        this.$router.go(-1)
-      },
       /**
        * 附件管理
        */
@@ -94,67 +86,29 @@
         this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
       },
       /**
-       * 编辑单据
-       */
-      editBill() {
-      },
-
-      /**
-       * 提交单据
-       */
-      submitBill() {
-        Dialog.confirm({
-          title: '提交单据',
-          message: '是否确定提交单据?',
-        }).then(() => {
-        }).catch(() => {
-        })
-      },
-      /**
-       * 收回单据
-       */
-      rollbackBill() {
-        Dialog.confirm({
-          title: '收回单据',
-          message: '是否确定收回单据?',
-        }).then(() => {
-        }).catch(() => {
-        })
-      },
-      /**
-       * 删除单据
-       */
-      deleteBill() {
-        if (this.approvestate == '-1') {
-          Dialog.confirm({
-            title: '删除单据',
-            message: '是否确定删除单据?',
-          }).then(() => {
-            Toast.loading({
-              message: '删除中...',
-              duration: 0
-            })
-          })
-        }
-      },
-      /**
        * 查询单据
        */
-      queryBillInfo(pk_h, billtype) {
+      queryBillInfo(pk_h) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
         let params = {
-          billid: pk_h,
-          billtype: billtype
+          billid: pk_h
         }
-        getBillInfo(params).then(res => {
+        getTripBill(params).then(res => {
           this.billInfo = res.data
           this.approvestate = res.data.approvestatus
           Toast.clear()
         })
-      }
+      },
+      /**
+       * 返回事件
+       */
+      clickLeft() {
+        this.$router.go(-1)
+      },
+
     }
   }
 </script>
