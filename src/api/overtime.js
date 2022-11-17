@@ -19,7 +19,7 @@ export function getOvertimeBill(params) {
  */
 export function saveOvertimeBill(params) {
   return request({
-    url: "/hrsh/overtime/get",
+    url: "/hrsh/overtime/save",
     method: 'post',
     data: params
   })

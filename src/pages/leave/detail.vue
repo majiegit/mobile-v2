@@ -33,7 +33,7 @@
   import {Toast, Dialog} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import ApplyButton from '@/components/ApplyButton/ApplyButton'
+  import ApplyButton from '@/components/Button/ApplyButton'
   import {getLeaveBill,submitLeaveBill,deleteLeaveBill} from '@/api/leave'
   import {approveStateName, whetherYN, LastAfter} from '@/utils/ConstantUtils'
 

@@ -106,7 +106,6 @@ export default {
 </script>
 <style scoped>
 .button_bottom {
-  position: fixed;
   width: 100%;
   height: 50px;
   padding: 5px 0px;

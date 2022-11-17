@@ -1,49 +1,48 @@
 <template>
   <div>
     <Header title="加班申请" @clickLeft="clickLeft"></Header>
-    <div>
-      <div class="item_body">
-        <p class="item_body_title">加班信息</p>
-        <van-form input-align="right" ref="regForm">
-          <van-field
-            is-link
-            required
-            readonly
-            v-model="overtimeData.overtimebegintime"
-            @click="selectDate(overtimeData.overtimebegintime,'overtimebegintime','开始时间', 'datetime')"
-            label="开始时间"
-            placeholder="请选择开始时间"
-          />
-          <van-field
-            is-link
-            required
-            readonly
-            v-model="overtimeData.overtimeendtime"
-            @click="selectDate(overtimeData.overtimeendtime,'overtimeendtime','结束时间', 'datetime')"
-            label="结束时间"
-            placeholder="请选择结束时间"
-          />
-          <van-cell center title="通宵加班" v-if="isAllNight">
-            <van-switch v-model="overtimeData.isallnight" slot="right-icon" size="24"/>
-          </van-cell>
-          <van-field label="加班时长" :value="overtimeData.otapplylength"  readonly/>
-          <van-field
-            v-model="overtimeData.remark"
-            re
-            rows="2"
-            autosize
-            label="说明"
-            type="textarea"
-            placeholder="加班说明"
-          />
-          <div style="position: fixed; width: 90%;bottom: 20px; height: 50px; padding: 5px 5%;">
-            <van-button round block type="info" @click="saveBillInfo">保 存</van-button>
-          </div>
-        </van-form>
-      </div>
-      <!-- 日期选择器-->
-      <SelectDate ref="selectorDate" @dateOk="dateOk"/>
+    <div class="item_body" :style="{'height': currentHeight}">
+      <van-form input-align="right" ref="billForm" colon >
+        <van-field
+          is-link
+          readonly
+          required
+          :rules="formRules.overtimebegintime"
+          name="overtimebegintime"
+          v-model="billInfo.overtimebegintime"
+          @click="selectDate(billInfo.overtimebegintime,'overtimebegintime','开始时间', 'datetime')"
+          label="开始时间"
+          placeholder="请选择开始时间"
+        />
+        <van-field
+          is-link
+          required
+          readonly
+          :rules="formRules.overtimeendtime"
+          name="overtimeendtime"
+          v-model="billInfo.overtimeendtime"
+          @click="selectDate(billInfo.overtimeendtime,'overtimeendtime','结束时间', 'datetime')"
+          label="结束时间"
+          placeholder="请选择结束时间"
+        />
+        <van-field label="通宵加班" v-if="billInfo.isallnight">
+          <van-switch v-model="billInfo.isallnight" slot="right-icon" size="20" active-value="Y" inactive-value="N"/>
+        </van-field>
+        <van-field
+          v-model="billInfo.remark"
+          rows="2"
+          autosize
+          label="说明"
+          type="textarea"
+          placeholder="请填写加班说明"
+        />
+        <van-field label="加班时长" :value="billInfo.otapplylength ? billInfo.otapplylength + '小时': billInfo.otapplylength" readonly/>
+      </van-form>
     </div>
+    <!--保存按钮-->
+    <SaveButton @save="saveBillInfo"/>
+    <!-- 日期选择器-->
+    <SelectDate ref="selectorDate" @dateOk="dateOk"/>
   </div>
 </template>
 
@@ -51,36 +50,87 @@
   import Header from '@/components/Header/Index'
   import Select from '@/components/Selector/Select'
   import SelectDate from '@/components/Selector/SelectDate'
-
+  import SaveButton from '@/components/Button/SaveButton'
+  import {getOvertimeBill, saveOvertimeBill} from '@/api/overtime'
+  import {Toast} from 'vant';
+  import {userInfoPkPsndoc,userInfoUserId} from "@/utils/storageUtils";
+  import {BillTypeList, BillTypeMap} from '@/utils/ConstantUtils'
   export default {
     data() {
       return {
-        overList: [],
-        isAllNight: false, // 是否通宵
+        formRules,
+        currentHeight: '',
         checked: true,
-        overtimeData: {
+        billInfo: {
+          billmaker: userInfoUserId,
+          pk_psndoc: userInfoPkPsndoc,
+          otapplylength: ''
         }
       }
     },
-    components: {Header, Select, SelectDate},
+    components: {Header, Select, SelectDate, SaveButton},
     mounted() {
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      // 判断是修改还是新增
+      if (this.$route.query.pk_h) {
+        this.queryBillInfo(this.$route.query.pk_h)
+      }
     },
     created() {
     },
+    watch: {
+      // 开始时间
+      "billInfo.overtimebegintime"(){
+        this.checkBeginEndTime()
+      },
+      // 结束时间
+      "billInfo.overtimeendtime"() {
+        this.checkBeginEndTime()
+      }
+    },
     methods: {
+      /**
+       * 校验开始结束时间
+       */
+      checkBeginEndTime(){
+        if(this.billInfo.overtimebegintime && this.billInfo.overtimeendtime ){
+          let beginDate = new Date(this.billInfo.overtimebegintime);
+          let endDate = new Date(this.billInfo.overtimeendtime);
+          if(beginDate.getTime() >= endDate.getTime()){
+            Toast("开始时间不能大于结束时间")
+            this.billInfo.overtimeendtime = ''
+          }
+          if(beginDate.getDate() < endDate.getDate()){
+            this.billInfo.isallnight = 'Y'
+          }else {
+            delete this.billInfo.isallnight
+          }
+        }
+      },
+      /**
+       * 查询单据
+       */
+      queryBillInfo(pk_h) {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
+        let params = {
+          billid: pk_h
+        }
+        getOvertimeBill(params).then(res => {
+          this.billInfo = res.data
+          Toast.clear()
+        })
+      },
       /**
        * 时间选择器确认回调
        * @param selector
        * @param item
        */
       dateOk(selector) {
-        // console.log(selector)
-        this.$set(this.overtimeData, selector.field, selector.value)
-        let begintime = this.overtimeData.overtimebegintime
-        let endtime = this.overtimeData.overtimeendtime
-        if (begintime && endtime) {
-          this.checkValue(begintime,endtime)
-        }
+        console.log(selector)
+        this.$set(this.billInfo, selector.field, selector.value)
       },
       /**
        * 选择时间
@@ -95,43 +145,48 @@
         this.$refs.selectorDate.openSelect(selector)
       },
       clickLeft() {
-        this.$router.push({name: 'application'})
+        this.$router.go(-1)
       },
-      // 检测时间段是否跨天
-      checkValue(begin,end) {
-        let begintime = begin.substring(0,10)
-        let endtime = end.substring(0,10)
-        console.log(begintime)
-        console.log(endtime)
-        let aDate = begintime.split('-');
-        // let oDate1 = new Date(begintime[0], begintime[1], begintime[2]); // 转换为12-18-2006格式
-        aDate = endtime.split('-');
-        // let oDate2 = new Date(endtime[0], endtime[1], endtime[2]);
-        // console.log('oDate1',oDate1)
-        // console.log('oDate2',oDate2)
-        // let iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24); // 把相差的毫秒数转换为天数
-        let iDays = Math.abs(begintime - endtime) / 1000 / 60 / 60 / 24; // 把相差的毫秒数转换为天数
-        console.log(iDays)
-        // let mapList = []
-        // this.overList = mapList.push('overtimebegintime', 'overtimebegintime')
-        // for (let i = 0; i < mapList.length; i++) {
-        //   if (!this.overtimeData[mapList[i]]) {
-        //     return
-        //   }
-        // }
-        // this.isAllNight = true
-      },
-      //
+      /**
+       * 保存单据
+       */
       saveBillInfo() {
-
-        // this.overtimeData.isallnight
-        let overtimeData = JSON.parse(JSON.stringify(this.overtimeData))
-        overtimeData.isallnight = true ? 'Y' : 'N'
-        console.log(overtimeData)
+        this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
+          Toast.loading({
+            message: '保存中...',
+            duration: 0
+          })
+          saveOvertimeBill(this.billInfo).then(res => {
+            Toast.clear()
+            this.$router.push({name: 'overtimeDetail', query:{pk_h: res.data.ph_overtime}})
+          })
+        })
       }
     }
+  }
+  // 表单校验规则
+  const formRules = {
+    overtimebegintime: [{
+      required: true,
+      message: ''
+    }],
+    overtimeendtime: [{
+      required: true,
+      message: ''
+    }]
   }
 </script>
 
 <style lang='less' scoped>
+  .item_body {
+    width: 100%;
+    overflow-y: auto;
+    &_title {
+      font-size: 14px;
+      line-height: 14px;
+      padding-left: 10px;
+      color: #999;
+    }
+  }
+
 </style>

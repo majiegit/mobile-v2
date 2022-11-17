@@ -34,7 +34,7 @@
 <script>
   import {Toast, Dialog} from 'vant';
   import Header from '@/components/Header/Index'
-  import ApplyButton from '@/components/ApplyButton/ApplyButton'
+  import ApplyButton from '@/components/Button/ApplyButton'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getTripBill,deleteTripBill} from '@/api/trip'
   import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'

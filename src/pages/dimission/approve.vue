@@ -31,7 +31,7 @@
   import {Toast} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import ApproveButton from '@/components/ApproveButton/ApproveButton'
+  import ApproveButton from '@/components/Button/ApproveButton'
 import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
 
   export default {

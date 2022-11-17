@@ -33,7 +33,7 @@
   import {Toast} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import ApproveButton from '@/components/ApproveButton/ApproveButton'
+  import ApproveButton from '@/components/Button/ApproveButton'
   import {getTripBill} from '@/api/trip'
   import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
 

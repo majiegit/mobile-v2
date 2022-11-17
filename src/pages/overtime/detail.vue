@@ -33,10 +33,10 @@
   import {Dialog} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import ApplyButton from '@/components/ApplyButton/ApplyButton'
+  import ApplyButton from '@/components/Button/ApplyButton'
   import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
   import {approveStateName, whetherYN} from '@/utils/ConstantUtils'
-
+  import {BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",
@@ -51,7 +51,7 @@
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: '',
+        billtype: BillTypeCode.overtime.code,
       }
     },
     watch: {
@@ -66,9 +66,6 @@
       this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
-      }
-      if (this.$route.query.billtype) {
-        this.billtype = this.$route.query.billtype
       }
       this.queryBillInfo(this.$route.query.pk_h)
     },

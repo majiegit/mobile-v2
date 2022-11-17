@@ -21,8 +21,6 @@
 </template>
 
 <script>
-  import {Toast} from 'vant';
-  import {Dialog} from 'vant';
   import {BillTypeMap} from '@/utils/ConstantUtils'
 
 
@@ -64,7 +62,6 @@
        */
       editBill() {
         let routerPath = BillTypeMap[this.billtype].routerEditPath
-        alert(routerPath)
         this.$router.push({name: routerPath, query: {pk_h: this.pk_h}})
       },
 
@@ -87,7 +84,6 @@
 <style scoped>
 
   .button_bottom {
-    position: fixed;
     width: 100%;
     height: 50px;
     padding: 5px 0px;

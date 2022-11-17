@@ -32,7 +32,7 @@
   import {Dialog} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import ApplyButton from '@/components/ApplyButton/ApplyButton'
+  import ApplyButton from '@/components/Button/ApplyButton'
 import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
 
 
