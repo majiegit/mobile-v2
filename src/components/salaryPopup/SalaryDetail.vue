@@ -1,0 +1,115 @@
+<template>
+  <div>
+    <!--    薪资明细弹框-->
+    <div style="padding: 15% 2%;">
+      <!-- 标题-->
+      <div
+        style="width: 100%; height: 56px; border-top-left-radius: 16px; border-top-right-radius: 16px; background: #2479ed; position: relative;">
+        <div
+          style="width: 100%; height: 51px; border-top-left-radius: 11px; border-top-right-radius: 11px; background: #fff;  position: absolute; top: 6px;">
+          <p style="margin-left: 20px;">{{ salaryDetail.cyear }}年{{ salaryDetail.cperiod }} 月
+            {{ salaryDetail.waClassName }}
+          </p>
+        </div>
+      </div>
+      <div>
+        <van-row type="flex">
+          <van-col span="24">
+            <!-- 数据内容-->
+            <van-row style="font-size: 14px; padding: 0 20px;" v-for="(row, index) in salaryDetail.paySlipVOs"
+                     :key="index">
+              <van-divider :style="{ borderColor: 'grey'}"
+                           dashed></van-divider>
+              <van-col span="12">
+                <span>{{ row.name }}
+              </span>
+              </van-col>
+              <van-col span="12">
+                <span style="float: right;">{{ row.value }}</span>
+              </van-col>
+            </van-row>
+          </van-col>
+        </van-row>
+      </div>
+      <!-- 按钮去呀-->
+      <van-row type="flex" justify="space-around" class="button_bottom">
+        <van-col span="10" class="button1">
+          <van-button round block type="primary" @click="submitOk">没问题</van-button>
+        </van-col>
+        <van-col span="10" class="button2">
+          <van-button round block type="primary" @click="problemShow = true">有问题</van-button>
+        </van-col>
+      </van-row>
+      <!--      输入框-->
+      <van-dialog
+        v-model="problemShow"
+        title="问题"
+        @confirm="onSubmit"
+        show-cancel-button>
+          <van-field
+            v-model="problem"
+            rows="3"
+            autosize
+            type="textarea"
+            placeholder="请输入所在问题"
+          />
+      </van-dialog>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "SalaryDetail",
+  props: {
+    salaryDetail: {
+      type: Object,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      problemShow: false,
+      problem:''
+    }
+  },
+  created() {
+  },
+  methods: {
+    /**
+     * 没问题
+     */
+    submitOk() {
+      this.$emit("submitOk", false)
+    },
+    /**
+     * 有问题
+     */
+    onSubmit() {
+      console.log(this.username)
+      // this.$emit("submitData", this.salaryDetail)
+    },
+  }
+}
+</script>
+
+<style scoped>
+
+.button_bottom {
+  width: 100%;
+  height: 50px;
+  padding: 5px 0px;
+  position: fixed;
+  bottom: 60px;
+}
+
+.button_bottom .button2 .van-button {
+  background-color: #3574ea;
+  border: 1px solid #3574ea;
+}
+
+.button_bottom .button1 .van-button {
+  background-color: #8f8f8f;
+  border: 1px solid #8f8f8f;
+}
+</style>
