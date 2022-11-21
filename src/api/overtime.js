@@ -84,3 +84,15 @@ export function rejectOvertimeBill(params) {
     data: params
   })
 }
+
+/**
+ * 计算加班时长
+ * @param parameter
+ */
+export function queryOvertimeLength(params) {
+  return request({
+    url: "/hrsh/overtime/queryLength",
+    method: 'post',
+    data: params
+  })
+}

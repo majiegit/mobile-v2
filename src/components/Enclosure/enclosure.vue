@@ -94,6 +94,10 @@
         params.append("filePath", this.filePath)
         params.append("fileName", file.file.name)
         params.append("file", file.file)
+        Toast.loading({
+          message: '上传中...',
+          duration: 0
+        })
         uploadFile(params).then(res => {
           Toast.success(res.message)
           this.queryFileList(this.filePath, false)
@@ -114,9 +118,7 @@
         }
         getFileList(params).then(res => {
           this.fileList = res.data
-          if (isToast) {
-            Toast.clear()
-          }
+          Toast.clear()
         })
       },
       /**

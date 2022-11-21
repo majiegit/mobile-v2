@@ -36,7 +36,7 @@
           type="textarea"
           placeholder="请填写加班说明"
         />
-        <van-field label="加班时长" :value="billInfo.otapplylength ? billInfo.otapplylength + '小时': billInfo.otapplylength" readonly/>
+        <van-field label="加班时长" :value="billInfo.otapplylength ? billInfo.otapplylength + ' 小时': billInfo.otapplylength" readonly/>
       </van-form>
     </div>
     <!--保存按钮-->
@@ -51,10 +51,10 @@
   import Select from '@/components/Selector/Select'
   import SelectDate from '@/components/Selector/SelectDate'
   import SaveButton from '@/components/Button/SaveButton'
-  import {getOvertimeBill, saveOvertimeBill} from '@/api/overtime'
+  import {getOvertimeBill, saveOvertimeBill, queryOvertimeLength} from '@/api/overtime'
   import {Toast} from 'vant';
   import {userInfoPkPsndoc,userInfoUserId} from "@/utils/storageUtils";
-  import {BillTypeList, BillTypeMap} from '@/utils/ConstantUtils'
+  import {BillTypeList} from '@/utils/ConstantUtils'
   export default {
     data() {
       return {
@@ -89,6 +89,21 @@
       }
     },
     methods: {
+      getOvertimeLength(){
+        let params = {
+          overtimebegintime: this.billInfo.overtimebegintime,
+          overtimeendtime: this.billInfo.overtimeendtime,
+          isallnight: this.billInfo.isallnight
+        }
+        Toast.loading({
+          message: '计算加班时长中...',
+          duration: 0
+        })
+        queryOvertimeLength(params).then(res => {
+          Toast.clear()
+          this.billInfo.otapplylength = String(res.data)
+        })
+      },
       /**
        * 校验开始结束时间
        */
@@ -99,12 +114,14 @@
           if(beginDate.getTime() >= endDate.getTime()){
             Toast("开始时间不能大于结束时间")
             this.billInfo.overtimeendtime = ''
+            return
           }
           if(beginDate.getDate() < endDate.getDate()){
             this.billInfo.isallnight = 'Y'
           }else {
-            delete this.billInfo.isallnight
+            this.billInfo.isallnight = 'N'
           }
+          this.getOvertimeLength()
         }
       },
       /**
@@ -152,13 +169,18 @@
        */
       saveBillInfo() {
         this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
+          // 校验保存数据
+          if(this.billInfo.otapplylength == '0' || this.billInfo.otapplylength == ''){
+            Toast("加班时长不能为0")
+            return
+          }
           Toast.loading({
             message: '保存中...',
             duration: 0
           })
           saveOvertimeBill(this.billInfo).then(res => {
             Toast.clear()
-            this.$router.push({name: 'overtimeDetail', query:{pk_h: res.data.ph_overtime}})
+            this.$router.push({name: 'overtimeDetail', query:{pk_h: res.data.pk_overtime}})
           })
         })
       }

@@ -8,7 +8,7 @@
           <van-cell title="申请时间：" :value="billInfo.applydate"/>
           <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
           <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="是否通宵：" :value="whetherYN[billInfo.isallnight]" v-if="billInfo.isallnight === 'Y'"/>
+          <van-cell title="是否通宵：" :value="whetherYN[billInfo.isallnight]"/>
           <van-cell title="加班时长：" :value="billInfo.otapplylength + '小时'"/>
           <van-cell title="加班说明：" :value="billInfo.remark"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
@@ -24,7 +24,7 @@
     </div>
 
     <!--单据操作按钮-->
-    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate"/>
+    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate" @submit="submitBill" @rollback="rollbackBill"/>
   </div>
 </template>
 
@@ -34,7 +34,7 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/Button/ApplyButton'
-  import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
+  import {getOvertimeBill, submitOvertimeBill,recoverOvertimeBill,deleteOvertimeBill} from '@/api/overtime'
   import {approveStateName, whetherYN} from '@/utils/ConstantUtils'
   import {BillTypeCode} from '@/utils/ConstantUtils'
 
@@ -45,13 +45,13 @@
       return {
         whetherYN: whetherYN,
         approveStateName: approveStateName,
-        title: '加班申请单',
+        title: '加班申请',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: BillTypeCode.overtime.code,
+        billtype: BillTypeCode.overtime.billtypecode,
       }
     },
     watch: {
@@ -59,6 +59,8 @@
         // 只有自由态可删除
         if (val == '-1') {
           this.rightIcon = 'delete-o'
+        }else{
+          this.rightIcon = ''
         }
       }
     },
@@ -82,8 +84,8 @@
       fileManager() {
         // 如果等于 1  附件禁止操作
         let disabled = 1
-        if (['3', '-1'].includes(this.approvestate)) {
-          // 提交 自由态 附件可操作
+        if (['-1'].includes(this.approvestate)) {
+          // 自由态 附件可操作
           disabled = 0
         }
         this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
@@ -107,12 +109,59 @@
             deleteOvertimeBill(params).then(res => {
               Toast.success(res.message)
               setTimeout(() => {
-                this.$router.go(-1)
+                this.$router.replace("myApply")
               },500)
             })
 
           })
         }
+      },
+      /**
+       * 收回单据
+       */
+      rollbackBill() {
+        Dialog.confirm({
+          title: '收回单据',
+          message: '是否确定收回单据?',
+        }).then(() => {
+          let params = {
+            pk_h: this.pk_h
+          }
+          Toast.loading({
+            message: '收回中...',
+            duration: 0
+          })
+          recoverOvertimeBill(params).then(res => {
+            Toast.success(res.message)
+            this.queryBillInfo(this.pk_h)
+          })
+        }).catch(() => {
+        })
+      },
+      /**
+       * 提交单据
+       */
+      submitBill() {
+        Dialog.confirm({
+          title: '提交单据',
+          message: '是否确定提交单据?',
+        }).then(() => {
+          let params = {
+            pk_h: this.pk_h
+          }
+          Toast.loading({
+            message: '提交中...',
+            duration: 0
+          })
+          submitOvertimeBill(params).then(res => {
+            Toast.success(res.message)
+            this.queryBillInfo(this.pk_h)
+            // setTimeout(() => {
+            //   this.$router.push("myApply")
+            // },500)
+          })
+        }).catch(() => {
+        })
       },
       /**
        * 查询单据

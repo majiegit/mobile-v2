@@ -83,9 +83,9 @@ import Header from '@/components/Header/Index'
 import {Toast} from 'vant';
 import {querySalaryData, enablePwd} from '@/api/salary'
 import {userInfo} from "@/utils/storageUtils";
-import SalaryDetail from "@/components/salaryPopup/SalaryDetail";
-import CheckPwd from '@/components/salaryPopup/CheckPwd'
-import SalaryContent from "@/components/salaryPopup/SalaryContent";
+import SalaryDetail from "@/components/SalaryPopup/SalaryDetail";
+import CheckPwd from '@/components/SalaryPopup/CheckPwd'
+import SalaryContent from "@/components/SalaryPopup/SalaryContent";
 
 export default {
   name: 'salary',

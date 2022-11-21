@@ -7,10 +7,10 @@
         {{billtype.billtypename}}
       </div>
     </div>
-    <div style="width: 96%; padding: 2%;">
+    <div class="item_body" :style="{'height': currentHeight}">
       <!--内容区域-->
       <div class="item" v-for="(item, index) in ApplyList" :key="index"
-           :style="index == 0 ? 'margin-top: 0px' : 'margin-top: 20px'">
+           :style="'margin-top: 15px'">
         <div class="item_left" :style="{background: approveStateColorList[item.approvestatus]}"/>
         <div class="item_right" @click="toApply(item)">
           <van-row type="flex" style="height: 30px; padding-top: 10px;">
@@ -35,6 +35,15 @@
         <van-empty description="暂无数据"/>
       </div>
     </div>
+
+    <!-- 去申请区域-->
+    <div>
+      <van-row type="flex" justify="space-around" class="button_bottom">
+        <van-col :span="23">
+          <van-button round block type="info" @click="toApplyEdit()" :disabled="billTypeModel == 0">去申请</van-button>
+        </van-col>
+      </van-row>
+    </div>
   </div>
 </template>
 
@@ -57,8 +66,12 @@
         }
       }
     },
+    mounted(){
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 60 - 50) + 'px'
+    },
     data() {
       return {
+        currentHeight: '',
         billTypeModel: '',
         billTypeList: BillTypeList,
         ApplyList: [],
@@ -75,6 +88,13 @@
     },
 
     methods: {
+      // 去申请
+      toApplyEdit(){
+        let billType = this.billTypeList[this.billTypeModel]
+        this.$router.push({
+          name: BillTypeMap[billType.billtype].routerEditPath,
+        })
+      },
       // 点击单据
       clickApply(billtype, index) {
         this.billTypeModel = index
@@ -113,6 +133,12 @@
 </script>
 
 <style lang='less' scoped>
+  .item_body {
+    width: 96%;
+    padding: 0 2%;
+    overflow-y: auto;
+  }
+
   .item {
     margin-top: 10px;
     width: 100%;
@@ -169,5 +195,14 @@
       line-height: 50px;
       text-align: center;
     }
+  }
+
+
+  .button_bottom {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 50px;
+    padding: 5px 0px;
   }
 </style>

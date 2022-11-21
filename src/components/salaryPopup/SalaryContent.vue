@@ -1,4 +1,4 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
   <div>
     <!--合计项目-->
     <van-row type="flex">
@@ -13,7 +13,6 @@
           <span>{{ salaryData.summarySalary[item.field] }}</span>
         </van-col>
       </van-row>
-      <br />
     </div>
   </div>
 </template>
@@ -51,24 +50,16 @@ export default {
 }
 .salary_total_div {
   width: 92%;
-  min-height: 60px;
   background: #2479ed;
   padding: 4%;
   color: #ffffff;
   border-radius: 15px;
   box-shadow: 0px 8px 15px 1px rgba(198, 198, 198, 0.3);
 }
-.button_bottom {
-  width: 100%;
-  height: 50px;
-  padding: 5px 0px;
-}
-.button_bottom .van-col .van-dropdown-menu .van-dropdown-menu__bar{
-  border-radius: 25px;
-  background: #1989fa;
-}
-.button_bottom .van-col .van-dropdown-menu .van-dropdown-menu__bar .van-dropdown-menu__item .van-dropdown-menu__title .van-ellipsis {
-  color: #fff;
+.item_col {
+  height: 30px;
+  font-size: 15px;
+  line-height: 30px;
 }
 </style>
 

@@ -64,9 +64,9 @@
       </van-field>
       <van-field label="单据类型：" v-if="messageType === 'approve'">
         <template #input>
-          <van-button size="mini" type="info">全部</van-button>
-          <van-button size="mini">加班单</van-button>
-          <van-button size="mini">请假单</van-button>
+          <van-button size="mini" :type="item.type === billtype ? 'info' : 'default'"
+                      v-for="(item,index) in approveTypeList"
+                      :key="index" @click="billtypeClick(item)"  >{{item.name}}</van-button>
         </template>
       </van-field>
       <van-row type="flex" justify="center">
@@ -91,6 +91,7 @@
       return {
         show: false,
         isread: '',
+        billtype: '',
         noticeIsreadList: [
           {
             name: '全部',
@@ -105,6 +106,7 @@
             isread: 'N'
           }
         ],
+        approveTypeList: [],
         approveIsreadList: [
           {
             name: '全部',
@@ -121,7 +123,9 @@
         ],
         messageType: 'notice',
         noticeMessageList: [],
+        noticeMessageListBak: [],
         approveMessageList: [],
+        approveMessageListBak: [],
         BillTypeMap
       }
     },
@@ -150,6 +154,28 @@
         })
       },
       /**
+       * 获取审批通知消息单据类型
+       */
+      getApproveBillType(messageList) {
+        let arr = []
+        let item = {
+          name: '全部',
+          type: '',
+        }
+        arr.push(item)
+
+        for (let i = 0; i < messageList.length; i++) {
+          let filter = arr.filter(item => item.type === messageList[i].billtype)
+          if (filter.length === 0) {
+            arr.push({
+              name: messageList[i].billtypename,
+              type: messageList[i].billtype
+            })
+          }
+        }
+        this.approveTypeList = arr
+      },
+      /**
        * 查询通知消息
        */
       queryApproveMessage() {
@@ -165,6 +191,8 @@
         })
         queryApproveMessageList(params).then(res => {
           this.approveMessageList = res.data
+          this.approveMessageListBak = res.data
+          this.getApproveBillType(this.approveMessageList)
           Toast.clear()
         })
       },
@@ -184,6 +212,7 @@
         })
         queryNoticeMessageList(params).then(res => {
           this.noticeMessageList = res.data
+          this.noticeMessageListBak = res.data
           Toast.clear()
         })
       },
@@ -193,14 +222,26 @@
       clickRight() {
         this.show = true
       },
+      billtypeClick(item){
+        this.billtype = item.type
+      },
       isreadClick(item) {
         this.isread = item.isread
       },
       okButton() {
         if (this.messageType === 'notice') {
-          this.queryNotiveMessage()
+          this.noticeMessageList = this.noticeMessageListBak.filter(item => item.isread === this.isread)
         } else {
-          this.queryApproveMessage()
+          if(this.isread && this.billtype){
+            this.approveMessageList = this.approveMessageListBak.filter(item => (item.isread === this.isread && item.billtype === this.billtype))
+          }else {
+            if(this.isread){
+              this.approveMessageList = this.approveMessageListBak.filter(item => item.isread === this.isread)
+            }
+            if(this.billtype){
+              this.approveMessageList = this.approveMessageListBak.filter(item => item.billtype === this.billtype)
+            }
+          }
         }
         this.show = false
       }
