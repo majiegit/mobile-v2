@@ -3,27 +3,27 @@
     <Header title="请假申请" @clickLeft="clickLeft"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
       <div class="item_body">
-        <van-form input-align="right" ref="regForm">
-          <!--   请假类型     -->
+<!--        <p class="item_body_title">请假明细</p>-->
+        <van-form input-align="right" ref="billForm">
           <van-field
             is-link
             required
-            readonly
-            v-model="leaveData.leavetype"
+            name="leavetype"
+            :rules="formRules.leavetype"
+            v-model="billInfo.leavetype"
             @click="selectLeaveType('leavetype','请选择请假类型')"
             label="请假类型"
             placeholder="请选择请假类型"
           />
-<!--          <label> 年假 剩余<font>小时</font></label>-->
-          <van-field v-if="leaveData.leavetype" v-model="value" :label="leaveData.leavetype + '额度剩余'" />
-          <p class="item_body_title">请假明细</p>
+          <van-field v-if="billInfo.leavetype" v-model="value" :label="billInfo.leavetype + '额度剩余'" />
           <van-field
             v-if="dateShow"
             is-link
             required
-            readonly
-            v-model="leaveData.begindate"
-            @click="selectDate(leaveData.begindate,'begindate','请选择开始日期', 'date')"
+            name="leavebegintime"
+            :rules="formRules.leavebegindate"
+            v-model="billInfo.leavebegindate"
+            @click="selectDate(billInfo.leavebegindate,'leavebegindate','请选择开始日期', 'date')"
             label="开始日期"
             placeholder="请选择开始时间"
           />
@@ -31,29 +31,29 @@
             v-if="timeShow"
             is-link
             required
-            readonly
-            v-model="leaveData.begintime"
-            @click="selectDate(leaveData.begintime,'begintime','请选择开始时间', 'datetime')"
+            name="leavebegintime"
+            :rules="formRules.leavebegintime"
+            v-model="billInfo.leavebegintime"
+            @click="selectDate(billInfo.leavebegintime,'leavebegintime','请选择开始时间', 'datetime')"
             label="开始时间"
             placeholder="请选择开始时间"
           />
           <van-field
             v-if="longTimeShow"
-            readonly
             clickable
-            right-icon="arrow"
-            :value="leaveData.start_day_type == 1 ? '上午': (leaveData.start_day_type == 2 ? '下午': '')"
+            :value="billInfo.start_day_type == 1 ? '上午': (billInfo.start_day_type == 2 ? '下午': '')"
             label="开始时间"
             placeholder="点击选择开始时间"
-            @click="selectLongTime(leaveData.start_day_type, '选择上下午', 'start_day_type')"
+            @click="selectLongTime(billInfo.start_day_type, '选择上下午', 'start_day_type')"
           />
           <van-field
             v-if="dateShow"
             is-link
             required
-            readonly
-            v-model="leaveData.enddate"
-            @click="selectDate(leaveData.enddate,'enddate','请选择结束日期', 'date')"
+            name="leavebegindate"
+            :rules="formRules.leavebegindate"
+            v-model="billInfo.leavebegindate"
+            @click="selectDate(billInfo.leavebegindate,'leavebegindate','请选择结束日期', 'date')"
             label="结束日期"
             placeholder="请选择结束时间"
           />
@@ -61,25 +61,24 @@
             v-if="timeShow"
             is-link
             required
-            readonly
-            v-model="leaveData.endtime"
-            @click="selectDate(leaveData.endtime,'endtime','请选择结束时间', 'datetime')"
+            name="leaveendtime"
+            :rules="formRules.leaveendtime"
+            v-model="billInfo.leaveendtime"
+            @click="selectDate(billInfo.leaveendtime,'leaveendtime','请选择结束时间', 'datetime')"
             label="结束时间"
             placeholder="请选择结束时间"
           />
           <van-field
             v-if="longTimeShow"
-            readonly
             clickable
-            right-icon="arrow"
-            :value="leaveData.end_day_type == 1 ? '上午': (leaveData.end_day_type == 2 ? '下午': '')"
+            :value="billInfo.end_day_type == 1 ? '上午': (billInfo.end_day_type == 2 ? '下午': '')"
             label="结束时间"
             placeholder="点击选择结束时间"
-            @click="selectLongTime(leaveData.end_day_type, '选择上下午', 'end_day_type')"
+            @click="selectLongTime(billInfo.end_day_type, '选择上下午', 'end_day_type')"
           />
-          <van-field label="请假时长" :value="leaveData.length" disabled/>
+          <van-field label="请假时长" :value="billInfo.length"             readonly/>
           <van-field
-            v-model="leaveData.mark"
+            v-model="billInfo.mark"
             rows="2"
             autosize
             label="请假说明"
@@ -90,11 +89,9 @@
           />
           <uploadButtom @uoload="uploadImg"></uploadButtom>
           <!--    附件上传      -->
-          <div style="position: fixed; width: 90%;bottom: 20px; height: 50px; padding: 5px 5%;">
-            <van-button round block type="info" @click="saveBillInfo">保 存</van-button>
-          </div>
         </van-form>
       </div>
+      <SaveButton @save="saveBillInfo"></SaveButton>
       <!-- 日期选择器-->
       <SelectDate ref="selectorDate" @dateOk="dateOk"/>
       <!--   下拉选择器   -->
@@ -108,23 +105,48 @@
 import Header from '@/components/Header/Index'
 import Select from '@/components/Selector/Select'
 import SelectDate from '@/components/Selector/SelectDate'
+import SaveButton from "../../components/Button/SaveButton";
 import uploadButtom from '@/components/Enclosure/uploadButtom'
 import { savebillInfo } from '@/api/leave'
 import {getFileList, uploadFile} from '@/api/filemanager'
 import {Toast} from "vant";
 
+const formRules = {
+  leavetype: [{
+    required: true,
+    message: ''
+  }],
+  leavebegintime :[{
+    required: true,
+    message: ''
+  }],
+  leaveendtime :[{
+    required: true,
+    message: ''
+  }],
+  leavebegindate :[{
+    required: true,
+    message: ''
+  }],
+  leaveenddate :[{
+    required: true,
+    message: ''
+  }],
+
+}
 
 export default {
   name: "edit",
   data() {
     return {
+      formRules,
       currentHeight: '',
       value: '2天',
       dateShow: false, // 日期类型
       timeShow: true, // 时间类型
       longTimeShow: false, // 时间类型(上下午)
       initDate: new Date(),
-      leaveData: {},
+      billInfo: {},
       leaveupload: [],
       uoloadList: []
     }
@@ -132,7 +154,7 @@ export default {
   mounted() {
     this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
   },
-  components: {Header, Select, SelectDate, uploadButtom},
+  components: {Header, Select, SelectDate, uploadButtom, SaveButton},
   created() {
   },
   methods: {
@@ -188,7 +210,7 @@ export default {
      * @param item
      */
     selectOk2(selector, item) {
-      this.$set(this.leaveData, selector.field, item.value)
+      this.$set(this.billInfo, selector.field, item.value)
     },
     /**
      *  选择上下午
@@ -220,9 +242,9 @@ export default {
      * @param item
      */
     selectOk(selector,item) {
-      this.$set(this.leaveData, selector.field, item.text)
-      // console.log(this.leaveData)
-      this.chooseleaveType(this.leaveData.leavetype)
+      this.$set(this.billInfo, selector.field, item.text)
+      // console.log(this.billInfo)
+      this.chooseleaveType(this.billInfo.leavetype)
     },
     /**
      *  选择请假类型
@@ -270,38 +292,30 @@ export default {
      * @param item
      */
     dateOk(selector) {
-      // console.log(selector)
-      this.$set(this.leaveData, selector.field, selector.value)
-      this.checkValue()
+      this.$set(this.billInfo, selector.field, selector.value)
     },
     // 校验值是否存在
     checkValue() {
       console.log(this.mapList)
       for (let i = 0; i < this.mapList.length; i++) {
-        if (!this.leaveData[this.mapList[i]]) {
+        if (!this.billInfo[this.mapList[i]]) {
           return
         }
       }
-      this.leaveData.length = '2小时 假'
+      this.billInfo.length = '2小时 假'
       console.log('计算时长')
     },
     // 保存
     saveBillInfo() {
-      let param = JSON.parse(JSON.stringify( this.leaveData ))
-      // return
-      if(this.leaveData.leavetype == undefined) {
-        Toast('请选择请假类型')
-        return
-      }
-      // else if (param.leavetype === '婚假' && !filedata) {
-      //   Toast(this.leaveData.leavetype + '必须上传附件')
-      //   return
-      // }
-      this.uploadFile()
-      return;
-      savebillInfo(param).then(res => {
-        this.uploadFile(res.data.pk_h)
+      this.$refs.billForm.validate(Object.keys(this.formRules)).then(() => {
+        Toast.loading({
+          message: '保存中...',
+          duration: 0
+        })
       })
+      // savebillInfo(param).then(res => {
+      //   this.uploadFile(res.data.pk_h)
+      // })
       // this.$router.push({name: 'leaveDetail'})
     },
     // 实现上传文件

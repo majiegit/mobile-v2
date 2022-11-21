@@ -20,8 +20,8 @@ export default [
         component: leaveoffApprove
     },
   {
-    path: '/leaveoReg',
-    name: 'leaveoReg',
+    path: '/leaveReg',
+    name: 'leaveReg',
     component: leaveoReg
   }
 ]
