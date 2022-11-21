@@ -8,7 +8,7 @@
           <van-cell title="申请时间：" :value="billInfo.applydate"/>
           <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
           <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="是否通宵：" :value="whetherYN[billInfo.isallnight]"/>
+          <van-cell title="是否通宵：" :value="whetherYN[billInfo.isallnight]" v-if="billInfo.isallnight === 'Y'"/>
           <van-cell title="加班时长：" :value="billInfo.otapplylength + '小时'"/>
           <van-cell title="加班说明：" :value="billInfo.remark"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
@@ -45,7 +45,7 @@
       return {
         whetherYN: whetherYN,
         approveStateName: approveStateName,
-        title: '加班申请',
+        title: '加班申请单',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},

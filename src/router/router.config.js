@@ -16,6 +16,7 @@ import leaveoff from './pages/leaveoff'
 import trans from './pages/trans'
 import signcard from './pages/signcard'
 import dimission from './pages/dimission'
+import calendar from './pages/calendar'
 
 // 总路由
 export const AllRouterList = [].concat(
@@ -35,6 +36,7 @@ export const AllRouterList = [].concat(
   leaveoff,
   trans,
   signcard,
-  dimission
+  dimission,
+  calendar
 )
 

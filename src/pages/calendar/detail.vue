@@ -34,9 +34,9 @@
 <script>
   import {Toast, Dialog} from 'vant';
   import Header from '@/components/Header/Index'
-  import ApplyButton from '@/components/Button/ApplyButton'
+  import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import {getTripBill,deleteTripBill} from '@/api/trip'
+  import {getBillInfo} from '@/api/my-apply'
   import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
 
 
@@ -47,7 +47,7 @@
       return {
         dateTimeType: dateTimeType,
         approveStateName: approveStateName,
-        title: '出差申请单',
+        title: '出差申请',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},
@@ -72,7 +72,7 @@
       if (this.$route.query.billtype) {
         this.billtype = this.$route.query.billtype
       }
-      this.queryBillInfo(this.$route.query.pk_h)
+      this.queryBillInfo(this.$route.query.pk_h, this.$route.query.billtype)
     },
     methods: {
       /**
@@ -126,9 +126,6 @@
        */
       deleteBill() {
         if (this.approvestate == '-1') {
-          let params = {
-            billid: this.pk_h
-          }
           Dialog.confirm({
             title: '删除单据',
             message: '是否确定删除单据?',
@@ -137,27 +134,22 @@
               message: '删除中...',
               duration: 0
             })
-            deleteTripBill(params).then(res => {
-              Toast.success(res.message)
-              setTimeout(() => {
-                this.$router.go(-1)
-              },500)
-            })
           })
         }
       },
       /**
        * 查询单据
        */
-      queryBillInfo(pk_h) {
+      queryBillInfo(pk_h, billtype) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
         let params = {
-          billid: pk_h
+          billid: pk_h,
+          billtype: billtype
         }
-        getTripBill(params).then(res => {
+        getBillInfo(params).then(res => {
           this.billInfo = res.data
           this.approvestate = res.data.approvestatus
           Toast.clear()
