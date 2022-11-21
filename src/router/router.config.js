@@ -17,6 +17,7 @@ import trans from './pages/trans'
 import signcard from './pages/signcard'
 import dimission from './pages/dimission'
 import calendar from './pages/calendar'
+import checkout from "./pages/checkout";
 
 // 总路由
 export const AllRouterList = [].concat(
@@ -37,6 +38,7 @@ export const AllRouterList = [].concat(
   trans,
   signcard,
   dimission,
-  calendar
+  calendar,
+  checkout
 )
 

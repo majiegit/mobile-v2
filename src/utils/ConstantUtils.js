@@ -145,3 +145,21 @@ export const BillTypeCode = {
     billtypename: '调配'
   }
 }
+
+
+/**
+ *
+ * @param begintime 开始时间
+ * @param endtime 结束时间
+ * @returns {boolean}
+ */
+export function checkBeginEndTime(begintime, endtime) {
+  if (begintime && endtime) {
+    let beginDate = new Date(begintime);
+    let endDate = new Date(endtime);
+    if (beginDate.getTime() >= endDate.getTime()) {
+      return false
+    }
+  }
+  return true
+}
