@@ -120,12 +120,12 @@ export default {
 }
 
 .blue_color {
-  color: #0C89F1
+  color: #2479ed
 }
 
 .checkout_top {
   width: 100%;
-  background: #0C89F1;
+  background: #2479ed;
   height: 200px;
   padding: 0 3%
 }

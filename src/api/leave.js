@@ -19,7 +19,7 @@ export function getLeaveBill(params) {
  */
 export function saveLeaveBill(params) {
   return request({
-    url: "/hrsh/leave/get",
+    url: "/hrsh/leave/save",
     method: 'post',
     data: params
   })
@@ -80,6 +80,30 @@ export function approveLeaveBill(params) {
 export function rejectLeaveBill(params) {
   return request({
     url: "/hrsh/leave/reject",
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 查询请假类型
+ * @param parameter
+ */
+export function queryLeaveType(params) {
+  return request({
+    url: "/hrsh/leave/queryLeaveType",
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 计算请假时长
+ * @param parameter
+ */
+export function queryLeaveLength(params) {
+  return request({
+    url: "/hrsh/leave/queryLength",
     method: 'post',
     data: params
   })

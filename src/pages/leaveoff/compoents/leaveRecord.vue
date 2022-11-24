@@ -50,21 +50,13 @@ export default {
 </script>
 
 <style lang='less'>
-.leaveoff_top .van-collapse .van-collapse-item__wrapper .van-collapse-item__content {
-  padding: 12px 4px;
-  color: #888888;
-  font-size: 17px;
-  line-height: 1.5;
-  background-color: #fff;
-}
-
 .leaveoff_top .van-collapse .van-collapse-item__wrapper .van-collapse-item__content .van-cell {
   color: #888888;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .leaveoff_top .van-collapse .van-collapse-item .van-collapse-item__title .van-cell__title, .van-cell__left-icon {
-  font-size: 17px;
-  color: #0eaef5;
+  font-size: 15px;
+  color: #2479ed;
 }
 </style>

@@ -2,7 +2,7 @@
   <div>
     <Header title="加班申请" @clickLeft="clickLeft"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
-      <van-form input-align="right" ref="billForm" colon >
+      <van-form input-align="right" ref="billForm" colon>
         <van-field
           is-link
           readonly
@@ -25,7 +25,7 @@
           label="结束时间"
           placeholder="请选择结束时间"
         />
-        <van-field label="通宵加班" v-if="billInfo.isallnight">
+        <van-field label="通宵加班" v-if="!isSame">
           <van-switch v-model="billInfo.isallnight" slot="right-icon" size="20" active-value="Y" inactive-value="N"/>
         </van-field>
         <van-field
@@ -36,7 +36,8 @@
           type="textarea"
           placeholder="请填写加班说明"
         />
-        <van-field label="加班时长" :value="billInfo.otapplylength ? billInfo.otapplylength + ' 小时': billInfo.otapplylength" readonly/>
+        <van-field label="加班时长" :value="billInfo.otapplylength ? billInfo.otapplylength + ' 小时': billInfo.otapplylength"
+                   readonly/>
       </van-form>
     </div>
     <!--保存按钮-->
@@ -53,15 +54,18 @@
   import SaveButton from '@/components/Button/SaveButton'
   import {getOvertimeBill, saveOvertimeBill, queryOvertimeLength} from '@/api/overtime'
   import {Toast} from 'vant';
-  import {userInfoPkPsndoc,userInfoUserId} from "@/utils/storageUtils";
+  import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
   import {BillTypeList} from '@/utils/ConstantUtils'
+  import {beginGtEndTime, beginEndSameDay} from '@/utils/DateTimeUtils'
+
   export default {
     data() {
       return {
         formRules,
         currentHeight: '',
-        checked: true,
+        isSame: true, // 开始结束时间是否同一天
         billInfo: {
+          isallnight: 'N',
           billmaker: userInfoUserId,
           pk_psndoc: userInfoPkPsndoc,
           otapplylength: ''
@@ -80,16 +84,19 @@
     },
     watch: {
       // 开始时间
-      "billInfo.overtimebegintime"(){
-        this.checkBeginEndTime()
+      "billInfo.overtimebegintime"() {
+        this.beginGtEndTime()
       },
       // 结束时间
       "billInfo.overtimeendtime"() {
-        this.checkBeginEndTime()
+        this.beginGtEndTime()
       }
     },
     methods: {
-      getOvertimeLength(){
+      /**
+       * 计算加班时长
+       */
+      getOvertimeLength() {
         let params = {
           overtimebegintime: this.billInfo.overtimebegintime,
           overtimeendtime: this.billInfo.overtimeendtime,
@@ -107,20 +114,17 @@
       /**
        * 校验开始结束时间
        */
-      checkBeginEndTime(){
-        if(this.billInfo.overtimebegintime && this.billInfo.overtimeendtime ){
-          let beginDate = new Date(this.billInfo.overtimebegintime);
-          let endDate = new Date(this.billInfo.overtimeendtime);
-          if(beginDate.getTime() >= endDate.getTime()){
+      beginGtEndTime() {
+        if (this.billInfo.overtimebegintime && this.billInfo.overtimeendtime) {
+          // 校验开始时间是否 > 结束时间
+          let isGt = beginGtEndTime(this.billInfo.overtimebegintime, this.billInfo.overtimeendtime)
+          if (isGt) {
             Toast("开始时间不能大于结束时间")
             this.billInfo.overtimeendtime = ''
             return
           }
-          if(beginDate.getDate() < endDate.getDate()){
-            this.billInfo.isallnight = 'Y'
-          }else {
-            this.billInfo.isallnight = 'N'
-          }
+          // 校验开始时间结束时间是否同一天
+          this.isSame = beginEndSameDay(this.billInfo.overtimebegintime, this.billInfo.overtimeendtime)
           this.getOvertimeLength()
         }
       },
@@ -170,7 +174,7 @@
       saveBillInfo() {
         this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
           // 校验保存数据
-          if(this.billInfo.otapplylength == '0' || this.billInfo.otapplylength == ''){
+          if (this.billInfo.otapplylength == '0' || this.billInfo.otapplylength == '') {
             Toast("加班时长不能为0")
             return
           }
@@ -180,7 +184,7 @@
           })
           saveOvertimeBill(this.billInfo).then(res => {
             Toast.clear()
-            this.$router.push({name: 'overtimeDetail', query:{pk_h: res.data.pk_overtime}})
+            this.$router.push({name: 'overtimeDetail', query: {pk_h: res.data.pk_overtime}})
           })
         })
       }

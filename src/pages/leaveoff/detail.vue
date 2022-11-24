@@ -10,8 +10,8 @@
 <!--          <van-cell title="申请时间：" :value="billInfo.applydate"/>-->
           <van-cell title="开始日期：" :value="billInfo.leavebegintime"/>
           <van-cell title="结束日期：" :value="billInfo.leaveendtime"/>
-          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="LastAfter[billInfo.start_day_type]"/>
-          <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="LastAfter[billInfo.end_day_type]"/>
+          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="StartEndDayType[billInfo.start_day_type]"/>
+          <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="StartEndDayType[billInfo.end_day_type]"/>
           <van-cell title="请假时长：" :value="billInfo.leaveday + dateTimeType[billInfo.minunit]"/>
           <van-cell title="休假说明：" :value="billInfo.leaveremark"/>
           <van-cell title="是否销假：" :value="whetherYN[billInfo.isrevoked]"/>
@@ -44,7 +44,7 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/Button/ApplyButton'
   import {getLeaveoffBill,deleteLeaveoffBill} from '@/api/leaveoff'
-  import {approveStateName, whetherYN, LastAfter, dateTimeType} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN, StartEndDayType, dateTimeType} from '@/utils/ConstantUtils'
 
 
   export default {
@@ -54,7 +54,7 @@
       return {
         approveStateName: approveStateName,
         whetherYN: whetherYN,
-        LastAfter: LastAfter,
+        StartEndDayType: StartEndDayType,
         dateTimeType: dateTimeType,
         title: '销假申请',
         currentHeight: '',

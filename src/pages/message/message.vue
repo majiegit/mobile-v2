@@ -66,7 +66,7 @@
         <template #input>
           <van-button size="mini" :type="item.type === billtype ? 'info' : 'default'"
                       v-for="(item,index) in approveTypeList"
-                      :key="index" @click="billtypeClick(item)"  >{{item.name}}</van-button>
+                      :key="index" @click="billtypeClick(item)" >{{item.name}}</van-button>
         </template>
       </van-field>
       <van-row type="flex" justify="center">

@@ -10,8 +10,8 @@
           <van-cell title="申请时间：" :value="billInfo.applydate"/>
           <van-cell title="开始时间：" :value="billInfo.tripoffbegintime"/>
           <van-cell title="结束时间：" :value="billInfo.tripendtime"/>
-          <!--          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="LastAfter[billInfo.start_day_type]"/>-->
-          <!--          <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="LastAfter[billInfo.end_day_type]"/>-->
+          <!--          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="StartEndDayType[billInfo.start_day_type]"/>-->
+          <!--          <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="StartEndDayType[billInfo.end_day_type]"/>-->
           <van-cell title="出差时长：" :value="billInfo.tripday + dateTimeType[billInfo.minunit]"/>
           <van-cell title="出差目的地：" :value="billInfo.otapplylength"/>
           <van-cell title="出差费用：" :value="billInfo.cost"/>

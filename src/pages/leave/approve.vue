@@ -7,13 +7,15 @@
           <van-cell title="请假类别：" :value="billInfo.leavetypename"/>
           <van-cell title="申请人：" :value="billInfo.psndocname"/>
           <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始日期：" :value="billInfo.begintime"/>
-          <van-cell title="结束日期：" :value="billInfo.endtime"/>
-          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="LastAfter[billInfo.start_day_type]"/>
-          <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="LastAfter[billInfo.end_day_type]"/>
-          <van-cell title="请假时长：" :value="billInfo.leaveday"/>
+          <van-cell :title="'开始' + (billInfo.minunit == '2' ? '日期': '时间')"
+                    :value="(billInfo.minunit == '2' ) ? billInfo.begintime.substring(0,10) : billInfo.begintime"/>
+          <van-cell :title="'结束' + (billInfo.minunit == '2' ? '日期': '时间')"
+                    :value="(billInfo.minunit == '2' ) ? billInfo.endtime.substring(0,10) : billInfo.endtime"/>
+          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="StartEndDayType[billInfo.start_day_type]"/>
+          <van-cell v-if="billInfo.end_day_type" title="结束时间：" :value="StartEndDayType[billInfo.end_day_type]"/>
+          <van-cell title="请假时长：" :value="billInfo.leaveday + LeaveTypeMinUnit[billInfo.minunit]"/>
           <van-cell title="休假说明：" :value="billInfo.leaveremark"/>
-          <!--          <van-cell title="是否销假：" :value="whetherYN[billInfo.isrevoked]"/>-->
+          <van-cell title="是否销假：" :value="whetherYN[billInfo.isrevoked]"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
@@ -24,7 +26,6 @@
         <van-empty description="暂无数据"/>
       </div>
     </div>
-
 
     <!-- 按钮区域-->
     <ApproveButton :pk_h="pk_h" :approvestate="approvestate" v-if="pk_h && approvestate" />
@@ -38,7 +39,7 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
   import {getLeaveBill} from '@/api/leave'
-  import {approveStateName, whetherYN, LastAfter} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN, StartEndDayType, LeaveTypeMinUnit} from '@/utils/ConstantUtils'
 
 
   export default {
@@ -46,9 +47,10 @@
     components: {Header, ApproveProcess, ApproveButton},
     data() {
       return {
-        LastAfter: LastAfter, // 上下午
-        whetherYN: whetherYN, // 是否YN
-        approveStateName: approveStateName, // 审批状态
+        LeaveTypeMinUnit,
+        StartEndDayType, // 上下午
+        whetherYN, // 是否YN
+        approveStateName, // 审批状态
         title: '请假审批单',
         check: {
           show: false,
@@ -79,13 +81,7 @@
        * 附件管理
        */
       fileManager() {
-        // 如果等于 1  附件禁止操作
-        let disabled = 1
-        if (['3', '-1'].includes(this.approvestate)) {
-          // 提交 自由态 附件可操作
-          disabled = 0
-        }
-        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
+        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h}})
       },
       /**
        * 查询单据

@@ -14,21 +14,6 @@ export const approveStateColorList = {
   '-1': '#2479ED'
 }
 
-export const whetherYN = {
-  'N': '否',
-  'Y': '是',
-}
-
-export const dateTimeType = {
-  '1': '小时',
-  '2': '天',
-}
-
-export const LastAfter = {
-  '1': '上午',
-  '2': '下午',
-}
-
 // 我的申请 审批中心使用
 export const BillTypeList = [
   {
@@ -146,20 +131,44 @@ export const BillTypeCode = {
   }
 }
 
-
-/**
- *
- * @param begintime 开始时间
- * @param endtime 结束时间
- * @returns {boolean}
- */
-export function checkBeginEndTime(begintime, endtime) {
-  if (begintime && endtime) {
-    let beginDate = new Date(begintime);
-    let endDate = new Date(endtime);
-    if (beginDate.getTime() >= endDate.getTime()) {
-      return false
-    }
-  }
-  return true
+// 是否 Y N
+export const whetherYN = {
+  'N': '否',
+  'Y': '是',
 }
+
+//  请假类型最小单位
+export const dateTimeType = {
+  '1': '小时',
+  '2': '天',
+}
+
+//  请假类型最小单位
+export const LeaveTypeMinUnit = {
+  '1': '小时',
+  '2': '天',
+}
+
+//  请假类型最小时间
+export const LeaveTypeMinTime = {
+  '0': 0,
+  '1': 0.5,
+  '2': 1
+}
+
+// 上午下午
+export const StartEndDayType = {
+  '1': '上午',
+  '2': '下午'
+}
+
+export const StartEndDayTypeList = [
+  {
+    text: '上午',
+    value: '1'
+  },
+  {
+    text: '下午',
+    value: '2'
+  }
+]

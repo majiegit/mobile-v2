@@ -83,7 +83,7 @@ import Select from '@/components/Selector/Select'
 import SelectDate from '@/components/Selector/SelectDate'
 import SaveButton from '@/components/Button/SaveButton'
 import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
-import {checkBeginEndTime} from '@/utils/ConstantUtils'
+import {beginGtEndTime} from '@/utils/DateTimeUtils'
 import {Toast} from "vant";
 
 
@@ -105,14 +105,14 @@ export default {
   },
   watch: {
     'billInfo.tripbegintime' () {
-      let check = checkBeginEndTime(this.billInfo.tripbegintime, this.billInfo.tripendtime)
+      let check = beginGtEndTime(this.billInfo.tripbegintime, this.billInfo.tripendtime)
       if (!check) {
         Toast('开始时间不能大于结束时间')
         this.billInfo.tripendtime = ''
       }
     },
     'billInfo.tripendtime' () {
-      let check = checkBeginEndTime(this.billInfo.tripbegintime, this.billInfo.tripendtime)
+      let check = beginGtEndTime(this.billInfo.tripbegintime, this.billInfo.tripendtime)
       if (!check) {
         Toast('开始时间不能大于结束时间')
         this.billInfo.tripendtime = ''
