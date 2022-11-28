@@ -137,14 +137,8 @@ export const whetherYN = {
   'Y': '是',
 }
 
-//  请假类型最小单位
-export const dateTimeType = {
-  '1': '小时',
-  '2': '天',
-}
-
-//  请假类型最小单位
-export const LeaveTypeMinUnit = {
+//  考勤最小单位
+export const HrkqMinUnit = {
   '1': '小时',
   '2': '天',
 }
@@ -170,5 +164,39 @@ export const StartEndDayTypeList = [
   {
     text: '下午',
     value: '2'
+  }
+]
+
+// 销假原因
+export const LeaveOffReason = {
+  '0': '休假时间有变化',
+  '1': '未休假'
+}
+
+export const LeaveOffReasonList = [
+  {
+    text: '休假时间有变化',
+    value: '0'
+  },
+  {
+    text: '未休假',
+    value: '1'
+  }
+]
+
+// 销差原因
+export const TripOffReason = {
+  '0': '出差时间有变化',
+  '1': '未出差'
+}
+
+export const TripOffReasonList = [
+  {
+    text: '出差时间有变化',
+    value: '0'
+  },
+  {
+    text: '未出差',
+    value: '1'
   }
 ]

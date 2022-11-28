@@ -6,14 +6,15 @@
         <van-cell-group>
           <van-cell title="出差类型：" :value="billInfo.triptypename"/>
           <van-cell title="申请人：" :value="billInfo.psndocname"/>
-          <van-cell title="出差类别：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.tripbegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.tripendtime"/>
-          <van-cell title="出差时长：" :value="billInfo.tripday	+ dateTimeType[billInfo.minunit]"/>
+          <van-cell title="申请时间：" :value="billInfo.applydate"/>
+          <van-cell title="出差开始时间：" :value="billInfo.tripbegintime"/>
+          <van-cell title="出差结束时间：" :value="billInfo.tripendtime"/>
+          <van-cell title="出差时长：" :value="billInfo.tripday	+ HrkqMinUnit[billInfo.minunit]"/>
           <van-cell title="出差费用：" :value="billInfo.cost"/>
           <van-cell title="交接人：" :value="billInfo.handover"/>
           <van-cell title="目的地：" :value="billInfo.destination"/>
           <van-cell title="出差理由：" :value="billInfo.remark"/>
+          <van-cell title="是否销差" :value="whetherYN[billInfo.isrevoked]"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
 
@@ -26,8 +27,9 @@
       </div>
     </div>
 
-    <!-- 按钮区域-->
-    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
+    <!--单据操作按钮-->
+    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate"
+                 @submit="submitBill" @rollback="rollbackBill"/>
   </div>
 </template>
 
@@ -36,24 +38,24 @@
   import Header from '@/components/Header/Index'
   import ApplyButton from '@/components/Button/ApplyButton'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
-  import {getTripBill,deleteTripBill} from '@/api/trip'
-  import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
-
+  import {getTripBill, submitTripBill, recoverTripBill, deleteTripBill} from '@/api/trip'
+  import {approveStateName, whetherYN, HrkqMinUnit,BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",
     components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
-        dateTimeType: dateTimeType,
-        approveStateName: approveStateName,
+        whetherYN,
+        HrkqMinUnit,
+        approveStateName,
         title: '出差申请单',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: '',
+        billtype: BillTypeCode.trip.billtypecode
       }
     },
     watch: {
@@ -61,6 +63,8 @@
         // 只有自由态可删除
         if (val == '-1') {
           this.rightIcon = 'delete-o'
+        }else {
+          this.rightIcon = ''
         }
       }
     },
@@ -87,39 +91,11 @@
       fileManager() {
         // 如果等于 1  附件禁止操作
         let disabled = 1
-        if (['3', '-1'].includes(this.approvestate)) {
+        if (['-1'].includes(this.approvestate)) {
           // 提交 自由态 附件可操作
           disabled = 0
         }
         this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
-      },
-      /**
-       * 编辑单据
-       */
-      editBill() {
-      },
-
-      /**
-       * 提交单据
-       */
-      submitBill() {
-        Dialog.confirm({
-          title: '提交单据',
-          message: '是否确定提交单据?',
-        }).then(() => {
-        }).catch(() => {
-        })
-      },
-      /**
-       * 收回单据
-       */
-      rollbackBill() {
-        Dialog.confirm({
-          title: '收回单据',
-          message: '是否确定收回单据?',
-        }).then(() => {
-        }).catch(() => {
-        })
       },
       /**
        * 删除单据
@@ -140,11 +116,58 @@
             deleteTripBill(params).then(res => {
               Toast.success(res.message)
               setTimeout(() => {
-                this.$router.go(-1)
-              },500)
+                this.$router.replace("myApply")
+              }, 500)
             })
           })
         }
+      },
+      /**
+       * 收回单据
+       */
+      rollbackBill() {
+        Dialog.confirm({
+          title: '收回单据',
+          message: '是否确定收回单据?',
+        }).then(() => {
+          let params = {
+            pk_h: this.pk_h
+          }
+          Toast.loading({
+            message: '收回中...',
+            duration: 0
+          })
+          recoverTripBill(params).then(res => {
+            Toast.success(res.message)
+            this.queryBillInfo(this.pk_h)
+          })
+        }).catch(() => {
+        })
+      },
+      /**
+       * 提交单据
+       */
+      submitBill() {
+        Dialog.confirm({
+          title: '提交单据',
+          message: '是否确定提交单据?',
+        }).then(() => {
+          let params = {
+            pk_h: this.pk_h
+          }
+          Toast.loading({
+            message: '提交中...',
+            duration: 0
+          })
+          submitTripBill(params).then(res => {
+            Toast.success(res.message)
+            this.queryBillInfo(this.pk_h)
+            // setTimeout(() => {
+            //   this.$router.push("myApply")
+            // },500)
+          })
+        }).catch(() => {
+        })
       },
       /**
        * 查询单据
@@ -171,22 +194,7 @@
   .item_body {
     width: 100%;
     overflow-y: auto;
-
-    &_title {
-      font-size: 14px;
-      line-height: 14px;
-      padding-left: 10px;
-      color: #999;
-    }
   }
-
-  .button_bottom {
-    position: fixed;
-    width: 100%;
-    height: 50px;
-    padding: 5px 0px;
-  }
-
   .fileClass {
     color: #2479ed;
     font-size: 14px;

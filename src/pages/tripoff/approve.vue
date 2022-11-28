@@ -12,7 +12,7 @@
           <van-cell title="结束时间：" :value="billInfo.tripendtime"/>
           <!--          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="StartEndDayType[billInfo.start_day_type]"/>-->
           <!--          <van-cell v-if="billInfo.end_day_type" title="结婚时间：" :value="StartEndDayType[billInfo.end_day_type]"/>-->
-          <van-cell title="出差时长：" :value="billInfo.tripday + dateTimeType[billInfo.minunit]"/>
+          <van-cell title="出差时长：" :value="billInfo.tripday + HrkqMinUnit[billInfo.minunit]"/>
           <van-cell title="出差目的地：" :value="billInfo.otapplylength"/>
           <van-cell title="出差费用：" :value="billInfo.cost"/>
           <van-cell title="销差原因：" :value="billInfo.remark"/>
@@ -22,7 +22,7 @@
         <van-cell title="销差理由：" :value="billInfo.tripoffremark"/>
         <van-cell title="实际开始时间：" :value="billInfo.tripoffbegintime"/>
         <van-cell title="实际结束时间：" :value="billInfo.tripoffendtime"/>
-        <van-cell title="实际出差时长：" :value="billInfo.tripoffday + dateTimeType[billInfo.minunit]"/>
+        <van-cell title="实际出差时长：" :value="billInfo.tripoffday + HrkqMinUnit[billInfo.minunit]"/>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
         <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>

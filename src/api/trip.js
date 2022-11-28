@@ -19,7 +19,7 @@ export function getTripBill(params) {
  */
 export function saveTripBill(params) {
   return request({
-    url: "/hrsh/trip/get",
+    url: "/hrsh/trip/save",
     method: 'post',
     data: params
   })
@@ -80,6 +80,30 @@ export function approveTripBill(params) {
 export function rejectTripBill(params) {
   return request({
     url: "/hrsh/trip/reject",
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 查询出差类型
+ * @param parameter
+ */
+export function queryTripType(params) {
+  return request({
+    url: "/hrsh/trip/queryTripType",
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 计算出差时长
+ * @param parameter
+ */
+export function queryTripLength(params) {
+  return request({
+    url: "/hrsh/trip/queryLength",
     method: 'post',
     data: params
   })

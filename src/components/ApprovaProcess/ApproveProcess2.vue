@@ -21,7 +21,7 @@
                 <span v-if="item.approveresult == 'N'">审批不通过</span>
               </p>
               <p>{{item.checknote}}</p>
-              <p>{{item.dealdate}}</p>
+              <p>{{item.senddate}}</p>
             </div>
           </van-step>
         </van-steps>

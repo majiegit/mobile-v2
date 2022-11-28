@@ -1,18 +1,25 @@
 <template>
   <div class="leaveoff_top">
-    <van-collapse is-link="false" v-model="activeNames" v-for="(item,index) in laeveData" :key="index">
+    <div v-if="leaveList.length == 0">
+      <van-empty description="暂无待销假数据"/>
+    </div>
+    <van-collapse is-link="false" v-model="activeNames" v-for="(item,index) in leaveList" :key="index">
       <van-collapse-item :name="index">
         <template #title>
           <div>
             <van-icon name="label-o"/>
-            {{ item.applydate}} {{ item.leavetypename }}
+            {{ item.applydate}} &nbsp; {{ item.leavetypename }}
           </div>
         </template>
         <div @click="toDetail(item)">
-          <van-cell title="开始日期：" :value="item.leavebegintime"/>
-          <van-cell title="结束日期：" :value="item.leaveendtime"/>
-          <van-cell title="请假时长：" :value="item.leaveday"/>
-          <van-cell title="请假说明：" :value="item.remark"/>
+          <van-cell :title="'开始' + (item.minunit == '2' ? '日期': '时间')"
+                    :value="(item.minunit == '2' ) ? item.begintime.substring(0,10) : item.begintime"/>
+          <van-cell :title="'结束' + (item.minunit == '2' ? '日期': '时间')"
+                    :value="(item.minunit == '2' ) ? item.endtime.substring(0,10) : item.endtime"/>
+          <van-cell v-if="item.start_day_type" title="开始时间" :value="StartEndDayType[item.start_day_type]"/>
+          <van-cell v-if="item.end_day_type" title="结束时间" :value="StartEndDayType[item.end_day_type]"/>
+          <van-cell title="请假时长" :value="item.leaveday + HrkqMinUnit[item.minunit]"/>
+          <van-cell title="请假说明" :value="item.leaveremark"/>
         </div>
       </van-collapse-item>
     </van-collapse>
@@ -20,30 +27,48 @@
 </template>
 
 <script>
-
+  import {queryLeaveIsRevoked} from '@/api/leaveoff'
+  import {userInfoPkPsndoc} from "@/utils/storageUtils";
+  import {StartEndDayType,HrkqMinUnit} from '@/utils/ConstantUtils'
 export default {
-  props: {
-    laeveData: {
-      type: Array,
-      default: []
-    }
-  },
   data() {
     return {
-      activeNames: [0, 1],
+      StartEndDayType,
+      HrkqMinUnit,
+      activeNames: [],
+      leaveList: []
     }
   },
   mounted() {
   },
   created() {
+    this.queryLeaveIsRevoked()
+  },
+  watch:{
+    leaveList(val){
+      for (let i = 0; i < val.length; i++) {
+        this.activeNames.push(i)
+      }
+    }
   },
   methods: {
+    /**
+     * 查询待销假请假记录
+     */
+    queryLeaveIsRevoked(){
+      let params = {
+        pk_psndoc: userInfoPkPsndoc
+      }
+      queryLeaveIsRevoked(params).then(res => {
+        this.leaveList = res.data
+      })
+    },
     /**
      * 将数据传给父组件
      * @param detail
      */
-    toDetail(detail) {
-      this.$emit('getDetail', detail, false)
+    toDetail(item) {
+      this.$emit('getDetail', item)
     }
   }
 }

@@ -19,7 +19,7 @@ export function getLeaveoffBill(params) {
  */
 export function saveLeaveoffBill(params) {
   return request({
-    url: "/hrsh/leaveoff/get",
+    url: "/hrsh/leaveoff/save",
     method: 'post',
     data: params
   })
@@ -80,6 +80,30 @@ export function approveLeaveoffBill(params) {
 export function rejectLeaveoffBill(params) {
   return request({
     url: "/hrsh/leaveoff/reject",
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 计算销假时长
+ * @param parameter
+ */
+export function queryLeaveoffLength(params) {
+  return request({
+    url: "/hrsh/leaveoff/queryLength",
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 查询待销假请假记录
+ * @param parameter
+ */
+export function queryLeaveIsRevoked(params) {
+  return request({
+    url: "/hrsh/leaveoff/queryLeaveIsRevoked",
     method: 'post',
     data: params
   })

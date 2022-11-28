@@ -4,19 +4,19 @@
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
         <van-cell-group>
-          <van-cell title="请假类别：" :value="billInfo.leavetypename"/>
-          <van-cell title="申请人：" :value="billInfo.psndocname"/>
-          <van-cell title="申请时间：" :value="billInfo.applydate"/>
+          <van-cell title="休假类型" :value="billInfo.leavetypename"/>
+          <van-cell title="申请人" :value="billInfo.psndocname"/>
+          <van-cell title="申请时间" :value="billInfo.applydate"/>
           <van-cell :title="'开始' + (billInfo.minunit == '2' ? '日期': '时间')"
                     :value="(billInfo.minunit == '2' ) ? billInfo.begintime.substring(0,10) : billInfo.begintime"/>
           <van-cell :title="'结束' + (billInfo.minunit == '2' ? '日期': '时间')"
                     :value="(billInfo.minunit == '2' ) ? billInfo.endtime.substring(0,10) : billInfo.endtime"/>
-          <van-cell v-if="billInfo.start_day_type" title="开始时间：" :value="StartEndDayType[billInfo.start_day_type]"/>
-          <van-cell v-if="billInfo.end_day_type" title="结束时间：" :value="StartEndDayType[billInfo.end_day_type]"/>
-          <van-cell title="请假时长：" :value="billInfo.leaveday + LeaveTypeMinUnit[billInfo.minunit]"/>
-          <van-cell title="休假说明：" :value="billInfo.leaveremark"/>
-          <van-cell title="是否销假：" :value="whetherYN[billInfo.isrevoked]"/>
-          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
+          <van-cell v-if="billInfo.start_day_type" title="开始时间" :value="StartEndDayType[billInfo.start_day_type]"/>
+          <van-cell v-if="billInfo.end_day_type" title="结束时间" :value="StartEndDayType[billInfo.end_day_type]"/>
+          <van-cell title="请假时长" :value="billInfo.leaveday + HrkqMinUnit[billInfo.minunit]"/>
+          <van-cell title="休假说明" :value="billInfo.leaveremark"/>
+          <van-cell title="是否销假" :value="whetherYN[billInfo.isrevoked]"/>
+          <van-cell title="审批状态" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
@@ -39,7 +39,7 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
   import {getLeaveBill} from '@/api/leave'
-  import {approveStateName, whetherYN, StartEndDayType, LeaveTypeMinUnit} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN, StartEndDayType, HrkqMinUnit} from '@/utils/ConstantUtils'
 
 
   export default {
@@ -47,7 +47,7 @@
     components: {Header, ApproveProcess, ApproveButton},
     data() {
       return {
-        LeaveTypeMinUnit,
+        HrkqMinUnit,
         StartEndDayType, // 上下午
         whetherYN, // 是否YN
         approveStateName, // 审批状态

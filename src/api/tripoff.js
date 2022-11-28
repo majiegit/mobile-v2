@@ -19,7 +19,7 @@ export function getTripoffBill(params) {
  */
 export function saveTripoffBill(params) {
   return request({
-    url: "/hrsh/tripoff/get",
+    url: "/hrsh/tripoff/save",
     method: 'post',
     data: params
   })
@@ -80,6 +80,31 @@ export function approveTripoffBill(params) {
 export function rejectTripoffBill(params) {
   return request({
     url: "/hrsh/tripoff/reject",
+    method: 'post',
+    data: params
+  })
+}
+
+
+/**
+ * 计算销差时长
+ * @param parameter
+ */
+export function queryTripoffLength(params) {
+  return request({
+    url: "/hrsh/tripoff/queryLength",
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 查询待销差请差记录
+ * @param parameter
+ */
+export function queryTripIsRevoked(params) {
+  return request({
+    url: "/hrsh/tripoff/queryTripIsRevoked",
     method: 'post',
     data: params
   })

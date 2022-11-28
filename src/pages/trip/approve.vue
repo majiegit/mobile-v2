@@ -6,14 +6,15 @@
         <van-cell-group>
           <van-cell title="出差类型：" :value="billInfo.triptypename"/>
           <van-cell title="申请人：" :value="billInfo.psndocname"/>
-          <van-cell title="出差类别：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.tripbegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.tripendtime"/>
-          <van-cell title="出差时长：" :value="billInfo.tripday	+ dateTimeType[billInfo.minunit]"/>
+          <van-cell title="申请时间：" :value="billInfo.applydate"/>
+          <van-cell title="出差开始时间：" :value="billInfo.tripbegintime"/>
+          <van-cell title="出差结束时间：" :value="billInfo.tripendtime"/>
+          <van-cell title="出差时长：" :value="billInfo.tripday	+ HrkqMinUnit[billInfo.minunit]"/>
           <van-cell title="出差费用：" :value="billInfo.cost"/>
           <van-cell title="交接人：" :value="billInfo.handover"/>
           <van-cell title="目的地：" :value="billInfo.destination"/>
           <van-cell title="出差理由：" :value="billInfo.remark"/>
+          <van-cell title="是否销差" :value="whetherYN[billInfo.isrevoked]"/>
           <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
@@ -35,7 +36,7 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
   import {getTripBill} from '@/api/trip'
-  import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN, HrkqMinUnit,BillTypeCode} from '@/utils/ConstantUtils'
 
 
   export default {
@@ -43,8 +44,9 @@
     components: {Header, ApproveProcess, ApproveButton},
     data() {
       return {
-        approveStateName: approveStateName,
-        dateTimeType: dateTimeType,
+        whetherYN,
+        HrkqMinUnit,
+        approveStateName,
         title: '出差申请单',
         check: {
           show: false,
@@ -61,8 +63,6 @@
     },
     watch: {},
     mounted() {
-      // let buttonHeight = document.getElementsByClassName('button_bottom').offsetHeight
-      // this.currentHeight = (document.documentElement.clientHeight - 46 - (buttonHeight ? buttonHeight : 0)) + 'px'
       this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
@@ -77,13 +77,7 @@
        * 附件管理
        */
       fileManager() {
-        // 如果等于 1  附件禁止操作
-        let disabled = 1
-        if (['3', '-1'].includes(this.approvestate)) {
-          // 提交 自由态 附件可操作
-          disabled = 0
-        }
-        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h, disabled: disabled}})
+        this.$router.push({name: 'enclosure', query: {filePath: this.pk_h}})
       },
       /**
        * 查询单据

@@ -9,7 +9,7 @@
           <van-cell title="出差类别：" :value="billInfo.applydate"/>
           <van-cell title="开始时间：" :value="billInfo.tripbegintime"/>
           <van-cell title="结束时间：" :value="billInfo.tripendtime"/>
-          <van-cell title="出差时长：" :value="billInfo.tripday	+ dateTimeType[billInfo.minunit]"/>
+          <van-cell title="出差时长：" :value="billInfo.tripday	+ HrkqMinUnit[billInfo.minunit]"/>
           <van-cell title="出差费用：" :value="billInfo.cost"/>
           <van-cell title="交接人：" :value="billInfo.handover"/>
           <van-cell title="目的地：" :value="billInfo.destination"/>
@@ -37,7 +37,7 @@
   import ApplyButton from '@/components/ApplyButton/ApplyButton'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getBillInfo} from '@/api/my-apply'
-  import {approveStateName, dateTimeType} from '@/utils/ConstantUtils'
+  import {approveStateName, HrkqMinUnit} from '@/utils/ConstantUtils'
 
 
   export default {
@@ -45,7 +45,7 @@
     components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
-        dateTimeType: dateTimeType,
+        HrkqMinUnit: HrkqMinUnit,
         approveStateName: approveStateName,
         title: '出差申请',
         currentHeight: '',

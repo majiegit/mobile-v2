@@ -4,14 +4,14 @@
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.psndocname"/>
-          <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="是否通宵：" :value="whetherYN[billInfo.isallnight]"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength + '小时'"/>
-          <van-cell title="加班说明：" :value="billInfo.remark"/>
-          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
+          <van-cell title="申请人" :value="billInfo.psndocname"/>
+          <van-cell title="申请时间" :value="billInfo.applydate"/>
+          <van-cell title="开始时间" :value="billInfo.overtimebegintime"/>
+          <van-cell title="结束时间" :value="billInfo.overtimeendtime"/>
+          <van-cell title="是否通宵" :value="whetherYN[billInfo.isallnight]"/>
+          <van-cell title="加班时长" :value="billInfo.otapplylength + '小时'"/>
+          <van-cell title="加班说明" :value="billInfo.remark"/>
+          <van-cell title="审批状态" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
 
         <p class="fileClass" @click="fileManager">附件管理</p>

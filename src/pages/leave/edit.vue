@@ -78,11 +78,11 @@
         />
 
         <!--请假时长-->
-        <van-field label="请假时长" :value="billInfo.leaveday + LeaveTypeMinUnit[billInfo.minunit]" readonly/>
+        <van-field label="请假时长" :value="billInfo.leaveday + HrkqMinUnit[billInfo.minunit]" readonly/>
 
         <!--剩余额度-->
         <van-cell :title="billInfo.leavetypename + '剩余额度'"
-                  :value="leaveTypeBalance + LeaveTypeMinUnit[billInfo.minunit]"/>
+                  :value="leaveTypeBalance + HrkqMinUnit[billInfo.minunit]"/>
 
       </van-form>
     </div>
@@ -100,9 +100,9 @@
   import Header from '@/components/Header/Index'
   import Select from '@/components/Selector/Select'
   import SelectDate from '@/components/Selector/SelectDate'
-  import SaveButton from "../../components/Button/SaveButton";
+  import SaveButton from "@/components/Button/SaveButton";
   import {saveLeaveBill, getLeaveBill, queryLeaveType, queryLeaveLength} from '@/api/leave'
-  import {StartEndDayType, StartEndDayTypeList, LeaveTypeMinUnit} from '@/utils/ConstantUtils'
+  import {StartEndDayType, StartEndDayTypeList, HrkqMinUnit} from '@/utils/ConstantUtils'
   import {getItem} from '@/utils/DataUtils'
   import {Toast} from "vant";
   import {beginGtEndTime, beginEndSameDay} from '@/utils/DateTimeUtils'
@@ -120,12 +120,12 @@
         },
         StartEndDayTypeShow: false, // 是否显示上下午
         StartEndDayType,
-        LeaveTypeMinUnit,
+        HrkqMinUnit,
         billInfo: {
           billmaker: userInfoUserId,
           pk_psndoc: userInfoPkPsndoc,
           pk_leave_type: '', // 请假类型PK
-          leavetypename: '', // 请假类型名称
+          leavetypename: '', // 休假类型名称
           leaveday: '', //请假时长
           minunit: '1',
           begintime: '',
@@ -133,12 +133,12 @@
           start_day_type: '',
           end_day_type: ''
         },
-        leaveTypeList: [], // 请假类型集合
-        leaveTypeBalance: '' // 请假类型剩额度
+        leaveTypeList: [], // 休假类型集合
+        leaveTypeBalance: '' // 休假类型剩额度
       }
     },
     watch: {
-      // 监听请假类型
+      // 监听休假类型
       'billInfo.pk_leave_type'(val) {
         // 处理显示字段
         let leaveType = getItem(this.leaveTypeList, 'id', val)
@@ -246,10 +246,10 @@
         })
       },
       /**
-       * 选择请假类型
+       * 选择休假类型
        */
       selectLeaveType(type) {
-        // 改变请假类型 赋值
+        // 改变休假类型 赋值
         this.billInfo.pk_leave_type = type.id
         this.billInfo.leavetypename = type.type_name
         this.billInfo.minunit = type.min_unit
@@ -258,7 +258,7 @@
         this.billInfo.leaveday = ''
       },
       /**
-       * 查询请假类型
+       * 查询休假类型
        */
       queryLeaveType() {
         queryLeaveType().then(res => {
@@ -335,7 +335,7 @@
        */
       selectDate(value, field, title, type) {
         if(!this.checkLeaveType()){
-          Toast("请先选择请假类型")
+          Toast("请先选择休假类型")
           return
         }
         let selector = {
@@ -360,7 +360,7 @@
        */
       saveBillInfo() {
         if(!this.checkLeaveType()){
-          Toast("请先选择请假类型")
+          Toast("请先选择休假类型")
           return
         }
         console.log(this.billInfo)
@@ -381,7 +381,7 @@
         })
       },
       /**
-       * 校验是否选择请假类型
+       * 校验是否选择休假类型
        */
       checkLeaveType(){
         let select = false
@@ -391,7 +391,7 @@
         return select
       },
       clickLeft() {
-        this.$router.push({name: 'application'})
+        this.$router.go(-1)
       },
     }
   }

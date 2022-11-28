@@ -2,257 +2,340 @@
   <div>
     <Header :title="title" @clickLeft="clickLeft"></Header>
     <!--销差记录-->
-    <div v-if="laeveData.length <= 0 &&  leaveoffShow">
-      <van-empty description="暂未出差记录"/>
+    <div v-if="waitTripShow">
+      <tripRecord @getDetail="getTripBill"></tripRecord>
     </div>
-    <div v-if="leaveoffShow">
-      <tripRecord :laeveData="laeveData" @getDetail="getData"></tripRecord>
-    </div>
-    <div v-else class="item_body">
-      <div :style="{'height': currentHeight}">
-        <p class="item_body_title">出差明细</p>
+    <!--销差详情-->
+    <div v-else>
+      <div class="item_body" :style="{'height': currentHeight}">
+        <p class="item_body_title">出差信息</p>
         <van-cell-group>
-          <van-cell title="出差类型：" :value="tripData.triptypename"/>
-          <van-cell title="开始时间" :value="tripData.tripbegintime"/>
-          <van-cell title="结束时间：" :value="tripData.tripendtime"/>
-          <van-cell title="销差时长：" :value="tripData.tripday"/>
-          <van-cell title="销差费用：" :value="tripData.remark"/>
-          <van-cell title="交接人：" :value="tripData.remark"/>
-          <van-cell title="销差目的：" :value="tripData.mudi"/>
+          <van-cell title="出差类型" :value="billInfo.triptypename"/>
+          <van-cell title="申请人" :value="billInfo.psndocname"/>
+          <van-cell title="出差开始时间" :value="billInfo.tripbegintime"/>
+          <van-cell title="出差结束时间" :value="billInfo.tripendtime"/>
+          <van-cell title="出差时长" :value="billInfo.tripday + HrkqMinUnit[billInfo.minunit]"/>
+          <van-cell title="出差理由" :value="billInfo.remark"/>
+          <van-cell title="出差目的地" :value="billInfo.otapplylength"/>
+          <van-cell title="出差费用" :value="billInfo.cost"/>
         </van-cell-group>
-        <!--销差明细-->
-        <van-form input-align="right" ref="billForm" colon>
-          <div class="tripoff">
-            <p class="item_body_title">销差明细</p>
-            <van-field
-              is-link
-              required
-              name="tripoffbegintime"
-              :rules="formRules.tripoffbegintime"
-              v-model="billInfo.tripoffbegintime"
-              @click="selectDate(billInfo.tripoffbegintime,'tripoffbegintime','请选择开始时间', 'datetime')"
-              label="实际开始时间"
-              placeholder="请选择实际开始时间"
-            />
-            <van-field
-              is-link
-              required
-              name="tripoffendtime"
-              :rules="formRules.tripoffendtime"
-              v-model="billInfo.tripoffendtime"
-              @click="selectDate(billInfo.tripoffendtime,'tripoffendtime','请选择结束时间', 'datetime')"
-              label="实际结束时间"
-              placeholder="请选择实际结束时间"
-            />
-            <van-field
-              v-model="billInfo.mark"
-              rows="2"
-              autosize
-              label="销差理由"
-              type="textarea"
-              maxlength="50"
-            />
-          </div>
+        <!--销差信息-->
+        <p class="item_body_title">销差信息</p>
+        <van-form input-align="right" colon ref="billForm" label-width="150px">
+          <!--销差时间开始时间   时间一组-->
+          <van-field
+            is-link
+            readonly
+            required
+            :rules="formRules.dr_flag"
+            name="dr_flag"
+            :value="TripOffReason[billInfo.dr_flag]"
+            @click="selectClick(TripOffReasonList,'请选择销差原因','dr_flag', billInfo.dr_flag)"
+            label="销差原因"
+            placeholder="请选择销差原因"
+          />
+
+          <van-field
+            is-link
+            required
+            readonly
+            name="tripoffbegintime"
+            :rules="formRules.tripoffbegintime"
+            :value="billInfo.tripoffbegintime"
+            @click="selectDate(billInfo.tripoffbegintime,'tripoffbegintime','实际开始时间', 'datetime')"
+            label="实际开始时间"
+            placeholder="'请选择实际开始时间'"
+          />
+          <van-field
+            is-link
+            required
+            readonly
+            name="tripoffendtime"
+            :rules="formRules.tripoffendtime"
+            :value="billInfo.tripoffendtime"
+            @click="selectDate(billInfo.tripoffendtime,'tripoffendtime','请选择实际结束时间','datetime')"
+            label="实际结束时间"
+            placeholder="'请选择实际结束时间"
+          />
+
+          <!--销差理由-->
+          <van-field
+            v-model="billInfo.tripoffremark"
+            rows="2"
+            autosize
+            label="销差理由"
+            type="textarea"
+            maxlength="50"
+            placeholder="请输入销差理由"
+            show-word-limit
+          />
+          <!--销差实际时长-->
+          <van-field label="销差实际时长" :value="billInfo.tripoffday + HrkqMinUnit[billInfo.minunit]" readonly/>
         </van-form>
       </div>
       <!--保存按钮-->
-      <SaveButton @save="saveBillInfo"/>
+      <SaveButton @save="saveBillInfo"></SaveButton>
     </div>
     <!-- 日期选择器-->
     <SelectDate ref="selectorDate" @dateOk="dateOk"/>
     <!--   下拉选择器   -->
-    <Select ref="selector" @selectOk="selectOk2"/>
+    <Select ref="selector" @selectOk="selectOk"/>
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header/Index'
-import Select from '@/components/Selector/Select'
-import SelectDate from '@/components/Selector/SelectDate'
-import SaveButton from '@/components/Button/SaveButton'
-import tripRecord from "./compoents/tripRecord";
-import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
-import {checkBeginEndTime} from '@/utils/ConstantUtils'
-import {Toast} from "vant";
+  import Header from '@/components/Header/Index'
+  import Select from '@/components/Selector/Select'
+  import SelectDate from '@/components/Selector/SelectDate'
+  import tripRecord from "./compoents/tripRecord";
+  import SaveButton from "@/components/Button/SaveButton";
+  import {Toast} from "vant";
+  import {getTripoffBill, queryTripoffLength, saveTripoffBill} from '@/api/tripoff'
+  import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
+  import {
+    approveStateName,
+    whetherYN,
+    StartEndDayType,
+    StartEndDayTypeList,
+    HrkqMinUnit,
+    TripOffReasonList,
+    TripOffReason
+  } from '@/utils/ConstantUtils'
+  import {beginGtEndTime, beginEndSameDay} from '@/utils/DateTimeUtils'
+  import {BillTypeCode} from '@/utils/ConstantUtils'
 
 
-export default {
-  data() {
-    return {
-      formRules,
-      title: '销差记录选择',
-      currentHeight: '',
-      leaveoffShow: true,
-      dateShow: false,
-      timeShow: false,
-      billInfo: {
-        billmaker: userInfoUserId,
-        pk_psndoc: userInfoPkPsndoc,
-        otapplylength: '',
+  export default {
+    components: {Header, Select, SelectDate, tripRecord, SaveButton},
+    data() {
+      return {
+        approveStateName,
+        whetherYN,
+        StartEndDayType,
+        StartEndDayTypeList,
+        HrkqMinUnit,
+        TripOffReasonList,
+        TripOffReason,
+        formRules,
+        title: '出差记录选择',
+        waitTripShow: false, // 销差记录显示
+        currentHeight: '',
+        billInfo: {
+          billmaker: userInfoUserId,
+          pk_psndoc: userInfoPkPsndoc,
+          dr_flag: '0',
+          minunit: '1',
+          tripoffday: ''
+        }
+      }
+    },
+    mounted() {
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      // 有销差单Pk直接查销差单
+      if (this.$route.query.pk_h) {
+        this.queryBillInfo(this.$route.query.pk_h)
+      } else {
+        // 新增销差单则选择出差记录
+        this.waitTripShow = true
+      }
+    },
+    created() {
+    },
+    watch: {},
+    methods: {
+      /**
+       * 销差原因上下午确认回调
+       * @param selector
+       * @param item
+       */
+      selectOk(selector, item) {
+        this.$set(this.billInfo, selector.field, item.value)
       },
-      tripData: {},
-      laeveData: [
-        {
-          applydate: '2022-07-20',
-          triptypename: '病假',
-          psndocname: '张曼曼',
-          tripbegintime: '2015',
-          tripendtime: '2312',
-          tripday: '5',
-          remark: 'qingjsad'
-        },
-        {
-          applydate: '2022-07-16',
-          triptypename: '事假',
-          tripbegintime: '16.51',
-          tripendtime: '13.51',
-          tripday: '3',
-          remark: 'qingjsad'
+      /**
+       *  选择销差原因
+       */
+      selectClick(data, title, field, value) {
+        let selector = {
+          data: data,
+          title: title,
+          field: field,
+          text: 'text',
+          key: 'value',
+          value: value
         }
-      ]
-    }
-  },
-  components: {Header, Select, SelectDate, SaveButton, tripRecord},
-  created() {
-  },
-  mounted() {
-    this.currentHeight = (document.documentElement.clientHeight - 126) + 'px'
-  },
-  watch: {
-    'billInfo.tripoffbegintime'() {
-      let check = checkBeginEndTime(this.billInfo.tripoffbegintime, this.billInfo.tripoffendtime)
-      if (!check) {
-        Toast('开始时间不能大于结束时间')
-        this.billInfo.tripoffendtime = ''
-      }
-    },
-    'billInfo.tripoffendtime'() {
-      let check = checkBeginEndTime(this.billInfo.tripoffbegintime, this.billInfo.tripoffendtime)
-      if (!check) {
-        Toast('开始时间不能大于结束时间')
-        this.billInfo.tripoffendtime = ''
-      }
-    }
-  },
-  methods: {
-    clickLeft() {
-      this.$router.go(-1)
-    },
-    /**
-     * 销假回调
-     * @param data
-     * @param Bool
-     */
-    getData(data, Bool) {
-      this.tripData = data
-      this.leaveoffShow = Bool
-      this.title = '销假申请'
-      console.log(this.billInfo)
-    },
-    /**
-     * 销差类型确认回调
-     * @param selector
-     * @param item
-     */
-    selectOk2(selector, item) {
-      this.$set(this.billInfo, selector.field, item.text)
-      // this.chooseleaveType(this.leaveData.leavetype)
-    },
-    /**
-     *选择销差类型
-     * @param data
-     * @param title
-     * @param field
-     * @param text
-     * @param key
-     */
-    selectLeaveType(data, title, field, text, key) {
-      let datas = [
-        {
-          text: '本地',
-          value: '1'
-        },
-        {
-          text: '外地',
-          value: '2'
+        this.$refs.selector.openSelect(selector)
+      },
+      /**
+       * 表单编辑后事件
+       */
+      afterEdit() {
+        // 校验开始时间是否 > 结束时间
+        if (this.billInfo.tripoffbegintime && this.billInfo.tripoffendtime) {
+          // 校验开始时间是否 > 结束时间
+          let isGt = beginGtEndTime(this.billInfo.tripoffbegintime, this.billInfo.tripoffendtime)
+          if (isGt) {
+            Toast("实际开始时间不能大于实际结束时间")
+            this.billInfo.tripoffendtime = ''
+            return
+          }
+          this.getTripOffLength()
         }
-      ]
-      let selector = {
-        data: datas,
-        title: title,
-        field: 'triptype',
-        text: 'text',
-        key: 'value',
-        value: '1'
-      }
-      this.$refs.selector.openSelect(selector)
-    },
-    /**
-     * 时间选择器确认回调
-     * @param selector
-     * @param item
-     */
-    dateOk(selector) {
-      // console.log(selector)
-      this.$set(this.billInfo, selector.field, selector.value)
-    },
-    /**
-     * 选择时间
-     * @param value
-     * @param field
-     * @param title
-     * @param type
-     */
-    selectDate(value, field, title, type) {
-      let selector = {
-        title: title,
-        field: field,
-        value: value,
-        type: type
-      }
-      this.$refs.selectorDate.openSelect(selector)
-    },
-    //
-    saveBillInfo() {
-      this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
+      },
+      /**
+       * 计算销差时长
+       */
+      getTripOffLength() {
+        let params = {
+          tripoffbegintime: this.billInfo.tripoffbegintime,
+          tripoffendtime: this.billInfo.tripoffendtime,
+          triptypeid: this.billInfo.triptypeid,
+          minunit: this.billInfo.minunit
+        }
         Toast.loading({
-          message: '保存中...',
+          message: '计算销差时长中...',
           duration: 0
         })
-        // 调用接口
-      })
-    },
+        queryTripoffLength(params).then(res => {
+          Toast.clear()
+          this.billInfo.tripoffday = res.data
+        })
+      },
+      /**
+       * 出差记录选择回调
+       * @param data
+       * @param Bool
+       */
+      getTripBill(trip) {
+        console.log(trip)
+        this.billInfo.mainid = trip.pk_trip
+        this.billInfo.tripendtime = trip.tripendtime
+        this.billInfo.tripbegintime = trip.tripbegintime
+        this.billInfo.tripday = trip.tripday
+        this.billInfo.minunit = trip.minunit
+        this.billInfo.triptypeid = trip.triptypeid
+        this.billInfo.triptypename = trip.triptypename
+        this.billInfo.psndocname = trip.psndocname
+        this.billInfo.tripremark = trip.remark
+        this.billInfo.tripremark = trip.destination
+        this.billInfo.cost = trip.cost
+        this.billInfo.handover = trip.handover
+        this.waitTripShow = false
+        this.title = '销差申请'
+      },
+      /**
+       * 查询单据
+       */
+      queryBillInfo(pk_h) {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
+        let params = {
+          billid: pk_h
+        }
+        getTripoffBill(params).then(res => {
+          this.billInfo = res.data
+          Toast.clear()
+        })
+      },
+      /**
+       * 选择出差时间
+       */
+      selectDate(value, field, title, type) {
+        let selector = {
+          title: title,
+          field: field,
+          value: value,
+          type: type
+        }
+        this.$refs.selectorDate.openSelect(selector)
+      },
+      /**
+       * 时间选择器确认回调
+       * @param selector
+       * @param item
+       */
+      dateOk(selector) {
+        this.$set(this.billInfo, selector.field, selector.value)
+        this.afterEdit()
+      },
+      // 保存
+      saveBillInfo() {
+        console.log(this.billInfo)
+        this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
+          Toast.loading({
+            message: '保存中...',
+            duration: 0
+          })
+          // 调用接口
+          saveTripoffBill(this.billInfo).then(res => {
+            Toast.clear()
+            this.$router.push({name: 'tripoffDetail', query: {pk_h: res.data.pk_tripoff}})
+          })
+        })
+      },
+      // 初始化数据
+      init() {
+        this.billInfo = {
+          billmaker: userInfoUserId,
+          pk_psndoc: userInfoPkPsndoc,
+          dr_flag: '0',
+          minunit: '1',
+          tripoffday: ''
+        }
+        this.title = '出差记录选择'
+      },
+      //
+      clickLeft() {
+        if (this.$route.query.pk_h) {
+          this.$router.go(-1)
+        } else {
+          if (this.waitTripShow) {
+            this.$router.go(-1)
+          } else {
+            this.waitTripShow = true
+            this.init()
+          }
+        }
+      },
+    }
   }
-}
-// 表单校验规则
-const formRules = {
-  tripoffbegintime: [{
-    required: true,
-    message: ''
-  }],
-  tripoffendtime: [{
-    required: true,
-    message: ''
-  }]
-}
+  // 表单校验规则
+  const formRules = {
+    dr_flag: [{
+      required: true,
+      message: ''
+    }],
+    tripoffbegintime: [{
+      required: true,
+      message: ''
+    }],
+    tripoffendtime: [{
+      required: true,
+      message: ''
+    }],
+    tripoff_start_day_type: [{
+      required: true,
+      message: ''
+    }],
+    tripoff_end_day_type: [{
+      required: true,
+      message: ''
+    }],
+  }
 </script>
-<style>
-.tripoff .van-cell .van-field__label {
-  width: 7.2em;
-}
 
-</style>
+<style lang='less'>
+  // 所有考勤统一样式
+  .item_body {
+    width: 100%;
+    overflow-y: auto;
 
-<style lang='less' scoped>
-.item_body {
-  width: 100%;
-  overflow-y: auto;
-
-  &_title {
-    font-size: 14px;
-    line-height: 14px;
-    padding-left: 10px;
-    color: #999;
+    &_title {
+      font-size: 14px;
+      line-height: 14px;
+      padding-left: 10px;
+      color: #999;
+    }
   }
-}
 </style>
