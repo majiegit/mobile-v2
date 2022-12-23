@@ -58,7 +58,7 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }

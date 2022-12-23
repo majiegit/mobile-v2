@@ -70,10 +70,6 @@ import {userInfoPkPsndoc} from "@/utils/storageUtils";
 export default {
   name: "CheckPwd",
   props: {
-    checkPwdShow: {
-      type: Boolean,
-      default: false
-    }
   },
   data() {
     return {
@@ -84,6 +80,7 @@ export default {
       newPassword: '',
       confirmPassword: '',
       updatePwdShow: false,
+      checkPwdShow: true
     }
   },
   created() {

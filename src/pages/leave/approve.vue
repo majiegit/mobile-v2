@@ -67,7 +67,7 @@
     },
     watch: {},
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -149,13 +149,6 @@
       padding-left: 10px;
       color: #999;
     }
-  }
-
-  .button_bottom {
-    position: fixed;
-    width: 100%;
-    height: 50px;
-    padding: 5px 0px;
   }
 
   .fileClass {

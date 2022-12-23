@@ -17,7 +17,10 @@ import trans from './pages/trans'
 import signcard from './pages/signcard'
 import dimission from './pages/dimission'
 import calendar from './pages/calendar'
-import checkout from "./pages/checkout";
+import checkout from "./pages/checkout"
+import psnInfoApprove from "./pages/psnInfoApprove"
+import inductionInfo from "./pages/inductionInfo"
+import prove from "./pages/prove"
 
 // 总路由
 export const AllRouterList = [].concat(
@@ -39,6 +42,9 @@ export const AllRouterList = [].concat(
   signcard,
   dimission,
   calendar,
+  psnInfoApprove,
+  prove,
+  inductionInfo,
   checkout
 )
 

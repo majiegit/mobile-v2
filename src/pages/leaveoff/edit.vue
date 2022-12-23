@@ -165,7 +165,7 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       // 有销假单Pk直接查销假单
       if (this.$route.query.pk_h) {
         this.queryBillInfo(this.$route.query.pk_h)

@@ -9,6 +9,7 @@
           <!-- 文本类型   0-->
           <van-field v-model="infoDataForm[field.code]" v-if="field.datatype == 0" class="van_field_class"
                      :name="field.name"
+                     :disabled="getFieldDisabled(field)"
                      :required="getFieldRequired(field)" :maxlength="field.maxlength"
                      :label="field.name" :placeholder="getFieldPlaceholder(field)" :rules="getFieldRules(field)"/>
           <!-- 整数类型   1 and  数量类型 2-->
@@ -16,11 +17,13 @@
                      class="van_field_class" :maxlength="field.maxlength"
                      :required="getFieldRequired(field)" :label="field.name" :placeholder="getFieldPlaceholder(field)"
                      :name="field.name"
+                     :disabled="getFieldDisabled(field)"
                      :rules="getFieldRules(field)"/>
           <!--日期类型  3 || 20-->
           <van-field v-model="infoDataForm[field.code]" readonly v-if="[20,3,8].includes(field.datatype)"
                      :name="field.name"
                      class="van_field_class" right-icon="arrow" :maxlength="field.maxlength"
+                     :disabled="getFieldDisabled(field)"
                      :required="getFieldRequired(field)" :label="field.name" :placeholder="getFieldPlaceholder(field)"
                      @click="getDate(field)"
                      :rules="getFieldRules(field)"/>
@@ -28,6 +31,7 @@
           <van-field v-model="infoDataForm[field.code+ '_name']" readonly v-if="[6].includes(field.datatype)"
                      :name="field.name"
                      class="van_field_class" right-icon="arrow" :maxlength="field.maxlength"
+                     :disabled="getFieldDisabled(field)"
                      :required="getFieldRequired(field)" :label="field.name" :placeholder="getFieldPlaceholder(field)"
                      @click="getSelectDate(field)"
                      :rules="getFieldRules(field)"/>
@@ -35,6 +39,7 @@
           <van-field v-model="infoDataForm[field.code+ '_name']" readonly v-if="field.datatype == 5"
                      :name="field.name"
                      class="van_field_class" right-icon="arrow" :maxlength="field.maxlength"
+                     :disabled="getFieldDisabled(field)"
                      :required="getFieldRequired(field)" :label="field.name" :placeholder="getFieldPlaceholder(field)"
                      @click="getReference(field)"
                      :rules="getFieldRules(field)"/>
@@ -42,15 +47,17 @@
           <van-field v-model="infoDataForm[field.code]" type="textarea" v-if="field.datatype == 9" autosize
                      :name="field.name"
                      class="van_field_class" :maxlength="field.maxlength"
+                     :disabled="getFieldDisabled(field)"
                      :required="getFieldRequired(field)" :label="field.name" :placeholder="getFieldPlaceholder(field)"
                      :rules="getFieldRules(field)"/>
           <!-- 是否开关 -->
           <van-field v-if="field.datatype == 4" class="van_field_class" :required="getFieldRequired(field)"
                      :name="field.name"
+                     :disabled="getFieldDisabled(field)"
                      :label="field.name" :placeholder="getFieldPlaceholder(field)"
                      :rules="getFieldRules(field)">
             <template #input>
-              <van-switch v-model="infoDataForm[field.code]" size="20" active-value="Y" inactive-value="N"/>
+              <van-switch v-model="infoDataForm[field.code]" size="20" active-value="Y" inactive-value="N" :disabled="getFieldDisabled(field)"/>
             </template>
           </van-field>
         </div>
@@ -115,7 +122,7 @@
       },
       // 下拉类型处理
       getSelectDate(field) {
-        if(this.isCheck){
+        if (this.getFieldDisabled(field)) {
           return
         }
         let selectorParam = {
@@ -148,6 +155,9 @@
       },
       // 日期类型处理
       getDate(field) {
+        if (this.getFieldDisabled(field)) {
+          return
+        }
         let selectorParam = {
           field: field,
           type: field.datatype == 8 ? 'datetime' : 'date',
@@ -163,6 +173,9 @@
       },
       // 参照类型处理
       getReference(field) {
+        if (this.getFieldDisabled(field)) {
+          return
+        }
         //请求参数
         var param = {
           // refType:code
@@ -203,6 +216,14 @@
           fieldsName.push(item.name)
         })
         return fieldsName
+      },
+      // 获取字段是否禁用
+      getFieldDisabled(field) {
+        let disabled = false
+        if (field.caneditflag === 'N') {  // 必填属性
+          disabled = true
+        }
+        return disabled
       },
       // 获取字段是否必填
       getFieldRequired(field) {

@@ -59,7 +59,7 @@
       [ImagePreview.Component.name]: ImagePreview.Component
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       this.uploadButtonWidth = (document.documentElement.clientWidth - 20) + 'px'
       this.filePath = this.$route.query.filePath
       if(this.$route.query.disabled == 1){

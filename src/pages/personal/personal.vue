@@ -2,7 +2,7 @@
   <div>
     <!--导航栏区域-->
     <div ref="header">
-      <Header title="个人信息" leftText="返回" @clickLeft="clickLeft" rightText="附件管理" @clickRight="clickRight"/>
+      <Header title="个人信息" @clickLeft="clickLeft" rightText="附件管理" @clickRight="clickRight"/>
     </div>
     <!--主内容区域-->
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">

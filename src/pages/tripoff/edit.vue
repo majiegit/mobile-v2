@@ -44,7 +44,7 @@
             :value="billInfo.tripoffbegintime"
             @click="selectDate(billInfo.tripoffbegintime,'tripoffbegintime','实际开始时间', 'datetime')"
             label="实际开始时间"
-            placeholder="'请选择实际开始时间'"
+            placeholder="请选择实际开始时间"
           />
           <van-field
             is-link
@@ -55,7 +55,7 @@
             :value="billInfo.tripoffendtime"
             @click="selectDate(billInfo.tripoffendtime,'tripoffendtime','请选择实际结束时间','datetime')"
             label="实际结束时间"
-            placeholder="'请选择实际结束时间"
+            placeholder="请选择实际结束时间"
           />
 
           <!--销差理由-->
@@ -130,7 +130,7 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       // 有销差单Pk直接查销差单
       if (this.$route.query.pk_h) {
         this.queryBillInfo(this.$route.query.pk_h)

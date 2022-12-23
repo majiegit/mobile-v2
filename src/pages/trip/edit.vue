@@ -112,7 +112,7 @@
     watch: {
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       // 判断是修改还是新增
       this.queryTripType()
       setTimeout(() => {

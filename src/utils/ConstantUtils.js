@@ -40,7 +40,22 @@ export const BillTypeList = [
     billtypename: '销差单',
     billtype: '6QXC',
   },
-
+  {
+    billtypename: '补签卡',
+    billtype: '6QBK',
+  },
+  {
+    billtypename: '转正单',
+    billtype: '6111',
+  },
+  {
+    billtypename: '调配单',
+    billtype: '6113',
+  },
+  {
+    billtypename: '离职单',
+    billtype: '6115',
+  },
 ]
 
 // 工作任务、 审批中心、我的申请使用
@@ -75,25 +90,30 @@ export const BillTypeMap = {
     routerDetailPath: 'tripoffDetail',  // 销差明细页路由
     routerApprovePath: 'tripoffApprove',  //销差审核页路由
   },
-  '6QLZ': {
-    billtypename: '离职单',
-    routerEditPath: 'dimissionEdit',  // 离职编辑页路由
-    routerDetailPath: 'dimissionDetail',  // 离职明细页路由
-    routerApprovePath: 'dimissionApprove',  //离职审核页路由
-  },
-  '6QQK': {
+  '6QBK': {
     billtypename: '签卡单',
     routerEditPath: 'signcardEdit',  // 签卡编辑页路由
     routerDetailPath: 'signcardDetail',  // 签卡明细页路由
     routerApprovePath: 'signcardApprove',  // 签卡审核页路由
   },
-  '6QDP': {
+  '6111': {
+    billtypename: '转正单',
+    routerEditPath: 'regEdit',  // 转正编辑页路由
+    routerDetailPath: 'regDetail',  // 转正明细页路由
+    routerApprovePath: 'regApprove',  // 转正审核页路由
+  },
+  '6113': {
     billtypename: '调配单',
     routerEditPath: 'transEdit',  // 调配编辑页路由
     routerDetailPath: 'transDetail',  // 调配明细页路由
     routerApprovePath: 'transApprove',  // 调配审核页路由
+  },
+  '6115': {
+    billtypename: '离职单',
+    routerEditPath: 'dimissionEdit',  // 离职编辑页路由
+    routerDetailPath: 'dimissionDetail',  // 离职明细页路由
+    routerApprovePath: 'dimissionApprove',  //离职审核页路由
   }
-
 }
 
 export const BillTypeCode = {
@@ -117,17 +137,21 @@ export const BillTypeCode = {
     billtypecode: '6QXC',  // 单据编码
     billtypename: '销差单'
   },
-  dimission: {
-    billtypecode: '6QLZ',  // 单据编码
-    billtypename: '离职单'
-  },
   signcard: {
     billtypecode: '6QQK',  // 单据编码
     billtypename: '签卡单'
   },
+  reg: {
+    billtypecode: '6111',  // 单据编码
+    billtypename: '转正'
+  },
   trans: {
-    billtypecode: '6QDP',  // 单据编码
+    billtypecode: '6113',  // 单据编码
     billtypename: '调配'
+  },
+  dimission: {
+    billtypecode: '6115',  // 单据编码
+    billtypename: '离职单'
   }
 }
 
@@ -198,5 +222,40 @@ export const TripOffReasonList = [
   {
     text: '未出差',
     value: '1'
+  }
+]
+
+// 员工信息审核状态
+export const PsnInfoApproveStatus = {
+  '0': '未审核',
+  '1': '审核通过',
+  '2': '审核不通过',
+}
+
+export const PsnInfoApproveList = [
+  {
+    text: '待审核',
+    value: 0
+  },
+  {
+    text: '已结束',
+    value: 1
+  }
+]
+
+// 调配方式
+
+export const StapplyModeList = [
+  {
+    text: '组织内调配',
+    value: 1
+  },
+  {
+    text: '调出',
+    value: 2
+  },
+  {
+    text: '调入',
+    value: 3
   }
 ]

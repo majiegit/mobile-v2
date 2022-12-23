@@ -17,19 +17,11 @@
             is-link
             required
             readonly
-            v-model="regData.transtypename"
-            @click="queryRegTransType(regData.transtypeid, 'transtypeid')"
-            label="流程类型"
-            placeholder="请选择流程类型"
+            v-model="regData.overdate"
+            @click="selectDate(regData.overdate, 'overdate','试用结束日期')"
+            label="试用结束日期"
+            placeholder="请选择试用结束日期"
             :rules="baseInfoRule"
-          />
-          <van-field
-            is-link
-            required
-            readonly
-            v-model="regData.user_name"
-            label="转正人"
-            placeholder="请选择转正人"
           />
           <van-field
             is-link
@@ -45,10 +37,10 @@
             is-link
             required
             readonly
-            v-model="regData.overdate"
-            @click="selectDate(regData.overdate, 'overdate','试用结束日期')"
-            label="试用结束日期"
-            placeholder="请选择试用结束日期"
+            v-model="regData.regulardate"
+            @click="selectDate(regData.regulardate, 'regulardate', '延期转正日期')"
+            label="延期转正日期"
+            placeholder="请选择延期转正日期"
             :rules="baseInfoRule"
           />
           <van-field
@@ -63,11 +55,12 @@
           />
           <van-field
             v-model="regData.memo"
-            re
             rows="2"
             autosize
             label="说明"
             type="textarea"
+            maxlength="50"
+            show-word-limit
             placeholder="请填写说明"
           />
 
@@ -120,13 +113,12 @@
         regResultList, // 试用结果数据
         baseInfoRule, // 基本信息字段rules
         regData: {
-          user_name: getStorage('userName'),
-          regTypeValue: ''
+          user_name: '',
+          regTypeValue: '1'
         }, // 转正基本信息数据
         newData: [],    // 转正前数据
         oldData: [],   // 转正后数据
         pk_h: '',     // 转正单PK
-        regTypeValue: '',  // 转正类型值
         regTypeList
       }
     },

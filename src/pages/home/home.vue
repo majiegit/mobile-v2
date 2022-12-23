@@ -46,12 +46,12 @@
     <!--菜单区域-->
     <div>
       <van-row type="flex" v-for="(menu, index1) in menuData" :key="index1" class="menuDiv">
-        <van-col :span="24" class="menuRole">{{ menu.role.staffRoleName }}</van-col>
+        <van-col :span="24" class="menuRole">{{ menu.role.staff_role_name }}</van-col>
         <van-col :span="6" v-for="(item, index) in menu.menuList" :key="index" class="menuList">
           <div class="menuListItemDiv">
             <div
               class="menuListItem"
-              @click='routerpush(item.mobilePath)' v-bind:style="{ background: item.iconColor }">
+              @click='routerpush(item.mobile_path)' v-bind:style="{ background: item.icon_color }">
               <div v-html="item.icon" class="menuIcon"></div>
             </div>
           </div>
@@ -91,7 +91,7 @@
       getMenus() {
         let params = {
           status: 1,
-          menuType: 1
+          menu_type: 1
         }
         queryUserRoleMenu(params).then(res => {
           this.menuData = res.data

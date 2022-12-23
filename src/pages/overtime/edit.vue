@@ -74,7 +74,7 @@
     },
     components: {Header, Select, SelectDate, SaveButton},
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       // 判断是修改还是新增
       if (this.$route.query.pk_h) {
         this.queryBillInfo(this.$route.query.pk_h)

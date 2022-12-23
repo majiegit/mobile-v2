@@ -2,7 +2,8 @@
   <div>
     <van-popup v-model="show" position="left" :style="{ width: '90%', height: '100%' }" closeable>
       <div style="width: 100%; height: 30px; position: relative; top: 50px;"></div>
-      <div style="width: 100%; height: 30px; position: relative; top: 50px;"></div>
+      <div style="width: 100%; height: 30px; position: relative; top: 50px;">
+      </div>
       <div style="width: 100%; height: 30px; position: relative; top: 50px;"></div>
       <div style="width: 100%; height: 30px; position: relative; top: 50px;"></div>
       <div style="width: 100%; height: 30px; position: relative; top: 50px;"></div>

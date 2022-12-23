@@ -107,7 +107,7 @@ export default {
 <style scoped>
 .button_bottom {
   width: 100%;
-  height: 50px;
+  height: 44px;
   padding: 5px 0px;
 }
 </style>

@@ -19,7 +19,7 @@ const router = new Router({
   base: './'
 })
 
-const allowList = ['login']  // no redirect allowList
+const allowList = ['login', 'inductionInfo','qrCode']  // no redirect allowList
 const loginRoutePath = '/login'
 const defaultRoutePath = '/application'
 
@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
           storage.set(USERINFO, res.data)
           let params = {
             status: 1,
-            menuType: 1
+            menu_type: 1
           }
             // 请求带有 redirect 重定向时，登录自动重定向到该地址
             const redirect = decodeURIComponent(from.query.redirect || to.path)

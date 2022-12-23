@@ -19,7 +19,7 @@
         </div>
       </van-col>
     </van-row>
-    <div class="salary_cont" v-if="salaryData.length != 0">
+    <div class="salary_cont" v-if="salaryData.salaryList.length != 0">
       <!--薪资合计-->
       <SalaryContent :salaryData="salaryData" :summarizing="summarizing"></SalaryContent>
       <!--薪资数据 标题-->
@@ -62,8 +62,8 @@
     <van-popup v-model="enableSalaryPwd"
                :close-on-click-overlay="false"
                round
-               style="width: 80%;height: 30%">
-      <CheckPwd :checkPwdShow="checkPwdShow" @closePwd="closePwd"></CheckPwd>
+               style="width: 80%;height: 35%">
+      <CheckPwd @closePwd="closePwd"></CheckPwd>
     </van-popup>
     <!--日期选择框-->
     <van-popup v-model="datePickShow" position="bottom">
@@ -98,13 +98,12 @@ export default {
   data() {
     return {
       userInfo,
-      checkPwdShow: true, // 验证密码
-      enableSalaryPwd: true,  // 是否需要薪资密码验证
+      enableSalaryPwd: false,  // 是否需要薪资密码验证
       salaryDetailShow: false, // 薪资明细
       salaryDetail: {},
-      // username: getStorage("userinfo").name,
-      // orgname: getStorage("userinfo").orgname ,
-      salaryData: [],
+      salaryData: {
+        salaryList: []
+      },
       summarizing: [
         {
           title: '应发汇总',

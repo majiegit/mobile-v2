@@ -59,3 +59,28 @@ export function enablePwd(data) {
     data: data
   })
 }
+
+/**
+ * 薪资确认
+ * @param parameter
+ */
+export function salaryConfirmSave(data) {
+  return request({
+    url: "/admin/salaryConfirm/save",
+    method: 'post',
+    data: data
+  })
+}
+
+/**
+ * 薪资确认
+ * @param parameter
+ */
+export function salaryConfirmList(data) {
+  return request({
+    url: "/admin/salaryConfirm/list",
+    method: 'post',
+    data: data
+  })
+}
+
