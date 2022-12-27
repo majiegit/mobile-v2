@@ -31,7 +31,7 @@
       <van-tab title="工作任务" name="approve">
         <van-cell-group>
           <van-cell v-for="(approve,index) in approveMessageList" :key="index"
-                    :to="{ name: BillTypeMap[approve.billtype].routerApprovePath, query: { pk_h: approve.billid, billtype: approve.billtype}}"
+                    :to="{ name: BillTypeMap[approve.billtype.substring(0,4)].routerApprovePath, query: { pk_h: approve.billid, billtype: approve.billtype}}"
                     is-link>
             <template #title>
               <van-icon name="records"/>
@@ -54,21 +54,24 @@
 
     <!--操作区域-->
     <van-popup v-model="show" position="top">
-      <van-field label="处理状态：">
-        <template #input>
+      <van-row type="flex" justify="center" style="padding: 5px; ">
+        <van-col :span="6" style="font-size: 15px; line-height: 25px;">消息状态：</van-col>
+        <van-col :span="17">
           <van-button size="mini" :type="item.isread === isread ? 'info' : 'default'"
                       v-for="(item,index) in (messageType === 'notice' ? noticeIsreadList : approveIsreadList)"
                       :key="index" @click="isreadClick(item)">{{item.name}}
           </van-button>
-        </template>
-      </van-field>
-      <van-field label="单据类型：" v-if="messageType === 'approve'">
-        <template #input>
+        </van-col>
+      </van-row>
+      <van-row type="flex" justify="center" style="padding: 5px; " v-if="messageType == 'approve'">
+        <van-col :span="6" style="font-size: 15px;  line-height: 25px;">单据类型：</van-col>
+        <van-col :span="17">
           <van-button size="mini" :type="item.type === billtype ? 'info' : 'default'"
                       v-for="(item,index) in approveTypeList"
-                      :key="index" @click="billtypeClick(item)" >{{item.name}}</van-button>
-        </template>
-      </van-field>
+                      :key="index" @click="billtypeClick(item)">{{item.name}}
+          </van-button>
+        </van-col>
+      </van-row>
       <van-row type="flex" justify="center">
         <van-col span="22" style="padding: 5px 0px;">
           <van-button type="info" block round @click="okButton">确定</van-button>
@@ -222,7 +225,7 @@
       clickRight() {
         this.show = true
       },
-      billtypeClick(item){
+      billtypeClick(item) {
         this.billtype = item.type
       },
       isreadClick(item) {
@@ -230,15 +233,21 @@
       },
       okButton() {
         if (this.messageType === 'notice') {
-          this.noticeMessageList = this.noticeMessageListBak.filter(item => item.isread === this.isread)
-        } else {
-          if(this.isread && this.billtype){
-            this.approveMessageList = this.approveMessageListBak.filter(item => (item.isread === this.isread && item.billtype === this.billtype))
+          if(this.isread){
+            this.noticeMessageList = this.noticeMessageListBak.filter(item => item.isread === this.isread)
           }else {
-            if(this.isread){
+            this.noticeMessageList = this.noticeMessageListBak
+
+          }
+        } else {
+          if (this.isread && this.billtype) {
+            this.approveMessageList = this.approveMessageListBak.filter(item => (item.isread === this.isread && item.billtype === this.billtype))
+          } else {
+            this.approveMessageList = this.approveMessageListBak
+            if (this.isread) {
               this.approveMessageList = this.approveMessageListBak.filter(item => item.isread === this.isread)
             }
-            if(this.billtype){
+            if (this.billtype) {
               this.approveMessageList = this.approveMessageListBak.filter(item => item.billtype === this.billtype)
             }
           }

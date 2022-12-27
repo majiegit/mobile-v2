@@ -10,7 +10,7 @@
           required
           name="pk_trnstype"
           :rules="formRules.pk_trnstype"
-          :value="billInfo.pk_trnstype.text"
+          :value="billInfo.pk_trnstype.display"
           @click="selectData(dimissionTypeList,'请选择离职业务类型','pk_trnstype', 'trnstypename', 'pk_trnstype', billInfo.pk_trnstype.value)"
           label="离职业务类型"
           placeholder="请选择离职业务类型"
@@ -23,7 +23,7 @@
             required
             name="sreason"
             :rules="formRules.sreason"
-            :value="billInfo.sreason.text"
+            :value="billInfo.sreason.display"
             @click="selectData(dimissionSreasonList,'请选择离职原因','sreason', 'name', 'pk_defdoc', billInfo.sreason.value)"
             label="离职原因"
             placeholder="请选择离职原因"
@@ -35,14 +35,14 @@
             required
             :rules="formRules.effectdate"
             name="effectdate"
-            v-model="billInfo.effectdate"
+            v-model="billInfo.effectdate.value"
             @click="selectDate(billInfo.effectdate,'effectdate','生效日期', 'date')"
             label="生效日期"
             placeholder="请选择生效日期"
           />
           <!--离职说明-->
           <van-field
-            v-model="billInfo.memo"
+            v-model="billInfo.memo.value"
             rows="2"
             autosize
             label="离职说明"
@@ -53,7 +53,7 @@
           />
 
           <p class="item_body_title" v-if="oldItem.length != 0">离职前信息</p>
-          <van-field :label="item.itemname" :value="billInfo[item.itemkey].text" disabled v-for="item in oldItem"
+          <van-field :label="item.itemname" :value="billInfo[item.itemkey].display" disabled v-for="item in oldItem"
                      :key="item.pk_stbill_itemset"/>
 
           <p class="item_body_title" v-if="newItem.length != 0">离职后信息</p>
@@ -63,26 +63,26 @@
           <van-field
             label="原人员信息组织"
             placeholder="请选择原人员信息组织"
-            :value="billInfo.pk_old_hi_org.text"
+            :value="billInfo.pk_old_hi_org.display"
             is-link
             readonly/>
           <van-field
             label="新人员信息组织"
             placeholder="请选择新人员信息组织"
-            :value="billInfo.pk_hi_org.text"
+            :value="billInfo.pk_hi_org.display"
             is-link
             readonly/>
           <p class="item_body_title">合同管理组织</p>
           <van-field
             label="原合同管理组织"
             placeholder="请选择原合同管理组织"
-            :value="billInfo.pk_old_hrcm_org.text"
+            :value="billInfo.pk_old_hrcm_org.display"
             is-link
             readonly/>
           <van-field
             label="新合同管理组织"
             placeholder="请选择新合同管理组织"
-            :value="billInfo.pk_hrcm_org.text"
+            :value="billInfo.pk_hrcm_org.display"
             is-link
             readonly/>
           <van-field label="解除" readonly>
@@ -114,7 +114,7 @@
           <van-field
             v-if="billInfo.ifaddblack.value == 'Y'"
             required
-            v-model="billInfo.addreason"
+            v-model="billInfo.addreason.value"
             rows="2"
             autosize
             label="加入理由"
@@ -158,7 +158,7 @@
         billInfo: {
           pk_trnstype: {
             value: '',
-            text: ''
+            display: ''
           }
         },
         newItem: [],
@@ -181,9 +181,9 @@
     methods: {
       changeSwitch(field) {
         if (field.value === 'Y') {
-          field.text = '是'
+          field.display = '是'
         } else {
-          field.text = '否'
+          field.display = '否'
         }
         console.log(field)
       },
@@ -245,7 +245,7 @@
       selectOk(selector, item) {
         console.log(selector, item)
         this.$set(this.billInfo[selector.field], 'value', item[selector.key])
-        this.$set(this.billInfo[selector.field], 'text', item[selector.text])
+        this.$set(this.billInfo[selector.field], 'display', item[selector.text])
         console.log(this.billInfo)
         // 离职类型
         if (selector.field == 'pk_trnstype') {
@@ -258,7 +258,7 @@
        * @param item
        */
       dateOk(selector) {
-        this.$set(this.billInfo, selector.field, selector.value)
+        this.$set(this.billInfo[selector.field],'value', selector.value)
         console.log(this.billInfo)
       },
       /**
@@ -280,6 +280,7 @@
        * 保存单据
        */
       saveBillInfo() {
+        console.log(this.billInfo)
         this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
           Toast.loading({
             message: '保存中...',

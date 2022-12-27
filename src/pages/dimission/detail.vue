@@ -4,58 +4,58 @@
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo">
         <van-cell-group>
-          <van-cell title="申请单编号" :value="billInfo.bill_code"/>
-          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus]"/>
-          <van-cell title="申请人：" :value="billInfo.billmaker.text"/>
-          <van-cell title="申请日期：" :value="billInfo.apply_date"/>
+          <van-cell title="申请单编号" :value="billInfo.bill_code.value"/>
+          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus.value]"/>
+          <van-cell title="申请人：" :value="billInfo.billmaker.display"/>
+          <van-cell title="申请日期：" :value="billInfo.apply_date.value"/>
         </van-cell-group>
 
         <p class="item_body_title">人员信息</p>
         <van-cell-group>
-          <van-cell title="离职人员：" :value="billInfo.pk_psndoc.text"/>
-          <van-cell title="离职业务类型：" :value="billInfo.pk_trnstype.text"/>
-          <van-cell title="离职原因：" :value="billInfo.sreason.text"/>
-          <van-cell title="生效日期：" :value="billInfo.effectdate"/>
-          <van-cell title="离职说明：" :value="billInfo.memo"/>
+          <van-cell title="离职人员：" :value="billInfo.pk_psndoc.display"/>
+          <van-cell title="离职业务类型：" :value="billInfo.pk_trnstype.display"/>
+          <van-cell title="离职原因：" :value="billInfo.sreason.display"/>
+          <van-cell title="生效日期：" :value="billInfo.effectdate.value"/>
+          <van-cell title="离职说明：" :value="billInfo.memo.value"/>
         </van-cell-group>
 
         <p class="item_body_title">离职前信息</p>
         <van-cell-group>
-          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].text" v-for="item in oldItem" :key="item.pk_stbill_itemset"/>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in oldItem" :key="item.pk_stbill_itemset"/>
         </van-cell-group>
 
         <p class="item_body_title">离职后信息</p>
         <van-cell-group>
-          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].text" v-for="item in newItem" :key="item.pk_stbill_itemset"/>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in newItem" :key="item.pk_stbill_itemset"/>
         </van-cell-group>
 
         <p class="item_body_title">离职后管理组织</p>
         <van-cell-group>
-          <van-cell title="原人员信息组织" :value="billInfo.pk_old_hi_org.text"/>
-          <van-cell title="新人员信息组织" :value="billInfo.pk_hi_org.text"/>
+          <van-cell title="原人员信息组织" :value="billInfo.pk_old_hi_org.display"/>
+          <van-cell title="新人员信息组织" :value="billInfo.pk_hi_org.display"/>
         </van-cell-group>
 
         <p class="item_body_title">合同管理组织</p>
         <van-cell-group>
-          <van-cell title="原合同管理组织" :value="billInfo.pk_old_hrcm_org.text"/>
-          <van-cell title="新合同管理组织" :value="billInfo.pk_hrcm_org.text"/>
-          <van-cell title="解除" :value="billInfo.isrelease.text"/>
-          <van-cell title="终止" :value="billInfo.isend.text"/>
+          <van-cell title="原合同管理组织" :value="billInfo.pk_old_hrcm_org.display"/>
+          <van-cell title="新合同管理组织" :value="billInfo.pk_hrcm_org.display"/>
+          <van-cell title="解除" :value="billInfo.isrelease.display"/>
+          <van-cell title="终止" :value="billInfo.isend.display"/>
         </van-cell-group>
 
         <p class="item_body_title">执行信息</p>
         <van-cell-group>
-          <van-cell title="停用离职人员" :value="billInfo.isdisablepsn.text"/>
-          <van-cell title="加入黑名单" :value="billInfo.ifaddblack.text"/>
-          <van-cell title="加入理由" :value="billInfo.addreason"/>
+          <van-cell title="停用离职人员" :value="billInfo.isdisablepsn.display"/>
+          <van-cell title="加入黑名单" :value="billInfo.ifaddblack.display"/>
+          <van-cell title="加入理由" :value="billInfo.addreason.value"/>
         </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
-        <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
+        <ApproveProcess :workflownote="workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
       </div>
-      <!--<div v-else>-->
-        <!--<van-empty description="暂无数据"/>-->
-      <!--</div>-->
+      <div v-else>
+        <van-empty description="暂无数据"/>
+      </div>
     </div>
     <!--单据操作按钮-->
     <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate"
@@ -85,6 +85,7 @@
         billInfo: null,
         oldItem: [],
         newItem: [],
+        workflownote: [],
         approvestate: '',
         pk_h: '',
         billtype: BillTypeCode.dimission.billtypecode
@@ -225,7 +226,8 @@
           this.oldItem = res.data.oldItem
           this.newItem = res.data.newItem
           this.billInfo = res.data.billInfo
-          this.approvestate = res.data.billInfo.approvestatus
+          this.workflownote = res.data.workflownote
+          this.approvestate = res.data.billInfo.approvestatus.value
           Toast.clear()
         })
       }

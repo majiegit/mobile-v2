@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--导航栏区域-->
-    <Header :title="tempData.name" leftText="返回" @clickLeft="clickLeft"  :rightText="right_text" @clickRight="clickRight"/>
+    <Header :title="tempData.name" @clickLeft="clickLeft"  :rightText="right_text" @clickRight="clickRight"/>
     <!--主内容区域-->
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto; padding: 0px 10px;">
       <div class="info_class"

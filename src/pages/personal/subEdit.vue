@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--导航栏区域-->
-    <Header :title="tempData.name" leftText="返回" @clickLeft="clickLeft"/>
+    <Header :title="tempData.name" @clickLeft="clickLeft"/>
     <!--主内容区域-->
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">
       <van-form colon label-width="100" input-align="right" ref="formData">

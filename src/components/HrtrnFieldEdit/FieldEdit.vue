@@ -2,7 +2,7 @@
   <div>
     <div v-for="(field,fieldIndex) in fieldData" :key="fieldIndex">
       <!-- 文本类型   0-->
-      <van-field v-model="billInfo[field.itemkey].text" v-if="[0,100].includes(field.data_type)"
+      <van-field v-model="billInfo[field.itemkey].value" v-if="[0,100].includes(field.data_type)"
                  class="van_field_class"
                  :name="field.itemname"
                  :required="getFieldRequired(field)"
@@ -12,14 +12,14 @@
                  :placeholder="getFieldPlaceholder(field)"
                  :rules="getFieldRules(field)"/>
       <!-- 整数类型   1 and  数量类型 2-->
-      <van-field v-model="billInfo[field.itemkey].text" type="number" v-if="[1,2].includes(field.data_type)"
+      <van-field v-model="billInfo[field.itemkey].value" type="number" v-if="[1,2].includes(field.data_type)"
                  class="van_field_class" :maxlength="field.max_length"
                  :disabled="getFieldDisabled(field)"
                  :required="getFieldRequired(field)" :label="field.itemname" :placeholder="getFieldPlaceholder(field)"
                  :name="field.itemname"
                  :rules="getFieldRules(field)"/>
       <!--日期类型  3 || 20-->
-      <van-field v-model="billInfo[field.itemkey].text" readonly v-if="[20,3,8].includes(field.data_type)"
+      <van-field v-model="billInfo[field.itemkey].value" readonly v-if="[20,3,8].includes(field.data_type)"
                  :name="field.itemname"
                  is-link
                  class="van_field_class" right-icon="arrow" :maxlength="field.max_length"
@@ -28,7 +28,7 @@
                  @click="getDate(field)"
                  :rules="getFieldRules(field)"/>
       <!--下拉类型  6 -->
-      <van-field v-model="billInfo[field.itemkey].text" readonly v-if="[6].includes(field.data_type)"
+      <van-field v-model="billInfo[field.itemkey].display" readonly v-if="[6].includes(field.data_type)"
                  :name="field.itemname"
                  class="van_field_class" right-icon="arrow" :maxlength="field.max_length"
                  :disabled="getFieldDisabled(field)"
@@ -36,7 +36,7 @@
                  @click="getSelectDate(field)"
                  :rules="getFieldRules(field)"/>
       <!-- 参数类型  5-->
-      <van-field v-model="billInfo[field.itemkey].text" readonly v-if="field.data_type == 5"
+      <van-field v-model="billInfo[field.itemkey].display" readonly v-if="field.data_type == 5"
                  :name="field.itemname"
                  class="van_field_class" right-icon="arrow" :maxlength="field.max_length"
                  :disabled="getFieldDisabled(field)"
@@ -44,7 +44,7 @@
                  @click="getReference(field)"
                  :rules="getFieldRules(field)"/>
       <!--大文本类型 9-->
-      <van-field v-model="billInfo[field.itemkey].text" type="textarea" v-if="field.data_type == 9" autosize
+      <van-field v-model="billInfo[field.itemkey].value" type="textarea" v-if="field.data_type == 9" autosize
                  :name="field.itemname"
                  class="van_field_class" :maxlength="field.max_length"
                  :disabled="getFieldDisabled(field)"
@@ -59,7 +59,7 @@
                  :placeholder="getFieldPlaceholder(field)"
                  :rules="getFieldRules(field)">
         <template #input>
-          <van-switch v-model="billInfo[field.itemkey].text" size="20" active-value="Y" inactive-value="N"
+          <van-switch v-model="billInfo[field.itemkey].value" size="20" active-value="Y" inactive-value="N"
                       :disabled="getFieldDisabled(field)"/>
         </template>
       </van-field>
@@ -98,7 +98,7 @@
     methods: {
       // 下拉类型确认
       selectDataOk(param, val) {
-        console.log(param)
+        console.log(param,'param')
         console.log(val)
         this.$set(this.billInfo, param.field.code, val[param.key])
         this.$set(this.billInfo, param.field.code + '_name', val[param.text])
@@ -107,7 +107,7 @@
       getSelectDate(field) {
         let selectorParam = {
           field: field,
-          value: this.billInfo[field.itemkey].text,
+          value: this.billInfo[field.itemkey].display,
           text: 'title',
           key: 'value'
         }
@@ -138,7 +138,7 @@
         let selectorParam = {
           field: field,
           type: field.data_type == 8 ? 'datetime' : 'date',
-          value: this.billInfo[field.itemkey].text
+          value: this.billInfo[field.itemkey].display
         }
         this.$refs.selector.openComponent(selectorParam)
       },
@@ -146,7 +146,7 @@
       selectOk(param) {
         console.log(param)
         this.$set(this.billInfo[param.field.itemkey], 'value', param.selectData.value)
-        this.$set(this.billInfo[param.field.itemkey], 'text', param.selectData.title)
+        this.$set(this.billInfo[param.field.itemkey], 'display', param.selectData.title)
       },
       // 参照类型处理
       getReference(field) {

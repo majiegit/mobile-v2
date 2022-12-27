@@ -18,7 +18,7 @@
     <van-popup v-model="cascade.show" position="top" :close-on-click-overlay="close_on_click_overlay">
       <!--导航栏区域-->
       <div ref="header">
-        <Header :title="cascade.title" leftText="返回"  rightText="确定" @clickRight="clickRight" @clickLeft="clickLeft"/>
+        <Header :title="cascade.title"  rightText="确定" @clickRight="clickRight" @clickLeft="clickLeft"/>
       </div>
       <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">
         <!-- 已选择数据区域-->
