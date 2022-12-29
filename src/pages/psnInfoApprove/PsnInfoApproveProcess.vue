@@ -7,7 +7,7 @@
           <van-step>
             <!--提交人-->
             <div>
-              <p>
+              <p style="margin: 0px">
                 <span>{{detail.psndocname}}</span>
                 <span>提交</span>
               </p>
@@ -17,7 +17,7 @@
           <van-step>
             <!--审批人-->
             <div>
-              <p>
+              <p style="margin: 0px">
                 <span>{{detail.checkusername}}</span>
                 <span>{{PsnInfoApproveStatus[detail.checkstatus]}}</span>
               </p>

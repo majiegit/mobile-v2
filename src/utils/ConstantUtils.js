@@ -14,7 +14,7 @@ export const approveStateColorList = {
   '-1': '#2479ED'
 }
 
-// 我的申请 审批中心使用
+// 我的申请使用
 export const BillTypeList = [
   {
     billtypename: '全部',

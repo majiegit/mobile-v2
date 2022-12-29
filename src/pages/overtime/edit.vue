@@ -56,7 +56,6 @@
   import {Toast} from 'vant';
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store';
-  import {BillTypeList} from '@/utils/ConstantUtils'
   import {beginGtEndTime, beginEndSameDay} from '@/utils/DateTimeUtils'
 
   export default {

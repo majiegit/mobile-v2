@@ -83,7 +83,7 @@
 <script>
   import Header from '@/components/Header/Index'
   import {queryNoticeMessageList, queryApproveMessageList, updateNoticeMessageIsRead} from '@/api/message'
-  import {approveStateName, approveStateColorList, BillTypeList, BillTypeMap} from '@/utils/ConstantUtils'
+  import {approveStateName, approveStateColorList, BillTypeMap} from '@/utils/ConstantUtils'
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store'
   import {Toast} from 'vant';

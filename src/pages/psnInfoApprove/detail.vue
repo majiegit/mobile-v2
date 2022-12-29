@@ -37,13 +37,13 @@
     <!-- 按钮区域-->
     <van-row type="flex" justify="space-around" class="button_bottom">
       <van-col :span="11">
-        <van-button round block type="info" @click="check(1)"
-                    :disabled="approveDetail.checkstatus == 0 ? false: true">审核通过
+        <van-button round block type="danger" @click="check(2)"
+                    :disabled="approveDetail.checkstatus == 0 ? false: true">审核不通过
         </van-button>
       </van-col>
       <van-col :span="11">
-        <van-button round block type="danger" @click="check(2)"
-                    :disabled="approveDetail.checkstatus == 0 ? false: true">审核不通过
+        <van-button round block type="info" @click="check(1)"
+                    :disabled="approveDetail.checkstatus == 0 ? false: true">审核通过
         </van-button>
       </van-col>
     </van-row>

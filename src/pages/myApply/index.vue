@@ -119,13 +119,19 @@
           message: '加载中...',
           duration: 0
         })
+        let billtypes = []
+        for (let i = 0; i < this.billTypeList.length; i++) {
+          billtypes.push(this.billTypeList[i].billtype)
+        }
         // 查询我的申请数据
         let params = {
-          pk_psndoc: this.pk_psndoc
+          pk_psndoc: this.pk_psndoc,
+          billtypes: billtypes
         }
         getMyApplication(params).then(res => {
           this.ApplyList = res.data
           this.ApplyListAll = res.data
+
           Toast.clear()
         })
       },

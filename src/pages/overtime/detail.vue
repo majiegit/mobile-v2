@@ -24,7 +24,7 @@
     </div>
 
     <!--单据操作按钮-->
-    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate" @submit="submitBill" @rollback="rollbackBill"/>
+    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate"  @submit="submitBill" @rollback="rollbackBill" ref="applyButton"/>
   </div>
 </template>
 
@@ -65,7 +65,8 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
+      console.log(this.$refs.applyButton.clientHeight)
+      this.currentHeight = (document.documentElement.clientHeight - 46 - this.$refs.applyButton.clientHeight) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }

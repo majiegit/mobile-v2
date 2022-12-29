@@ -8,9 +8,9 @@
       </van-tabs>
     </div>
     <div class="applyListClass">
-      <div class="applyListClass_item" v-for="(tab,index) in billTypeList" :key="index" @click="clickApply(tab,index)"
+      <div class="applyListClass_item" v-for="(billtype,index) in approveTypeList" :key="index" @click="clickApply(billtype,index)"
            :style="{'color': index == billTypeModel ? '#2479ED': ''}">
-        {{tab.billtypename}}
+        {{billtype.name}}
       </div>
     </div>
     <div style="width: 96%; padding: 2%;">
@@ -51,18 +51,9 @@
   import {getMyApplication} from '@/api/my-apply'
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store'
-  import {approveStateName, approveStateColorList,BillTypeList,BillTypeMap} from '@/utils/ConstantUtils'
+  import {approveStateName, approveStateColorList,BillTypeMap} from '@/utils/ConstantUtils'
   export default {
     watch: {
-      billTypeModel(val) {
-        console.log(val)
-        let billType = this.billTypeList[val]
-        if (val === 0) {
-          this.ApplyList = this.ApplyListAll
-        } else {
-          this.ApplyList = this.ApplyListAll.filter(apply => billType.billtype === apply.billtype)
-        }
-      },
       approveStatus(val) {
         this.queryMyApprove()
       }
@@ -71,7 +62,7 @@
       return {
         approveStatus: 'N',
         billTypeModel: 0,
-        billTypeList: BillTypeList,
+        approveTypeList: [],
         ApplyList: [],
         ApplyListAll: [],
         approveStateName: approveStateName,
@@ -87,13 +78,18 @@
 
     methods: {
       // 点击单据
-      clickApply(tab, index) {
+      clickApply(billtype, index) {
         this.billTypeModel = index
+        if (this.billTypeModel === 0) {
+          this.ApplyList = this.ApplyListAll
+        } else {
+          this.ApplyList = this.ApplyListAll.filter(apply => billtype.type === apply.billtype)
+        }
       },
       // 跳转单据
       toApply(item) {
         this.$router.push({
-          name: BillTypeMap[item.billtype].routerApprovePath,
+          name: BillTypeMap[item.billtype.substring(0,4)].routerApprovePath,
           query: {
             pk_h: item.billid,
             billtype: item.billtype
@@ -112,12 +108,36 @@
         getMyApprove(params).then(res => {
           this.ApplyListAll = res.data
           this.ApplyList = res.data
+          this.getApproveBillType(this.ApplyListAll)
           Toast.clear()
         })
+      },
+      /**
+       * 获取审批通知消息单据类型
+       */
+      getApproveBillType(messageList) {
+        let arr = []
+        let item = {
+          name: '全部',
+          type: '',
+        }
+        arr.push(item)
+
+        for (let i = 0; i < messageList.length; i++) {
+          let filter = arr.filter(item => item.type === messageList[i].billtype)
+          if (filter.length === 0) {
+            arr.push({
+              name: messageList[i].billtypename,
+              type: messageList[i].billtype
+            })
+          }
+        }
+        this.approveTypeList = arr
       },
       clickLeft() {
         this.$router.push({name: 'application'})
       }
+
     }
   }
 </script>
