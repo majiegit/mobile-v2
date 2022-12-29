@@ -21,12 +21,14 @@
 
         <p class="item_body_title">离职前信息</p>
         <van-cell-group>
-          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in oldItem" :key="item.pk_stbill_itemset"/>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in oldItem"
+                    :key="item.pk_stbill_itemset"/>
         </van-cell-group>
 
         <p class="item_body_title">离职后信息</p>
         <van-cell-group>
-          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in newItem" :key="item.pk_stbill_itemset"/>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in newItem"
+                    :key="item.pk_stbill_itemset"/>
         </van-cell-group>
 
         <p class="item_body_title">离职后管理组织</p>
@@ -68,10 +70,19 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/Button/ApplyButton'
-  import {getDimissionBill, saveDimissionBill, submitDimissionBill, recoverDimissionBill, queryDimissionType, deleteDimissionBill} from '@/api/dimission'
+  import {
+    getDimissionBill,
+    saveDimissionBill,
+    submitDimissionBill,
+    recoverDimissionBill,
+    queryDimissionType,
+    deleteDimissionBill
+  } from '@/api/dimission'
   import {approveStateName} from '@/utils/ConstantUtils'
   import {BillTypeCode} from '@/utils/ConstantUtils'
-  import {userInfo} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
+
   export default {
     name: "edit",
     components: {Header, ApproveProcess, ApplyButton},
@@ -88,7 +99,8 @@
         workflownote: [],
         approvestate: '',
         pk_h: '',
-        billtype: BillTypeCode.dimission.billtypecode
+        billtype: BillTypeCode.dimission.billtypecode,
+        pk_org: storage.get(USERINFO).pk_org
       }
     },
     watch: {
@@ -96,7 +108,7 @@
         // 只有自由态可删除
         if (val == '-1') {
           this.rightIcon = 'delete-o'
-        }else {
+        } else {
           this.rightIcon = ''
         }
       }
@@ -146,7 +158,7 @@
         }).then(() => {
           let params = {
             billid: this.pk_h,
-            pk_org: userInfo.pk_org
+            pk_org: this.pk_org
           }
           Toast.loading({
             message: '提交中...',
@@ -172,7 +184,7 @@
         }).then(() => {
           let params = {
             billid: this.pk_h,
-            pk_org: userInfo.pk_org
+            pk_org: this.pk_org
           }
           Toast.loading({
             message: '收回中...',
@@ -192,7 +204,7 @@
         if (this.approvestate == '-1') {
           let params = {
             billid: this.pk_h,
-            pk_org: userInfo.pk_org
+            pk_org: this.pk_org
           }
           Dialog.confirm({
             title: '删除单据',

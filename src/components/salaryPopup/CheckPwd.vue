@@ -4,13 +4,16 @@
       <!-- 验证密码 -->
       <div v-if="checkPwdShow">
         <p style="line-height: 25px;">薪资密码验证</p>
-        <van-field style="width: 100%; margin: 10px 0%; border-radius: 10px; border: 1px solid grey;"
+        <van-field style="width: 100%; margin: 20px 0%; border-radius: 10px; border: 1px solid grey;"
                    v-model="password"
-                   type="password"
+                   :type="passwordType"
+                   left-icon="lock"
+                   right-icon="eye"
+                   @click-right-icon="handleClick"
                    placeholder="请输入薪资密码"
         />
         <van-button block type="info" round @click="checkPwdClick">验 证</van-button>
-        <van-row>
+        <van-row style="margin: 20px 0px;">
           <van-col :span="12" class="moreEvent1">
             <span>首次使用请先重置密码 </span>
           </van-col>
@@ -65,14 +68,16 @@
 <script>
 import {Dialog, Toast} from "vant";
 import {updatePwd, restPwd, checkPwd} from '@/api/salary'
-import {userInfoPkPsndoc} from "@/utils/storageUtils";
-
+import {USERINFO} from '@/utils/mutation-types'
+import storage from 'store'
 export default {
   name: "CheckPwd",
   props: {
   },
   data() {
     return {
+      pk_psndoc: storage.get(USERINFO).pk_psndoc,
+      passwordType: 'password',
       // 二次密码验证
       password: '',
       // 修改密码
@@ -86,6 +91,10 @@ export default {
   created() {
   },
   methods: {
+    // 密码眼睛
+    handleClick() {
+      this.passwordType === 'text' ? this.passwordType = 'password' : this.passwordType = 'text'
+    },
     // 验证密码
     checkPwdClick() {
       if (this.password === '') {
@@ -105,7 +114,7 @@ export default {
     // 重置密码
     resetPwd() {
       let params = {
-        pk_psndoc: userInfoPkPsndoc
+        pk_psndoc: this.pk_psndoc
       }
       Dialog.confirm({
         title: '重置密码',
@@ -146,7 +155,7 @@ export default {
     updatePwd() {
       if (this.checkTwoPwd()) {
         let params = {
-          pk_psndoc: userInfoPkPsndoc,
+          pk_psndoc: this.pk_psndoc,
           oldPassword: this.oldPassword,
           newPassword: this.newPassword
         }

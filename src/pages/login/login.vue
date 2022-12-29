@@ -1,5 +1,5 @@
 <template>
-  <div class="body" style="background-image:url(./static/img/login/background.png)">
+  <div class="body" style="background-image:url(./static/img/login/background.png)" :style="{ 'height': currentHeight}">
     <!--logo-->
     <div class="logo">
       <img src="../../../static/img/login/logo.png" id="logo"/>
@@ -53,13 +53,14 @@
     name: 'login',
     data() {
       return {
+        currentHeight: '',
         usercode: '',
         password: '',
         passwordType: 'password'
       }
     },
     created() {
-
+      this.currentHeight = (document.documentElement.clientHeight) + 'px'
     },
     mounted() {
     },
@@ -93,12 +94,11 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     width: 100%;
-    /*height: 100%;*/
   }
 
   .logo {
     position: absolute;
-    top: 10%;
+    top: 100px;
     width: 100%;
     text-align: center;
     img {
@@ -111,7 +111,7 @@
     width: 70%;
     padding: 0px 15%;
     position: absolute;
-    top: 30%;
+    top: 250px;
   }
 
   .login_button {
@@ -124,7 +124,7 @@
 
   .threeLogin {
     position: absolute;
-    bottom: 15%;
+    top: 650px;
     width: 100%;
     text-align: center;
     font-family: Microsoft YaHei;

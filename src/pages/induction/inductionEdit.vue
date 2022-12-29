@@ -110,7 +110,8 @@
       infoDataForm: {
         type: Object,
         default: {}
-      }
+      },
+      pk_org: ''
     },
     mounted() {
 
@@ -163,7 +164,8 @@
         var param = {
           dataType: field.datatype,
           pk_refinfo: field.pk_refinfo,
-          refModel: field.refmodel
+          refModel: field.refmodel,
+          pk_org: this.pk_org
         }
         Toast.loading({
           message: '加载中...',
@@ -269,12 +271,14 @@
         if (this.isCheck) {
           return
         }
+        console.log(this.infoDataForm)
         //请求参数
         var param = {
           // refType:code
           dataType: field.datatype,
           pk_refinfo: field.pk_refinfo,
-          refModel: field.refmodel
+          refModel: field.refmodel,
+          pk_org: this.pk_org
         }
 
 

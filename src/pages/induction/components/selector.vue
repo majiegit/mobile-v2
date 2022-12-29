@@ -30,7 +30,6 @@
       <!--导航栏区域-->
       <div ref="header">
         <Header :title="cascade.title"
-                leftText="返回"
                 rightText="确定"
                 @clickRight="clickRight"
                 @clickLeft="clickLeft"

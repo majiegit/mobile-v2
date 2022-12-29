@@ -84,11 +84,13 @@
   import Select from '@/components/Selector/Select'
   import SelectDate from '@/components/Selector/SelectDate'
   import SaveButton from '@/components/Button/SaveButton'
-  import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store';
   import {beginGtEndTime} from '@/utils/DateTimeUtils'
   import {Toast} from "vant";
   import {saveTripBill, getTripBill, queryTripType, queryTripLength} from '@/api/trip'
   import {HrkqMinUnit} from '@/utils/ConstantUtils'
+
   export default {
     data() {
       return {
@@ -97,8 +99,8 @@
         tripTypeList: [],
         currentHeight: '',
         billInfo: {
-          billmaker: userInfoUserId,
-          pk_psndoc: userInfoPkPsndoc,
+          billmaker: storage.get(USERINFO).pk_psndoc,
+          pk_psndoc: storage.get(USERINFO).pk_psndoc,
           triptypeid: '',
           triptypename: '',
           minunit: '2',
@@ -109,8 +111,7 @@
     components: {Header, Select, SelectDate, SaveButton},
     created() {
     },
-    watch: {
-    },
+    watch: {},
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       // 判断是修改还是新增
@@ -169,9 +170,9 @@
         console.log(selector, item)
         this.$set(this.billInfo, selector.field, item[selector.key])
         // 出差类型
-        if(selector.field == 'triptypeid'){
-          this.$set(this.billInfo,'triptypename', item.name)
-          this.$set(this.billInfo,'minunit', item.unit)
+        if (selector.field == 'triptypeid') {
+          this.$set(this.billInfo, 'triptypename', item.name)
+          this.$set(this.billInfo, 'minunit', item.unit)
         }
       },
       /**
@@ -187,7 +188,7 @@
        * 选择时间
        */
       selectDate(value, field, title, type) {
-        if(!this.billInfo.triptypeid){
+        if (!this.billInfo.triptypeid) {
           Toast("请先选择出差类型")
           return
         }

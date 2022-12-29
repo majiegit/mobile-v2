@@ -2,7 +2,8 @@
   <div>
     <Header title="我的申请" @clickLeft="clickLeft"></Header>
     <div class="applyListClass">
-      <div class="applyListClass_item" v-for="(billtype,index) in billTypeList" :key="index" @click="clickApply(billtype,index)"
+      <div class="applyListClass_item" v-for="(billtype,index) in billTypeList" :key="index"
+           @click="clickApply(billtype,index)"
            :style="{'color': index == billTypeModel ? '#2479ED': ''}">
         {{billtype.billtypename}}
       </div>
@@ -26,7 +27,8 @@
           </van-row>
           <van-row type="flex" style="height: 30px; padding-top: 10px;">
             <van-col span="23" offset="1">
-              <span :style="{color: approveStateColorList[item.approvestatus]}">{{approveStateName[item.approvestatus]}}</span>
+              <span
+                :style="{color: approveStateColorList[item.approvestatus]}">{{approveStateName[item.approvestatus]}}</span>
             </van-col>
           </van-row>
         </div>
@@ -51,7 +53,8 @@
   import Header from '@/components/Header/Index'
   import {Toast} from 'vant';
   import {getMyApplication} from '@/api/my-apply'
-  import {userInfoPkPsndoc} from '@/utils/storageUtils'
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
   import {approveStateName, approveStateColorList, BillTypeList, BillTypeMap} from '@/utils/ConstantUtils'
 
   export default {
@@ -66,11 +69,12 @@
         }
       }
     },
-    mounted(){
+    mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 46 - 60 - 50) + 'px'
     },
     data() {
       return {
+        pk_psndoc: storage.get(USERINFO).pk_psndoc,
         currentHeight: '',
         billTypeModel: '',
         billTypeList: BillTypeList,
@@ -89,7 +93,7 @@
 
     methods: {
       // 去申请
-      toApplyEdit(){
+      toApplyEdit() {
         let billType = this.billTypeList[this.billTypeModel]
         this.$router.push({
           name: BillTypeMap[billType.billtype].routerEditPath,
@@ -117,7 +121,7 @@
         })
         // 查询我的申请数据
         let params = {
-          pk_psndoc: userInfoPkPsndoc
+          pk_psndoc: this.pk_psndoc
         }
         getMyApplication(params).then(res => {
           this.ApplyList = res.data
@@ -196,7 +200,6 @@
       text-align: center;
     }
   }
-
 
   .button_bottom {
     position: fixed;

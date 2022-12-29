@@ -100,11 +100,14 @@
       selectDataOk(param, val) {
         console.log(param,'param')
         console.log(val)
-        this.$set(this.billInfo, param.field.code, val[param.key])
-        this.$set(this.billInfo, param.field.code + '_name', val[param.text])
+        this.$set(this.billInfo[param.field.itemkey], 'value', param.selectData.value)
+        this.$set(this.billInfo[param.field.itemkey], 'display', param.selectData.title)
       },
       // 下拉类型处理
       getSelectDate(field) {
+        if(this.getFieldDisabled(field)){
+          return
+        }
         let selectorParam = {
           field: field,
           value: this.billInfo[field.itemkey].display,
@@ -135,6 +138,9 @@
       },
       // 日期类型处理
       getDate(field) {
+        if(this.getFieldDisabled(field)){
+          return
+        }
         let selectorParam = {
           field: field,
           type: field.data_type == 8 ? 'datetime' : 'date',
@@ -150,6 +156,9 @@
       },
       // 参照类型处理
       getReference(field) {
+        if(this.getFieldDisabled(field)){
+          return
+        }
         console.log(field)
         //请求参数
         var param = {

@@ -46,7 +46,7 @@
             {{selectData.name}}
           </div>
           <div
-            style="width: 80%; height: 520px; background: #fff;position: absolute; top: 22%; left: 10%; border-radius: 20px;">
+            style="width: 80%; height: 520px; background: #fff; margin-top: 10%; margin-left: 10%; border-radius: 20px;">
             <div style="width: 200px; height: 200px; text-align: center; margin: 0 auto; margin-top: 20px; padding:34px 34px 34px 34px;
             background-size: 100%;
             background-image: url('./static/img/inductionInfo/code.png')">
@@ -128,7 +128,7 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 50) + 'px'
       this.getOrgs()
     },
     methods: {
@@ -264,5 +264,6 @@
     width: 100%;
     height: 100%;
     background: #fff;
+    overflow-y: auto;
   }
 </style>

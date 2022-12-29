@@ -29,16 +29,15 @@
           <van-col :span="17">
             <p class="userInfo">
               <span v-show='userInfo.name'>
-              {{ userInfo.name }}  &nbsp;&nbsp; {{userInfo.jobname}}
+              {{ userInfo.name }}  {{userInfo.postname}}
               </span> <br/>
               <span>{{ userInfo.orgname }}</span> <br/>
               <span>{{ userInfo.deptname }}</span><br/>
-              <span>{{ userInfo.postname }}</span>
             </p>
           </van-col>
         </van-row>
         <div class="dateEntry">
-          <span> 今天是您加入的第{{ userInfo.joinsysday }}天</span>
+          <span>今天是您加入{{ userInfo.orgname}}的第{{ userInfo.joinsysday }}天</span>
         </div>
       </div>
     </div>

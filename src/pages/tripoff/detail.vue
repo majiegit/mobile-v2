@@ -42,8 +42,8 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/Button/ApplyButton'
-  import {getTripoffBill,submitTripoffBill, recoverTripoffBill,deleteTripoffBill} from '@/api/tripoff'
-  import {approveStateName, HrkqMinUnit, TripOffReason,BillTypeCode} from '@/utils/ConstantUtils'
+  import {getTripoffBill, submitTripoffBill, recoverTripoffBill, deleteTripoffBill} from '@/api/tripoff'
+  import {approveStateName, HrkqMinUnit, TripOffReason, BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",

@@ -49,7 +49,8 @@
   import {getMyApprove} from '@/api/approveCenter'
   import {Toast} from 'vant'
   import {getMyApplication} from '@/api/my-apply'
-  import {userInfoUserId} from '@/utils/storageUtils'
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
   import {approveStateName, approveStateColorList,BillTypeList,BillTypeMap} from '@/utils/ConstantUtils'
   export default {
     watch: {
@@ -105,7 +106,7 @@
           duration: 0
         })
         let params = {
-          userId: userInfoUserId,
+          userId: storage.get(USERINFO).user_id,
           isread: this.approveStatus
         }
         getMyApprove(params).then(res => {

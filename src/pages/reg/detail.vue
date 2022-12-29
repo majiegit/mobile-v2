@@ -18,19 +18,21 @@
           <van-cell title="试用结束日期" :value="billInfo.end_date.value"/>
           <van-cell title="生效日期" :value="billInfo.regulardate.value"/>
           <van-cell title="试用结果" :value="billInfo.trialresult.display"/>
-          <van-cell title="延期转正日期" :value="billInfo.trialdelaydate.value"/>
+          <van-cell title="延期转正日期" :value="billInfo.trialdelaydate.value" v-if="billInfo.trialresult.value == 2"/>
           <!--<van-cell title="督导人" :value="billInfo.effectdate.value"/>-->
           <van-cell title="转正说明" :value="billInfo.memo.value"/>
         </van-cell-group>
 
         <p class="item_body_title">转正前信息</p>
         <van-cell-group>
-          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in oldItem" :key="item.pk_stbill_itemset"/>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in oldItem"
+                    :key="item.pk_reg_itemset"/>
         </van-cell-group>
 
         <p class="item_body_title">转正后信息</p>
         <van-cell-group>
-          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in newItem" :key="item.pk_stbill_itemset"/>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in newItem"
+                    :key="item.pk_reg_itemset"/>
         </van-cell-group>
 
         <p class="item_body_title">执行信息</p>
@@ -60,7 +62,9 @@
   import {getRegBill, saveRegBill, submitRegBill, recoverRegBill, queryRegType, deleteRegBill} from '@/api/reg'
   import {approveStateName} from '@/utils/ConstantUtils'
   import {BillTypeCode} from '@/utils/ConstantUtils'
-  import {userInfo} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
+
   export default {
     name: "edit",
     components: {Header, ApproveProcess, ApplyButton},
@@ -77,7 +81,8 @@
         workflownote: [],
         approvestate: '',
         pk_h: '',
-        billtype: BillTypeCode.reg.billtypecode
+        billtype: BillTypeCode.reg.billtypecode,
+        pk_org: storage.get(USERINFO).pk_org
       }
     },
     watch: {
@@ -85,7 +90,7 @@
         // 只有自由态可删除
         if (val == '-1') {
           this.rightIcon = 'delete-o'
-        }else {
+        } else {
           this.rightIcon = ''
         }
       }
@@ -135,7 +140,7 @@
         }).then(() => {
           let params = {
             billid: this.pk_h,
-            pk_org: userInfo.pk_org
+            pk_org: this.pk_org
           }
           Toast.loading({
             message: '提交中...',
@@ -161,7 +166,7 @@
         }).then(() => {
           let params = {
             billid: this.pk_h,
-            pk_org: userInfo.pk_org
+            pk_org: this.pk_org
           }
           Toast.loading({
             message: '收回中...',
@@ -181,7 +186,7 @@
         if (this.approvestate == '-1') {
           let params = {
             billid: this.pk_h,
-            pk_org: userInfo.pk_org
+            pk_org: this.pk_org
           }
           Dialog.confirm({
             title: '删除单据',

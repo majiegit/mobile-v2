@@ -34,7 +34,7 @@
 
 
     <!--  审核按钮  -->
-    <ApproveButton :pk_h="pk_h" :approvestate="approvestate" v-if="pk_h && approvestate" />
+    <ApproveButton :pk_h="pk_h" :approvestate="approvestate" v-if="pk_h && approvestate"/>
   </div>
 </template>
 
@@ -43,7 +43,7 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
-import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
+  import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
 
   export default {
     name: "approve",

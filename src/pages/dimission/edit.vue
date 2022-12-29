@@ -143,7 +143,8 @@
   import FieldEdit from '@/components/HrtrnFieldEdit/FieldEdit'
   import {getDimissionBill, saveDimissionBill, queryDimissionType, queryDimissionSreason} from '@/api/dimission'
   import {Toast} from 'vant';
-  import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store';
 
 
   export default {
@@ -206,14 +207,14 @@
       /**
        * 查询单据
        */
-      queryBillInfo(pk_h, pk_sttype) {
+      queryBillInfo(pk_h, pk_trnstype) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
         let params = {
           billid: pk_h,
-          pk_sttype: pk_sttype
+          pk_trnstype: pk_trnstype
         }
         getDimissionBill(params).then(res => {
           this.billInfo = res.data.billInfo
@@ -258,7 +259,7 @@
        * @param item
        */
       dateOk(selector) {
-        this.$set(this.billInfo[selector.field],'value', selector.value)
+        this.$set(this.billInfo[selector.field], 'value', selector.value)
         console.log(this.billInfo)
       },
       /**

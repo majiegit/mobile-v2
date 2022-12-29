@@ -122,7 +122,8 @@
   import SaveButton from "@/components/Button/SaveButton";
   import {Toast} from "vant";
   import {getLeaveoffBill, queryLeaveoffLength, saveLeaveoffBill} from '@/api/leaveoff'
-  import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store';
   import {
     approveStateName,
     whetherYN,
@@ -156,8 +157,8 @@
         },
         currentHeight: '',
         billInfo: {
-          billmaker: userInfoUserId,
-          pk_psndoc: userInfoPkPsndoc,
+          billmaker: storage.get(USERINFO).pk_psndoc,
+          pk_psndoc: storage.get(USERINFO).pk_psndoc,
           dr_flag: '0',
           minunit: '1',
           leaveoffday: ''
@@ -379,8 +380,8 @@
       // 初始化数据
       init() {
         this.billInfo = {
-          billmaker: userInfoUserId,
-          pk_psndoc: userInfoPkPsndoc,
+          billmaker: storage.get(USERINFO).pk_psndoc,
+          pk_psndoc: storage.get(USERINFO).pk_psndoc,
           dr_flag: '0',
           minunit: '1',
           leaveoffday: ''

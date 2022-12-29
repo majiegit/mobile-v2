@@ -53,7 +53,7 @@ request.interceptors.response.use(
       storage.remove(REFRESH_TOKEN)
       storage.remove(USERINFO)
       Toast(res.message)
-      window.location.href = '/'
+      location.reload()
     } else {
       // 弹出错误消息
       Toast(res.message)

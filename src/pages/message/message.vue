@@ -84,7 +84,8 @@
   import Header from '@/components/Header/Index'
   import {queryNoticeMessageList, queryApproveMessageList, updateNoticeMessageIsRead} from '@/api/message'
   import {approveStateName, approveStateColorList, BillTypeList, BillTypeMap} from '@/utils/ConstantUtils'
-  import {userInfoUserId} from '@/utils/storageUtils'
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
   import {Toast} from 'vant';
 
   export default {
@@ -92,6 +93,7 @@
     components: {Header},
     data() {
       return {
+        userId: storage.get(USERINFO).user_id,
         show: false,
         isread: '',
         billtype: '',
@@ -183,7 +185,7 @@
        */
       queryApproveMessage() {
         let params = {
-          userId: userInfoUserId
+          userId: this.userId
         }
         if (this.isread) {
           params.isread = this.isread
@@ -204,7 +206,7 @@
        */
       queryNotiveMessage() {
         let params = {
-          userId: userInfoUserId
+          userId: this.userId
         }
         if (this.isread) {
           params.isread = this.isread

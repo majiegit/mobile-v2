@@ -1,102 +1,119 @@
 <template>
   <div>
     <Header title="转正申请" @clickLeft="clickLeft"></Header>
-    <div>
-      <!--转正类型-->
-      <van-row type="flex" justify="space-around" class="regTypeRow">
-        <van-col :span="11" v-for="(type,index) in regTypeList" :key="index">
-          <van-button class="regType" :type="regData.regTypeValue == type.value ? 'info' : 'default' ">{{type.name}}
-          </van-button>
-        </van-col>
-      </van-row>
-      <div class="item_body">
-        <!-- 基本信息-->
-        <p>基本信息</p>
-        <van-form input-align="right" ref="regForm">
+    <div class="item_body" :style="{'height': currentHeight}">
+      <van-form input-align="right" ref="billForm" colon label-width="120px">
+        <!-- 试用类型 -->
+        <van-field
+          is-link
+          readonly
+          required
+          name="probation_type"
+          :rules="formRules.probation_type"
+          :value="billInfo.probation_type.display"
+          @click="selectData(regTypeList,'请选择试用类型','probation_type', 'name', 'probation_type', billInfo.probation_type.value)"
+          label="试用类型"
+          placeholder="请选择试用类型"
+        />
+        <!--先选择试用类型 再显示以下内容-->
+        <div v-if="formShow">
+          <!--试用开始日期-->
           <van-field
             is-link
-            required
             readonly
-            v-model="regData.overdate"
-            @click="selectDate(regData.overdate, 'overdate','试用结束日期')"
+            required
+            :rules="formRules.begin_date"
+            name="regulardate"
+            v-model="billInfo.begin_date.value"
+            @click="selectDate(billInfo.begin_date,'begin_date','试用开始日期', 'date')"
+            label="试用开始日期"
+            placeholder="请选择试用开始日期"
+          />
+          <!--试用结束日期-->
+          <van-field
+            is-link
+            readonly
+            required
+            :rules="formRules.end_date"
+            name="end_date"
+            v-model="billInfo.end_date.value"
+            @click="selectDate(billInfo.end_date,'end_date','试用结束日期', 'date')"
             label="试用结束日期"
             placeholder="请选择试用结束日期"
-            :rules="baseInfoRule"
           />
+          <!--生效日期-->
           <van-field
             is-link
-            required
             readonly
-            v-model="regData.regularresultname"
-            @click="selectRegResult(regData.regularresult, 'regularresult')"
-            label="试用结果"
-            placeholder="请选择试用结果"
-            :rules="baseInfoRule"
-          />
-          <van-field
-            is-link
             required
-            readonly
-            v-model="regData.regulardate"
-            @click="selectDate(regData.regulardate, 'regulardate', '延期转正日期')"
-            label="延期转正日期"
-            placeholder="请选择延期转正日期"
-            :rules="baseInfoRule"
-          />
-          <van-field
-            is-link
-            required
-            readonly
-            v-model="regData.regulardate"
-            @click="selectDate(regData.regulardate, 'regulardate', '生效日期')"
+            :rules="formRules.regulardate"
+            name="regulardate"
+            v-model="billInfo.regulardate.value"
+            @click="selectDate(billInfo.regulardate,'regulardate','生效日期', 'date')"
             label="生效日期"
             placeholder="请选择生效日期"
-            :rules="baseInfoRule"
           />
+          <!--试用结果-->
           <van-field
-            v-model="regData.memo"
+            is-link
+            readonly
+            required
+            :rules="formRules.trialresult"
+            name="trialresult"
+            v-model="billInfo.trialresult.display"
+            @click="selectData(regResultList,'请选择试用结果','trialresult', 'name', 'trialresult', billInfo.trialresult.value)"
+            label="试用结果"
+            placeholder="请选择试用结果"
+          />
+          <!--延期转正日期-->
+          <van-field
+            v-if="billInfo.trialresult.value == 2"
+            is-link
+            readonly
+            required
+            :rules="formRules.trialdelaydate"
+            name="trialdelaydate"
+            v-model="billInfo.trialdelaydate.value"
+            @click="selectDate(billInfo.trialdelaydate,'trialdelaydate','延期转正日期', 'date')"
+            label="延期转正日期"
+            placeholder="请选择延期转正日期"
+          />
+          <!--转正说明-->
+          <van-field
+            v-model="billInfo.memo.value"
             rows="2"
             autosize
-            label="说明"
+            label="转正说明"
             type="textarea"
             maxlength="50"
+            placeholder="请填写转正说明"
             show-word-limit
-            placeholder="请填写说明"
           />
 
-          <!-- 转正前数据-->
-          <p>转正前信息</p>
-          <van-field
-            v-for="(item,index) in oldData" :key="item.itemKey"
-            v-model="item.displayname"
-            :required="item.isrequired"
-            :label="item.itemName"
-          />
+          <p class="item_body_title" v-if="oldItem.length != 0">转正前信息</p>
+          <van-field :label="item.itemname" :value="billInfo[item.itemkey].display" disabled v-for="item in oldItem"
+                     :key="item.pk_stbill_itemset"/>
 
-          <!-- 转正后数据-->
-          <p>转正后信息</p>
-          <van-field
-            v-for="(item,index) in newData" :key="item.itemKey"
-            v-model="item.displayname"
-            is-link
-            :required="item.isrequired"
-            :label="item.itemName"
-            :placeholder="'请填写'+ item.itemName"
-            :rules="[{required: true, message: ''}]"
-            @click="selectRegNewData(item)"
-          />
-          <div style="margin: 16px;">
-            <van-button round block type="info" @click="saveBillInfo">保 存</van-button>
-          </div>
-        </van-form>
-      </div>
+          <p class="item_body_title" v-if="newItem.length != 0">转正后信息</p>
+          <FieldEdit :billInfo="billInfo" :fieldData="newItem"/>
+
+
+          <p class="item_body_title">执行信息</p>
+          <van-field label="同步工作履历" readonly>
+            <template #input>
+              <van-switch v-model="billInfo.ifsynwork.value" size="20" active-value="Y" inactive-value="N"
+                          @change="changeSwitch(billInfo.ifsynwork)"/>
+            </template>
+          </van-field>
+        </div>
+      </van-form>
     </div>
-
-    <!-- 下拉选择器-->
-    <div>
-      <Select ref="selector" @selectOk="selectOk"/>
-      <SelectDate ref="selectorDate" @dateOk="dateOk"/>
-    </div>
+    <!--保存按钮-->
+    <SaveButton @save="saveBillInfo"/>
+    <!-- 日期选择器-->
+    <SelectDate ref="selectorDate" @dateOk="dateOk"/>
+    <!--   下拉选择器   -->
+    <Select ref="selector" @selectOk="selectOk"/>
   </div>
 </template>
 
@@ -104,168 +121,102 @@
   import Header from '@/components/Header/Index'
   import Select from '@/components/Selector/Select'
   import SelectDate from '@/components/Selector/SelectDate'
-  // import {fetchData, getStorage} from 'hr-utils'
+  import SaveButton from '@/components/Button/SaveButton'
+  import FieldEdit from '@/components/HrtrnFieldEdit/FieldEdit'
+  import {getRegBill, saveRegBill, queryRegType, queryRegSreason} from '@/api/reg'
   import {Toast} from 'vant';
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store';
+
 
   export default {
     data() {
       return {
-        regResultList, // 试用结果数据
-        baseInfoRule, // 基本信息字段rules
-        regData: {
-          user_name: '',
-          regTypeValue: '1'
-        }, // 转正基本信息数据
-        newData: [],    // 转正前数据
-        oldData: [],   // 转正后数据
-        pk_h: '',     // 转正单PK
-        regTypeList
+        checked: '',
+        formRules,
+        regTypeList,
+        regResultList,
+        currentHeight: '',
+        formShow: false,
+        billInfo: {
+          probation_type: {
+            value: '',
+            display: ''
+          }
+        },
+        newItem: [],
+        oldItem: []
       }
     },
-
-    components: {Header, Select, SelectDate},
-
-    created() {
-      // 修改单据
-      // if (this.$route.query.pk_h) {
-      //   this.pk_h = this.$route.query.pk_h
-      //   this.queryRegBillInfo(this.$route.query.pk_h)
-      // } else {
-      //   // 新增单据
-      //   this.queryNewRegData()
-      // }
-      // this.queryMyApplication()
+    components: {Header, Select, SelectDate, SaveButton, FieldEdit},
+    mounted() {
+      this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
+      // 判断是修改还是新增
+      if (this.$route.query.pk_h) {
+        this.queryBillInfo(this.$route.query.pk_h, null)
+      }
     },
-
+    created() {
+    },
+    watch: {},
     methods: {
-      // 查询转正单据
-      queryRegBillInfo(pk_h) {
+      changeSwitch(field) {
+        if (field.value === 'Y') {
+          field.display = '是'
+        } else {
+          field.display = '否'
+        }
+        console.log(field)
+      },
+
+      /**
+       * 查询单据
+       */
+      queryBillInfo(pk_h, probation_type) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
-        fetchData({
-          url: 'hrssc/portal/tbmquery/getBillInfo',
-          method: 'post',
-          param: {
-            billtype: 'psnreg',
-            pk_h: pk_h
-          },
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            this.regData = res.data
-            this.newData = res.data.data.newdata
-            this.oldData = res.data.data.olddata
-            Toast.clear()
-          },
-          error: error => {
-          }
-        })
-      },
-      // 查询新的转正单据数据
-      queryNewRegData(pk_h) {
-        Toast.loading({
-          message: '加载中...',
-          duration: 0
-        })
-        fetchData({
-          url: 'hrssc/portal/regmng/getNewReg',
-          method: 'post',
-          param: {
-            billtype: 'psnreg',
-            pk_hi_regapply: 'new'
-          },
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            this.regData.trial_type = res.data.trial_type
-            this.newData = res.data.newdata
-            this.oldData = res.data.olddata
-            Toast.clear()
-          },
-          error: error => {
-          }
-        })
-      },
-      clickLeft() {
-        this.$router.push({name: 'application'})
-      },
-      /**
-       * 查询转正流程类型
-       */
-      queryRegTransType(value, field) {
-        fetchData({
-          url: 'hrssc/portal/tbmquery/queryTranstype',
-          method: 'post',
-          param: {
-            billtype: 'psnreg'
-          },
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            let selector = {
-              data: res.data,
-              title: '流程类型',
-              field: field,
-              value: value,
-              text: 'transtypename',
-              key: 'transtypeid'
-            }
-            this.$refs.selector.openSelect(selector)
-          },
-          error: error => {
-          }
+        let params = {
+          billid: pk_h,
+          probation_type: probation_type
+        }
+        getRegBill(params).then(res => {
+          this.billInfo = res.data.billInfo
+          this.newItem = res.data.newItem
+          this.oldItem = res.data.oldItem
+          this.formShow = true
+          Toast.clear()
         })
       },
       /**
-       * 选择试用结果
+       *  下来框选择事件
        */
-      selectRegResult(val, field) {
+      selectData(data, title, field, text, key, value) {
         let selector = {
-          data: this.regResultList,
-          title: '试用结果',
+          data: data,
+          title: title,
           field: field,
-          value: val,
-          text: 'title',
-          key: 'key'
+          text: text,
+          key: key,
+          value: value
         }
         this.$refs.selector.openSelect(selector)
       },
-
       /**
        * 选择器确认回调
+       * @param selector
+       * @param item
        */
       selectOk(selector, item) {
-        console.log(selector)
-        console.log(item)
-        if (selector.field === 'transtypeid') {
-          // 流程类型
-          this.$set(this.regData, selector.field, item[selector.key])
-          this.$set(this.regData, 'transtypename', item[selector.text])
-        } else if (selector.field === 'regularresult') {
-          // 试用结果
-          this.$set(this.regData, selector.field, item[selector.key])
-          this.$set(this.regData, 'regularresultname', item[selector.text])
-        } else {
-          // 转正后字段  设置
-          let index = this.getItemIndex(this.newData, selector.field);
-          this.$set(this.newData[index], 'displayname', item[selector.text])
-          this.$set(this.newData[index], 'value', item[selector.key])
-
+        console.log(selector, item)
+        this.$set(this.billInfo[selector.field], 'value', item[selector.key])
+        this.$set(this.billInfo[selector.field], 'display', item[selector.text])
+        console.log(this.billInfo)
+        // 转正类型
+        if (selector.field == 'probation_type') {
+          this.queryBillInfo(null, this.billInfo.probation_type.value)
         }
-      },
-      /**
-       * 选择时间
-       */
-      selectDate(value, field, title) {
-        let selector = {
-          title: title,
-          field: field,
-          value: value,
-          type: 'date'
-        }
-        this.$refs.selectorDate.openSelect(selector)
       },
       /**
        * 时间选择器确认回调
@@ -273,164 +224,124 @@
        * @param item
        */
       dateOk(selector) {
-        this.$set(this.regData, selector.field, selector.value)
+        this.$set(this.billInfo[selector.field], 'value', selector.value)
+        console.log(this.billInfo)
       },
       /**
-       * 转正后数据选择
+       * 选择时间
        */
-      selectRegNewData(item) {
-        let pk_org, pk_dept, newseries
-        if (item.itemKey === 'newpk_dept') {
-          let index = this.getItemIndex(this.newData, 'newpk_org')
-          let value = this.newData[index].value
-          if (value) {
-            pk_org = value
-            console.log(pk_org)
-          }
+      selectDate(value, field, title, type) {
+        let selector = {
+          title: title,
+          field: field,
+          value: value,
+          type: type
         }
-        this.queryRegNewData(item, pk_org, pk_dept, newseries)
+        this.$refs.selectorDate.openSelect(selector)
+      },
+      clickLeft() {
+        this.$router.go(-1)
       },
       /**
-       * 查询转正后参照数据
-       * @param item
-       * @param pk_org
-       * @param pk_dept
-       * @param newseries
-       */
-      queryRegNewData(item, pk_org, pk_dept, newseries) {
-        fetchData({
-          url: 'hrssc/portal/regmng/queryRefList',
-          method: 'post',
-          param: {
-            refType: item.itemKey,
-            newpk_org: pk_org,
-            pk_dept: pk_dept,
-            newseries: newseries
-          },
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            let selector = {
-              data: res.data,
-              title: item.itemName,
-              field: item.itemKey,
-              value: item.value,
-              text: 'name',
-              key: 'pk'
-            }
-            this.$refs.selector.openSelect(selector)
-          },
-          error: error => {
-          }
-        })
-      },
-      /**
-       * 获取符合数据 条件 的单条数据
-       */
-      getItemIndex(data, itemKey) {
-        let index
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].itemKey === itemKey) {
-            index = i
-            break
-          }
-        }
-        return index
-      },
-      /**
-       * 保存单据 事件
+       * 保存单据
        */
       saveBillInfo() {
-        this.$refs.regForm.validate().then(() => {
-          this.save()
-        }).catch(() => {
+        console.log(this.billInfo)
+        this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
+          Toast.loading({
+            message: '保存中...',
+            duration: 0
+          })
+          saveRegBill(this.billInfo).then(res => {
+            Toast.clear()
+            this.$router.push({name: 'regDetail', query: {pk_h: res.data.pk_reg}})
+          })
         })
       },
-      // 调用保存接口
-      save() {
-        let param = {
-          regMap: {
-            memo: this.regData.memo,
-            overdate: this.regData.overdate,
-            regulardate: this.regData.regulardate,
-            regularresult: this.regData.regularresult,
-            trial_type: this.regData.trial_type,
-            transtypeid: this.regData.transtypeid,
-            synchronized: true
-          },
-          newdata: this.newData
+      // 获取字段规则
+      getFieldRules(field) {
+        let required = this.getFieldRequired(field)
+        // let message = this.getFieldPlaceholder(field)
+        let message = ''
+        let rule = {required: required, message: message}
+        let rules = []
+        rules.push(rule)
+        return rules
+      },
+      // 获取字段是否必填
+      getFieldRequired(field) {
+        let required = false
+        if (field.mustflag === 'Y') {  // 必填属性
+          required = true
         }
-
-        Toast.loading({
-          message: '保存中...',
-          duration: 0
-        })
-
-        fetchData({
-          url: 'hrssc/portal/regmng/savePsnReg',
-          method: 'post',
-          param: param,
-          mock: false,
-          contentType: "application/json",
-          success: res => {
-            this.$router.push({name: 'regDetail',query: {'pk_h': res.data.pk_hi_regapply}})
-            Toast.clear()
-          },
-          error: error => {
-            Toast.clear()
-            Toast(error.message)
-          }
-        })
-      }
+        return required
+      },
+      // 获取字段说明
+      getFieldPlaceholder(field) {
+        let message = ''
+        if ([0, 1, 2, 9, 4, 14, 18].includes(field.datatype)) {
+          message = '请填写' + field.name
+        } else if ([5, 3, 20, 101, 102, 6, 8].includes(field.datatype)) {
+          message = '请选择' + field.name
+        }
+        return message
+      },
     }
   }
-  // 基本校验规则
-  const baseInfoRule = [{required: true, message: ''}]
+
   // 试用结果
   const regResultList = [
     {
-      key: '1',
-      title: '转正'
+      trialresult: 1,
+      name: '转正'
     }, {
-      key: '2',
-      title: '延长试用期'
+      trialresult: 2,
+      name: '延长试用期'
     }, {
-      key: '3',
-      title: '未通过试用'
+      trialresult: 3,
+      name: '未通过试用'
     }
   ]
+
   // 转类型数据
   const regTypeList = [
     {
-      value: 1,
+      probation_type: 1,
       name: '入职试用'
     },
     {
-      value: 2,
+      probation_type: 2,
       name: '转岗试用'
     }
   ]
+
+  // 表单校验规则
+  const formRules = {
+    probation_type: [{
+      required: true,
+      message: ''
+    }],
+    sreason: [{
+      required: true,
+      message: ''
+    }],
+    regulardate: [{
+      required: true,
+      message: ''
+    }]
+  }
 </script>
 
 <style lang='less' scoped>
-  .regTypeRow {
-    background: #fff;
-    padding: 2%;
-  }
-
-  .regType {
-    width: 100%;
-    height: 35px;
-  }
-
   .item_body {
     width: 100%;
-
-    p {
+    overflow-y: auto;
+    &_title {
       font-size: 14px;
       line-height: 14px;
       padding-left: 10px;
       color: #999;
     }
   }
+
 </style>

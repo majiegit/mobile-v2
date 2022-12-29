@@ -28,60 +28,63 @@
 
 <script>
   import {queryLeaveIsRevoked} from '@/api/leaveoff'
-  import {userInfoPkPsndoc} from "@/utils/storageUtils";
-  import {StartEndDayType,HrkqMinUnit} from '@/utils/ConstantUtils'
-export default {
-  data() {
-    return {
-      StartEndDayType,
-      HrkqMinUnit,
-      activeNames: [],
-      leaveList: []
-    }
-  },
-  mounted() {
-  },
-  created() {
-    this.queryLeaveIsRevoked()
-  },
-  watch:{
-    leaveList(val){
-      for (let i = 0; i < val.length; i++) {
-        this.activeNames.push(i)
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
+  import {StartEndDayType, HrkqMinUnit} from '@/utils/ConstantUtils'
+
+  export default {
+    data() {
+      return {
+        pk_psndoc: storage.get(USERINFO).pk_psndoc,
+        StartEndDayType,
+        HrkqMinUnit,
+        activeNames: [],
+        leaveList: []
       }
-    }
-  },
-  methods: {
-    /**
-     * 查询待销假请假记录
-     */
-    queryLeaveIsRevoked(){
-      let params = {
-        pk_psndoc: userInfoPkPsndoc
-      }
-      queryLeaveIsRevoked(params).then(res => {
-        this.leaveList = res.data
-      })
     },
-    /**
-     * 将数据传给父组件
-     * @param detail
-     */
-    toDetail(item) {
-      this.$emit('getDetail', item)
+    mounted() {
+    },
+    created() {
+      this.queryLeaveIsRevoked()
+    },
+    watch: {
+      leaveList(val) {
+        for (let i = 0; i < val.length; i++) {
+          this.activeNames.push(i)
+        }
+      }
+    },
+    methods: {
+      /**
+       * 查询待销假请假记录
+       */
+      queryLeaveIsRevoked() {
+        let params = {
+          pk_psndoc: this.pk_psndoc
+        }
+        queryLeaveIsRevoked(params).then(res => {
+          this.leaveList = res.data
+        })
+      },
+      /**
+       * 将数据传给父组件
+       * @param detail
+       */
+      toDetail(item) {
+        this.$emit('getDetail', item)
+      }
     }
   }
-}
 </script>
 
 <style lang='less'>
-.leaveoff_top .van-collapse .van-collapse-item__wrapper .van-collapse-item__content .van-cell {
-  color: #888888;
-  font-size: 14px;
-}
+  .leaveoff_top .van-collapse .van-collapse-item__wrapper .van-collapse-item__content .van-cell {
+    color: #888888;
+    font-size: 14px;
+  }
 
-.leaveoff_top .van-collapse .van-collapse-item .van-collapse-item__title .van-cell__title, .van-cell__left-icon {
-  font-size: 15px;
-  color: #2479ed;
-}
+  .leaveoff_top .van-collapse .van-collapse-item .van-collapse-item__title .van-cell__title, .van-cell__left-icon {
+    font-size: 15px;
+    color: #2479ed;
+  }
 </style>

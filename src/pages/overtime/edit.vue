@@ -54,7 +54,8 @@
   import SaveButton from '@/components/Button/SaveButton'
   import {getOvertimeBill, saveOvertimeBill, queryOvertimeLength} from '@/api/overtime'
   import {Toast} from 'vant';
-  import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store';
   import {BillTypeList} from '@/utils/ConstantUtils'
   import {beginGtEndTime, beginEndSameDay} from '@/utils/DateTimeUtils'
 
@@ -66,8 +67,8 @@
         isSame: true, // 开始结束时间是否同一天
         billInfo: {
           isallnight: 'N',
-          billmaker: userInfoUserId,
-          pk_psndoc: userInfoPkPsndoc,
+          billmaker: storage.get(USERINFO).pk_psndoc,
+          pk_psndoc: storage.get(USERINFO).pk_psndoc,
           otapplylength: ''
         }
       }

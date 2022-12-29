@@ -89,11 +89,11 @@
   </div>
 </template>
 <script>
-  import {userInfo, userInfoPkPsndoc} from '@/utils/storageUtils'
   import Header from '@/components/Header/Index'
   import {Toast} from 'vant'
   import {queryPsndocTemp, getSubInfoVO} from '@/api/psndoc'
-
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
   export default {
     name: 'personal',
     components: {
@@ -101,14 +101,14 @@
     },
     data() {
       return {
-        userInfoPkPsndoc: userInfoPkPsndoc,
+        pk_psndoc: storage.get(USERINFO).pk_psndoc,
         photoShow: false,
         activeNames: [0],
         isWater: false,
         currentHeight: '',
         templateData: '',//模板
         infoData: '',//数据
-        userdata: userInfo
+        userdata: storage.get(USERINFO)
       }
     },
     watch: {},
@@ -130,7 +130,7 @@
         this.$router.push({
           name: 'enclosure',
           query: {
-            filePath: this.userInfoPkPsndoc,
+            filePath: this.pk_psndoc,
             disabled: 0
           }
         })
@@ -253,7 +253,7 @@
           duration: 0
         })
         let param = {
-          pk_psndoc: userInfoPkPsndoc
+          pk_psndoc: this.pk_psndoc
         }
         // 查询个人信息数据
         getSubInfoVO(param).then(res => {

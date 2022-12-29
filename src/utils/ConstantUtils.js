@@ -163,9 +163,10 @@ export const whetherYN = {
 
 //  考勤最小单位
 export const HrkqMinUnit = {
-  '1': '入职试用',
-  '2': '转岗试用',
+  '1': '小时',
+  '2': '天',
 }
+
 
 //  请假类型最小时间
 export const LeaveTypeMinTime = {

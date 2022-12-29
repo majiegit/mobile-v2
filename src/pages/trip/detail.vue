@@ -28,7 +28,7 @@
     </div>
 
     <!--单据操作按钮-->
-    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate"
+    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-show="pk_h && approvestate" ref="applyButton"
                  @submit="submitBill" @rollback="rollbackBill"/>
   </div>
 </template>
@@ -39,7 +39,7 @@
   import ApplyButton from '@/components/Button/ApplyButton'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import {getTripBill, submitTripBill, recoverTripBill, deleteTripBill} from '@/api/trip'
-  import {approveStateName, whetherYN, HrkqMinUnit,BillTypeCode} from '@/utils/ConstantUtils'
+  import {approveStateName, whetherYN, HrkqMinUnit, BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",
@@ -63,13 +63,13 @@
         // 只有自由态可删除
         if (val == '-1') {
           this.rightIcon = 'delete-o'
-        }else {
+        } else {
           this.rightIcon = ''
         }
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
+      this.currentHeight = (document.documentElement.clientHeight - 46 - this.$refs.applyButton.offsetHeight) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -195,6 +195,7 @@
     width: 100%;
     overflow-y: auto;
   }
+
   .fileClass {
     color: #2479ed;
     font-size: 14px;

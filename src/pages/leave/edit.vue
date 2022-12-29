@@ -106,7 +106,9 @@
   import {getItem} from '@/utils/DataUtils'
   import {Toast} from "vant";
   import {beginGtEndTime, beginEndSameDay} from '@/utils/DateTimeUtils'
-  import {userInfoPkPsndoc, userInfoUserId} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store';
+
   export default {
     name: "edit",
     components: {Header, Select, SelectDate, SaveButton},
@@ -122,8 +124,8 @@
         StartEndDayType,
         HrkqMinUnit,
         billInfo: {
-          billmaker: userInfoUserId,
-          pk_psndoc: userInfoPkPsndoc,
+          billmaker: storage.get(USERINFO).pk_psndoc,
+          pk_psndoc: storage.get(USERINFO).pk_psndoc,
           pk_leave_type: '', // 请假类型PK
           leavetypename: '', // 休假类型名称
           leaveday: '', //请假时长
@@ -166,7 +168,7 @@
         if (this.$route.query.pk_h) {
           this.queryBillInfo(this.$route.query.pk_h)
         }
-      },200)
+      }, 200)
 
     },
     created() {
@@ -319,11 +321,11 @@
           }
         } else {
           // 不显示上下午
-          if(this.dateType.type == 'date'){
-            if(this.billInfo.begintime){
+          if (this.dateType.type == 'date') {
+            if (this.billInfo.begintime) {
               this.billInfo.begintime = this.billInfo.begintime.substring(0, 10) + ' 00:00:00'
             }
-            if(this.billInfo.endtime){
+            if (this.billInfo.endtime) {
               this.billInfo.endtime = this.billInfo.endtime.substring(0, 10) + ' 00:00:00'
             }
           }
@@ -334,7 +336,7 @@
        * 选择请假时间
        */
       selectDate(value, field, title, type) {
-        if(!this.checkLeaveType()){
+        if (!this.checkLeaveType()) {
           Toast("请先选择休假类型")
           return
         }
@@ -359,7 +361,7 @@
        * 保存单据
        */
       saveBillInfo() {
-        if(!this.checkLeaveType()){
+        if (!this.checkLeaveType()) {
           Toast("请先选择休假类型")
           return
         }
@@ -383,9 +385,9 @@
       /**
        * 校验是否选择休假类型
        */
-      checkLeaveType(){
+      checkLeaveType() {
         let select = false
-        if(this.billInfo.pk_leave_type){
+        if (this.billInfo.pk_leave_type) {
           select = true
         }
         return select

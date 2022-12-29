@@ -23,7 +23,8 @@
   import Header from '@/components/Header/Index'
   import {queryPsnInfoApproveList} from '@/api/psnInfoApprove'
   import {PsnInfoApproveStatus, PsnInfoApproveList} from '@/utils/ConstantUtils'
-  import {userInfo} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
   export default {
     name: 'userCheck',
     components: {
@@ -36,7 +37,8 @@
         approveStatus: 0,
         PsnInfoApproveStatus,
         PsnInfoApproveList,
-        approveList: []
+        approveList: [],
+        pk_org: storage.get(USERINFO).pk_org
       }
     },
     watch: {
@@ -68,7 +70,7 @@
           duration: 0
         })
         let params = {
-          pk_org: userInfo.pk_org,
+          pk_org: this.pk_org,
           checkstatus: this.approveStatus
         }
         queryPsnInfoApproveList(params).then(res => {

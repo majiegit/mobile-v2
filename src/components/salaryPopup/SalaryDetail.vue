@@ -29,10 +29,10 @@
         <!-- 按钮去呀-->
         <van-row type="flex" justify="space-around" class="button_bottom" v-if="salaryConfirmList.length == 0">
           <van-col span="10" class="button1">
-            <van-button round block type="primary" @click="submitOk">没问题</van-button>
+            <van-button round block type="primary" @click="problemShow = true">有问题</van-button>
           </van-col>
           <van-col span="10" class="button2">
-            <van-button round block type="primary" @click="problemShow = true">有问题</van-button>
+            <van-button round block type="primary" @click="submitOk">没问题</van-button>
           </van-col>
         </van-row>
       </div>
@@ -54,8 +54,10 @@
   </div>
 </template>
 <script>
-  import {salaryConfirmSave,salaryConfirmList} from '@/api/salary'
-  import {userInfo} from "@/utils/storageUtils";
+  import {salaryConfirmSave, salaryConfirmList} from '@/api/salary'
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
+
   export default {
     name: "SalaryDetail",
     props: {
@@ -68,19 +70,20 @@
       return {
         problemShow: false,
         problem: '',
-        userInfo,
+        userInfo: storage.get(USERINFO),
         salaryConfirmList: []
       }
     },
-    watch:{
-      salaryDetail(val){
+    watch: {
+      salaryDetail(val) {
         this.querySalaryConfirmList()
       }
     },
     created() {
+      this.querySalaryConfirmList()
     },
     methods: {
-      querySalaryConfirmList(){
+      querySalaryConfirmList() {
         let params = {
           pk_wa_data: this.salaryDetail.pk_wa_data
         }

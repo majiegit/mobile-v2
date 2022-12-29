@@ -24,7 +24,8 @@
 
 <script>
   import {queryTripIsRevoked} from '@/api/tripoff'
-  import {userInfoPkPsndoc} from "@/utils/storageUtils";
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
   import {StartEndDayType, HrkqMinUnit} from '@/utils/ConstantUtils'
 
   export default {
@@ -54,7 +55,7 @@
        */
       queryTripIsRevoked() {
         let params = {
-          pk_psndoc: userInfoPkPsndoc
+          pk_psndoc: storage.get(USERINFO).pk_psndoc
         }
         queryTripIsRevoked(params).then(res => {
           this.tripList = res.data
