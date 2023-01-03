@@ -6,12 +6,12 @@
     <van-collapse is-link="false" v-model="activeNames" v-for="(item,index) in leaveList" :key="index">
       <van-collapse-item :name="index">
         <template #title>
-          <div>
+          <div style="color: #2479ed;">
             <van-icon name="label-o"/>
             {{ item.applydate}} &nbsp; {{ item.leavetypename }}
           </div>
         </template>
-        <div @click="toDetail(item)">
+        <div @click="toDetail(item)"  class="record">
           <van-cell :title="'开始' + (item.minunit == '2' ? '日期': '时间')"
                     :value="(item.minunit == '2' ) ? item.begintime.substring(0,10) : item.begintime"/>
           <van-cell :title="'结束' + (item.minunit == '2' ? '日期': '时间')"
@@ -78,13 +78,7 @@
 </script>
 
 <style lang='less'>
-  .leaveoff_top .van-collapse .van-collapse-item__wrapper .van-collapse-item__content .van-cell {
-    color: #888888;
-    font-size: 14px;
-  }
-
-  .leaveoff_top .van-collapse .van-collapse-item .van-collapse-item__title .van-cell__title, .van-cell__left-icon {
-    font-size: 15px;
-    color: #2479ed;
+  .record .van-cell{
+    color: #969799;
   }
 </style>

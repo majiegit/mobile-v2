@@ -1,18 +1,20 @@
 <template>
   <div>
     <BirthdayPopup/>
-    <BirthdayPopup2/>
+    <StaffZhouNianQing/>
+    <GroupZhouNianQing/>
   </div>
 </template>
 
 <script>
   import BirthdayPopup from './BirthdayPopup'
-  import BirthdayPopup2 from './BirthdayPopup2'
+  import StaffZhouNianQing from './StaffZhouNianQing'
+  import GroupZhouNianQing from './GroupZhouNianQing'
 
   export default {
     name: 'popup',
     components: {
-      BirthdayPopup, BirthdayPopup2
+      BirthdayPopup, StaffZhouNianQing,GroupZhouNianQing
     },
     data() {
       return {}

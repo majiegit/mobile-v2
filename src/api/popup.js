@@ -24,3 +24,15 @@ export function savePopupList(data) {
     data: data
   })
 }
+
+/**
+ * 保存
+ * @param parameter
+ */
+export function queryGroupCreateTime(data) {
+  return request({
+    url: "/hrsh/popup/queryGroupCreateTime",
+    method: 'post',
+    params: data
+  })
+}
