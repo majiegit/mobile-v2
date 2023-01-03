@@ -21,6 +21,8 @@ import checkout from "./pages/checkout"
 import psnInfoApprove from "./pages/psnInfoApprove"
 import inductionInfo from "./pages/inductionInfo"
 import prove from "./pages/prove"
+import addressBook from "./pages/addressBook"
+import staffQuery from "./pages/staffQuery"
 // 固定
 import fixed from "./pages/fixed"
 
@@ -48,6 +50,8 @@ export const AllRouterList = [].concat(
   prove,
   inductionInfo,
   checkout,
+  addressBook,
+  staffQuery,
   fixed
 )
 

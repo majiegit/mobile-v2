@@ -12,10 +12,9 @@
         placeholder="请输入姓名/电话/邮箱"
         @input="search"
       />
-      <!-- 组织架构-->
       <van-row type="flex" justify="end">
         <van-col span="24" v-for="(psndoc,index) in psndocList" :key="index">
-          <van-cell :border="false" :to="{name : 'addressBookDetail', query: { pk_psndoc: psndoc.pk_psndoc}}">
+          <van-cell :border="false" :to="{name : 'staffQueryDetail', query: { pk_psndoc: psndoc.pk_psndoc}}">
             <!-- 使用 title 插槽来自定义标题 -->
             <template #title>
               <div style="width: 100%; height: 100%; line-height: 30px;">
@@ -54,7 +53,7 @@
     name: "Index",
     data() {
       return {
-        title: '通讯录',
+        title: '员工查询',
         currentHeight: '',
         psndocList: [],
         psndocListAll: [],
