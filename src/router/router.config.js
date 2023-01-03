@@ -21,6 +21,8 @@ import checkout from "./pages/checkout"
 import psnInfoApprove from "./pages/psnInfoApprove"
 import inductionInfo from "./pages/inductionInfo"
 import prove from "./pages/prove"
+// 固定
+import fixed from "./pages/fixed"
 
 // 总路由
 export const AllRouterList = [].concat(
@@ -45,6 +47,7 @@ export const AllRouterList = [].concat(
   psnInfoApprove,
   prove,
   inductionInfo,
-  checkout
+  checkout,
+  fixed
 )
 
