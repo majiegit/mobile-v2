@@ -71,7 +71,7 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
+      // this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
@@ -216,6 +216,6 @@
     color: #2479ed;
     font-size: 14px;
     background: #fff;
-    padding: 20px 10px;
+    padding: 20px 16px;
   }
 </style>

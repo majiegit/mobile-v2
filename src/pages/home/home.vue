@@ -40,8 +40,9 @@
           <span>今天是您加入{{ userInfo.orgname}}的第{{ userInfo.joinsysday }}天</span>
         </div>
       </div>
-    </div>
 
+    </div>
+    <Popup/>
     <!--菜单区域-->
     <div>
       <van-row type="flex" v-for="(menu, index1) in menuData" :key="index1" class="menuDiv">
@@ -59,7 +60,6 @@
       </van-row>
     </div>
 
-
     <Setting ref="setting"/>
   </div>
 </template>
@@ -67,6 +67,7 @@
   import {queryUserRoleMenu, queryPsndocInfo} from '@/api/home'
   import {queryIsReadMessageCount} from '@/api/message'
   import Setting from '@/pages/home/component/setting'
+  import Popup from '@/components/Popup/Index'
   export default {
     name: 'application',
     data() {
@@ -77,7 +78,8 @@
       }
     },
     components: {
-      Setting
+      Setting,
+      Popup
     },
     created() {
       this.getUserInfo()

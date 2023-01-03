@@ -22,7 +22,7 @@
       </div>
     </div>
     <!--审核按钮-->
-    <ApproveButton :pk_h="pk_h" :approvestate="approvestate" v-if="pk_h && approvestate"/>
+    <ApproveButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate"/>
   </div>
 </template>
 
@@ -111,6 +111,6 @@ import {getOvertimeBill} from '@/api/overtime'
     color: #2479ed;
     font-size: 14px;
     background: #fff;
-    padding: 20px 10px;
+    padding: 20px 16px;
   }
 </style>

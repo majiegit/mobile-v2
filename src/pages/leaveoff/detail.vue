@@ -229,6 +229,6 @@
     color: #2479ed;
     font-size: 14px;
     background: #fff;
-    padding: 20px 10px;
+    padding: 20px 16px;
   }
 </style>

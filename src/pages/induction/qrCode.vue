@@ -162,6 +162,8 @@
           this.right_text = '完成'
           this.title = '选择组织'
           this.show = false
+        }else {
+          this.$router.go(-1)
         }
       },
       // 完成事件

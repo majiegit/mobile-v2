@@ -131,10 +131,11 @@
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
+      // this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       // 有销差单Pk直接查销差单
       if (this.$route.query.pk_h) {
         this.queryBillInfo(this.$route.query.pk_h)
+        this.title = '销差申请'
       } else {
         // 新增销差单则选择出差记录
         this.waitTripShow = true
