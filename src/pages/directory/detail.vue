@@ -40,7 +40,6 @@
 
 <script>
   import Header from '@/components/Header/Index'
-  import {queryPsndocInfo} from '@/api/addressBook'
 
   export default {
     components: {
@@ -65,11 +64,11 @@
           },
           {
             name: '部门',
-            value: 'deptname',
+            value: 'dept_name',
             icon: 'idcard'
           }, {
             name: '机构',
-            value: 'orgname',
+            value: 'org_name',
             icon: 'wap-home-o'
           }
         ]
@@ -77,7 +76,8 @@
     },
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 46) + 'px'
-      this.getPsndocInfo(this.$route.query.pk_psndoc)
+      this.userInfo = this.$route.params.psndoc
+      console.log(this.userInfo)
     },
     methods: {
       /**
@@ -100,18 +100,7 @@
        */
       clickLeft() {
         this.$router.go(-1)
-      },
-      /**
-       * 查询员工基本信息
-       */
-      getPsndocInfo(pk_psndoc) {
-        let params = {
-          pk_psndoc: pk_psndoc
-        }
-        queryPsndocInfo(params).then(res => {
-          this.userInfo = res.data
-        })
-      },
+      }
     }
   }
 </script>
@@ -135,7 +124,6 @@
       text-align: center;
     }
     &_right {
-      width: 240px;
       height: 60px;
       margin: 10px;
       float: left;

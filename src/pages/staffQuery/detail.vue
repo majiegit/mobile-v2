@@ -57,8 +57,7 @@
                 <!--内容-->
                 <van-col span="14" offset="1">
                   <!--根据不同的类型获取对应的值-->
-                  <span style="float: right;"
-                        :class="(infoData.aprlist && infoData.aprlist[field.code]) ? 'font_color': ''">{{getFieldValue(field,info)}}</span>
+                  <span style="float: right;">{{getFieldValue(field,info)}}</span>
                 </van-col>
               </van-row>
               <!--下划线-->
@@ -112,7 +111,7 @@
     methods: {
       // 头部左上角点击事件
       clickLeft() {
-        this.$router.push("application")
+        this.$router.go("-1")
       },
 
       // 查询员工基本信息

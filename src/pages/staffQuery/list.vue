@@ -12,7 +12,7 @@
         placeholder="请输入姓名/电话/邮箱"
         @input="search"
       />
-      <van-row type="flex" justify="end">
+      <van-row type="flex" justify="end"  v-if="psndocList.length != 0">
         <van-col span="24" v-for="(psndoc,index) in psndocList" :key="index">
           <van-cell :border="false" :to="{name : 'staffQueryDetail', query: { pk_psndoc: psndoc.pk_psndoc}}">
             <!-- 使用 title 插槽来自定义标题 -->
@@ -37,6 +37,9 @@
           </van-cell>
         </van-col>
       </van-row>
+      <div v-else>
+        <van-empty description="暂无人员数据"/>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +47,8 @@
 <script>
   import Header from '@/components/Header/Index'
   import {USERINFO} from '@/utils/mutation-types'
-  import {queryPsndocList, queryPsndocInfo} from '@/api/addressBook'
+  import {queryPsnInfoList} from '@/api/staffQuery'
+  import {Toast} from 'vant';
 
   export default {
     components: {
@@ -62,7 +66,7 @@
     },
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 46) + 'px'
-      this.queryPsndocList()
+      this.queryPsndocList(this.$route.query.id, this.$route.query.isleaf, this.$route.query.isbusinessunit, this.$route.query.orgtype1)
     },
     methods: {
 
@@ -74,14 +78,15 @@
             if (
               (this.psndocListAll[i].name && this.psndocListAll[i].name.indexOf(value) != -1) ||    // 姓名
               (this.psndocListAll[i].mobile && this.psndocListAll[i].mobile.indexOf(value) != -1) ||  // 电话
-              (this.psndocListAll[i].email && this.psndocListAll[i].email.indexOf(value) != -1)     // 邮箱
+              (this.psndocListAll[i].email && this.psndocListAll[i].email.indexOf(value) != -1) ||   // 工作邮箱
+              (this.psndocListAll[i].secret_email && this.psndocListAll[i].secret_email.indexOf(value) != -1)     // 私人邮箱
             ) {
               arr.push(this.psndocListAll[i])
             }
           }
           this.psndocList = arr
-        }else {
-          this.psndocList  = this.psndocListAll
+        } else {
+          this.psndocList = this.psndocListAll
         }
       },
       /**
@@ -104,10 +109,22 @@
       clickLeft() {
         this.$router.go(-1)
       },
-      queryPsndocList() {
-        queryPsndocList().then(res => {
+      queryPsndocList(id, isleaf, isbusinessunit,orgtype1) {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
+        let params = {
+          id: id,
+          isleaf: isleaf,
+          isbusinessunit: isbusinessunit,
+          orgtype1: orgtype1,
+
+        }
+        queryPsnInfoList(params).then(res => {
           this.psndocList = res.data
           this.psndocListAll = res.data
+          Toast.clear()
         })
       },
     }

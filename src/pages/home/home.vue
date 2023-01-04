@@ -37,7 +37,7 @@
           </van-col>
         </van-row>
         <div class="dateEntry">
-          <span>今天是您加入{{ userInfo.orgname}}的第{{ userInfo.joinsysday }}天</span>
+          <span>今天是您加入{{ userInfo.orgname}}的第{{ userInfo.joinsysyear }}年{{ userInfo.joinsysday }}天</span>
         </div>
       </div>
 

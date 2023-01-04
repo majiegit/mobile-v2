@@ -2,6 +2,17 @@
   <div>
     <!--导航栏区域-->
     <Header :title="title" @clickLeft="clickLeft"/>
+    <!-- 搜索框-->
+    <div style="width: 100%; height: 54px;">
+      <van-search
+        style="position: fixed; top: 46px; width: 100%; z-index: 1;"
+        disabled
+        shape="round"
+        background="#2479ed"
+        placeholder="请输入姓名/电话/邮箱"
+        @click="searchClick"
+      />
+    </div>
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">
       <div v-if="orgData">
         <!-- 已选择组织架构数据-->
@@ -31,7 +42,7 @@
 <script>
   import {Toast} from 'vant';
   import Header from '@/components/Header/Index'
-  import {querySubOrgOrDeptByPk} from '@/api/staffQuery'
+  import {queryCompanyStructure} from '@/api/directory'
   import storage from 'store';
 
   export default {
@@ -41,7 +52,7 @@
     name: "orgstructure",
     data() {
       return {
-        title: '员工查询',
+        title: '通讯录',
         currentHeight: '',
         orgData: [],
         orgModel: {},
@@ -50,20 +61,20 @@
     },
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 46) + 'px'
-      let storageOrgDataSelect = storage.get('StaffQueryOrgDataSelectKey')
+      let storageOrgDataSelect = storage.get('DirectoryOrgDataSelectKey')
       if (storageOrgDataSelect) {
         for (let i = 0; i < storageOrgDataSelect.length; i++) {
           if (i != storageOrgDataSelect.length - 1) {
             this.orgDataSelect.push(storageOrgDataSelect[i])
           }
         }
-        if(this.orgDataSelect.length != 0){
-          this.querySubOrgOrDeptByPk(this.orgDataSelect[this.orgDataSelect.length - 1].id)
-        }else {
-          this.querySubOrgOrDeptByPk()
+        if (this.orgDataSelect.length != 0) {
+          this.queryCompanyStructure(this.orgDataSelect[this.orgDataSelect.length - 1].id, this.orgDataSelect[this.orgDataSelect.length - 1].isbusinessunit)
+        } else {
+          this.queryCompanyStructure('', 'Y')
         }
       } else {
-        this.querySubOrgOrDeptByPk()
+        this.queryCompanyStructure('', 'Y')
       }
     },
     watch: {
@@ -71,7 +82,7 @@
         if (this.orgData.length == 0) {
           // 查询人员
           this.$router.push({
-            name: 'staffQueryList',
+            name: 'directoryList',
             query: {
               id: this.orgModel.id,
               isleaf: this.orgModel.isleaf,
@@ -85,30 +96,34 @@
     methods: {
       // 选择已选择组织
       selectOrgDataClick(org) {
-        this.querySubOrgOrDeptByPk(org.id)
+        this.queryCompanyStructure(org.id, org.isbusinessunit)
       },
       // 选择下级组织
       orgClick(org) {
         this.orgModel = org
         this.orgDataSelect.push(this.orgModel)
-        storage.set('StaffQueryOrgDataSelectKey', this.orgDataSelect)
-        this.querySubOrgOrDeptByPk(org.id)
+        storage.set('DirectoryOrgDataSelectKey', this.orgDataSelect)
+        this.queryCompanyStructure(org.id, org.isbusinessunit)
       },
       // 头部左上角点击事件
       clickLeft() {
-        storage.remove('StaffQueryOrgDataSelectKey')
-        this.$router.push("application")
+        storage.remove('DirectoryOrgDataSelectKey')
+        this.$router.go(-1)
+      },
+      searchClick(){
+        this.$router.push("directorySearch")
       },
       // 查询组织架构
-      querySubOrgOrDeptByPk(id) {
+      queryCompanyStructure(id, isbusinessunit) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
         let params = {
-          id: id
+          id: id,
+          isbusinessunit: isbusinessunit
         }
-        querySubOrgOrDeptByPk(params).then(res => {
+        queryCompanyStructure(params).then(res => {
           Toast.clear()
           this.orgData = res.data
         })
