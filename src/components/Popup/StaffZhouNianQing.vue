@@ -12,7 +12,7 @@
     <div style="width: 300px; height: 400px;">
       <!-- 图片区域-->
       <div
-        style="width: 300px; height: 350px; background-image: url('./../static/img/popup/zhounianqing.png'); background-size: 100% 100%;">
+        style="width: 300px; height: 350px; background-image: url('./static/img/popup/zhounianqing.png'); background-size: 100% 100%;">
         <div
           style="width: 80%; height: 150px; padding: 0 10%; font-size: 14px; color: #323233; position: absolute; top: 30%; text-align: center;">
           <p style="margin: 0px; font-size: 12px;">恭喜{{username}}入职{{orgname}}{{joinsysdateNumber}}周年</p>
