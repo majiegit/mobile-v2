@@ -6,18 +6,20 @@
     close-icon="close"
     close-icon-position="bottom-left"
     @click-close-icon="close"
+
     id="BirthdayPopup"
   >
     <!-- 最外层Div-->
     <div style="width: 300px; height: 410px;">
       <!-- 图片区域-->
       <div
-        style="width: 300px; height: 350px; background-image: url('./static/img/popup/zhounianqing.png'); background-size: 100% 100%;">
-        <div
-          style="width: 80%; height: 150px; padding: 0 10%; font-size: 14px; color: #323233; position: absolute; top: 30%; text-align: center;">
-          <p style="margin: 0px; font-size: 12px;">恭喜{{username}}入职{{orgname}}{{joinsysdateNumber}}周年</p>
-          <p style="font-size: 45px; font-weight: bolder; color: #f3bb7b; line-height: 20px;">{{joinsysdateNumber}}</p>
-        </div>
+        style="width: 300px; height: 350px; background-image: url('./static/img/popup/yejian.png'); background-size: 100% 100%;">
+<!--        <div-->
+<!--          style="width: 80%; height: 150px; padding: 0 10%; font-size: 14px; color: #323233; position: absolute; top: 30%; ">-->
+<!--          <p>亲爱的{{username}}：</p>-->
+<!--          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;今天是您的生日，在这个特别的日子里，衷心的祝愿你 <span style="color: red"> 生日快乐、身体健康！</span></p>-->
+<!--          <p style="float: right; color: #999999">{{newdate}}</p>-->
+<!--        </div>-->
       </div>
     </div>
   </van-popup>
@@ -28,17 +30,14 @@
   import storage from 'store'
   import {USERINFO} from '@/utils/mutation-types'
   import {queryPopupList, savePopupList} from '@/api/popup'
-
   export default {
     name: 'BirthdayPopup',
     data() {
       return {
         show: false,
-        joinsysdateNumber: '',
-        username: storage.get(USERINFO).name,
-        orgname: storage.get(USERINFO).orgname,
+        // username: storage.get(USERINFO).name,
         newdate: dayjs(new Date().getTime()).format("YYYY-MM-DD"),
-        key: dayjs(new Date().getTime()).format("YYYY-MM-DD") + '_staffzhounianqing'
+        key: dayjs(new Date().getTime()).format("YYYY-MM-DD") + '_yejian'
       }
     },
     created() {
@@ -48,23 +47,18 @@
     },
     watch: {},
     methods: {
-      init() {
-        let joinsysdate = storage.get(USERINFO).joinsysdate
-        if (joinsysdate) {
-          let date = joinsysdate.substring(joinsysdate.length - 5)
-          if (date == this.newdate.substring(this.newdate.length - 5)) {
-            this.joinsysdateNumber = this.newdate.substring(0, 4) - joinsysdate.substring(0, 4)
-            this.query()
-          }
+      init(){
+        if(new Date().getHours() >= 22){
+          this.query()
         }
       },
-      query() {
+      query(){
         let params = {
           key: this.key,
           user_id: storage.get(USERINFO).user_id
         }
         queryPopupList(params).then(res => {
-          if (res.data.length == 0) {
+          if(res.data.length == 0){
             this.show = true
           }
         })

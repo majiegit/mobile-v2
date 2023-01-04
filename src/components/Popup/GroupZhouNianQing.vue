@@ -9,7 +9,7 @@
     id="BirthdayPopup"
   >
     <!-- 最外层Div-->
-    <div style="width: 300px; height: 400px;">
+    <div style="width: 300px; height: 410px;">
       <!-- 图片区域-->
       <div
         style="width: 300px; height: 350px; background-image: url('./static/img/popup/groupzhounianqing.png'); background-size: 100% 100%;">
@@ -38,13 +38,12 @@
         newdate: dayjs(new Date().getTime()).format("YYYY-MM-DD"),
         username: storage.get(USERINFO).name,
         orgname: storage.get(USERINFO).orgname,
-        key: this.newdate + '_groupzhounianqing'
+        key: dayjs(new Date().getTime()).format("YYYY-MM-DD") + '_groupzhounianqing'
       }
     },
     created() {
       this.init()
     },
-    watch: {},
     mounted() {
     },
     watch: {},
@@ -97,6 +96,7 @@
   }
 
   #BirthdayPopup .van-popup__close-icon {
+    font-size: 30px;
     left: 50% !important;
     transform: translateX(-50%);
   }

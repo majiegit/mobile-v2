@@ -6,17 +6,18 @@
     close-icon="close"
     close-icon-position="bottom-left"
     @click-close-icon="close"
+
     id="BirthdayPopup"
   >
     <!-- 最外层Div-->
-    <div style="width: 300px; height: 400px;">
+    <div style="width: 300px; height: 410px;">
       <!-- 图片区域-->
       <div
         style="width: 300px; height: 350px; background-image: url('./static/img/popup/shengri.png'); background-size: 100% 100%;">
         <div
           style="width: 80%; height: 150px; padding: 0 10%; font-size: 14px; color: #323233; position: absolute; top: 30%; ">
-          <p>亲爱的{{username}}</p>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;今天是您的生日,在这个特别的日子里,衷心的祝愿你生日快乐！</p>
+          <p>亲爱的{{username}}：</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;今天是您的生日，在这个特别的日子里，衷心的祝愿你 <span style="color: red"> 生日快乐、身体健康！</span></p>
           <p style="float: right; color: #999999">{{newdate}}</p>
         </div>
       </div>
@@ -36,7 +37,7 @@
         show: false,
         username: storage.get(USERINFO).name,
         newdate: dayjs(new Date().getTime()).format("YYYY-MM-DD"),
-        key: this.newdate + '_birthday'
+        key: dayjs(new Date().getTime()).format("YYYY-MM-DD") + '_birthday'
       }
     },
     created() {
@@ -86,6 +87,7 @@
   }
 
   #BirthdayPopup .van-popup__close-icon {
+    font-size: 30px;
     left: 50% !important;
     transform: translateX(-50%);
   }

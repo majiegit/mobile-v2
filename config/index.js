@@ -32,6 +32,7 @@ module.exports = {
     proxyTable: {
       '/hrshc': {
         target: 'http://127.0.0.1:2111',
+        // target: 'http://8.140.136.205:2121',
         ws: false,
         changeOrigin: true,
         '^hrshc': '/hrshc',

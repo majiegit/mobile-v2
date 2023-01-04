@@ -3,6 +3,7 @@
     <BirthdayPopup/>
     <StaffZhouNianQing/>
     <GroupZhouNianQing/>
+    <yeJian/>
   </div>
 </template>
 
@@ -10,11 +11,12 @@
   import BirthdayPopup from './BirthdayPopup'
   import StaffZhouNianQing from './StaffZhouNianQing'
   import GroupZhouNianQing from './GroupZhouNianQing'
+  import yeJian from './yeJian'
 
   export default {
     name: 'popup',
     components: {
-      BirthdayPopup, StaffZhouNianQing,GroupZhouNianQing
+      BirthdayPopup, StaffZhouNianQing,GroupZhouNianQing, yeJian
     },
     data() {
       return {}
