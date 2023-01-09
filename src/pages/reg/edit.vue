@@ -23,9 +23,8 @@
             readonly
             required
             :rules="formRules.begin_date"
-            name="regulardate"
+            name="begin_date"
             v-model="billInfo.begin_date.value"
-            @click="selectDate(billInfo.begin_date,'begin_date','试用开始日期', 'date')"
             label="试用开始日期"
             placeholder="请选择试用开始日期"
           />
@@ -37,7 +36,7 @@
             :rules="formRules.end_date"
             name="end_date"
             v-model="billInfo.end_date.value"
-            @click="selectDate(billInfo.end_date,'end_date','试用结束日期', 'date')"
+            @click="selectDate(billInfo.end_date.value,'end_date','试用结束日期', 'date')"
             label="试用结束日期"
             placeholder="请选择试用结束日期"
           />
@@ -49,7 +48,7 @@
             :rules="formRules.regulardate"
             name="regulardate"
             v-model="billInfo.regulardate.value"
-            @click="selectDate(billInfo.regulardate,'regulardate','生效日期', 'date')"
+            @click="selectDate(billInfo.regulardate.value,'regulardate','生效日期', 'date')"
             label="生效日期"
             placeholder="请选择生效日期"
           />
@@ -74,7 +73,7 @@
             :rules="formRules.trialdelaydate"
             name="trialdelaydate"
             v-model="billInfo.trialdelaydate.value"
-            @click="selectDate(billInfo.trialdelaydate,'trialdelaydate','延期转正日期', 'date')"
+            @click="selectDate(billInfo.trialdelaydate.value,'trialdelaydate','延期转正日期', 'date')"
             label="延期转正日期"
             placeholder="请选择延期转正日期"
           />
@@ -91,7 +90,7 @@
           />
 
           <p class="item_body_title" v-if="oldItem.length != 0">转正前信息</p>
-          <van-field :label="item.itemname" :value="billInfo[item.itemkey].display" disabled v-for="item in oldItem"
+          <van-field :label="item.itemname" :value="billInfo[item.itemkey].display" readonly v-for="item in oldItem"
                      :key="item.pk_stbill_itemset"/>
 
           <p class="item_body_title" v-if="newItem.length != 0">转正后信息</p>
@@ -321,14 +320,23 @@
       required: true,
       message: ''
     }],
-    sreason: [{
+    begin_date: [{
+      required: true,
+      message: ''
+    }],
+    end_date: [{
       required: true,
       message: ''
     }],
     regulardate: [{
       required: true,
       message: ''
+    }],
+    trialdelaydate: [{
+      required: true,
+      message: ''
     }]
+
   }
 </script>
 

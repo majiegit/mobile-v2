@@ -5,18 +5,18 @@
       <div v-if="billInfo">
         <van-cell-group>
           <van-cell title="申请单编号" :value="billInfo.bill_code.value"/>
-          <van-cell title="审批状态：" :value="approveStateName[billInfo.approve_state.value]"/>
-          <van-cell title="申请人：" :value="billInfo.billmaker.display"/>
-          <van-cell title="申请日期：" :value="billInfo.apply_date.value"/>
+          <van-cell title="审批状态" :value="approveStateName[billInfo.approve_state.value]"/>
+          <van-cell title="申请人" :value="billInfo.billmaker.display"/>
+          <van-cell title="申请日期" :value="billInfo.apply_date.value"/>
         </van-cell-group>
 
         <p class="item_body_title">人员信息</p>
         <van-cell-group>
-          <van-cell title="离职人员：" :value="billInfo.pk_psndoc.display"/>
-          <van-cell title="离职业务类型：" :value="billInfo.pk_trnstype.display"/>
-          <van-cell title="离职原因：" :value="billInfo.sreason.display"/>
-          <van-cell title="生效日期：" :value="billInfo.effectdate.value"/>
-          <van-cell title="离职说明：" :value="billInfo.memo.value"/>
+          <van-cell title="离职人员" :value="billInfo.pk_psndoc.display"/>
+          <van-cell title="离职业务类型" :value="billInfo.pk_trnstype.display"/>
+          <van-cell title="离职原因" :value="billInfo.sreason.display"/>
+          <van-cell title="生效日期" :value="billInfo.effectdate.value"/>
+          <van-cell title="离职说明" :value="billInfo.memo.value"/>
         </van-cell-group>
 
         <p class="item_body_title">离职前信息</p>

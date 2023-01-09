@@ -2,52 +2,111 @@
   <div>
     <Header :title="title" @clickLeft="clickLeft" :rightIcon="rightIcon" @clickRight="deleteBill"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
-      <div v-if="billInfo.pk_psndoc">
+      <div v-if="billInfo">
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.pk_psndoc"/>
-          <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
-          <van-cell title="加班说明：" :value="billInfo.remark"/>
-          <van-cell title="审批状态：" :value="billInfo.approvestatus"/>
+          <van-cell title="申请单编号" :value="billInfo.bill_code.value"/>
+          <van-cell title="审批状态" :value="approveStateName[billInfo.approve_state.value]"/>
+          <van-cell title="申请人" :value="billInfo.billmaker.display"/>
+          <van-cell title="申请日期" :value="billInfo.apply_date.value"/>
         </van-cell-group>
 
+        <p class="item_body_title">人员信息</p>
+        <van-cell-group>
+          <van-cell title="调配人员" :value="billInfo.pk_psndoc.display"/>
+          <van-cell title="调配业务类型" :value="billInfo.pk_trnstype.display"/>
+          <van-cell title="调配原因" :value="billInfo.sreason.display"/>
+          <van-cell title="生效日期" :value="billInfo.effectdate.value"/>
+          <div v-if="billInfo.trial_flag.value === 'Y'">
+            <van-cell title="试用" :value="billInfo.trial_flag.display"/>
+            <van-cell title="岗位试用期限" :value="billInfo.trialdays.value"/>
+            <van-cell title="岗位试用期限单位" :value="billInfo.trial_unit.display"/>
+            <van-cell title="试用开始日期" :value="billInfo.trialbegindate.value"/>
+            <van-cell title="试用结束日期" :value="billInfo.trialenddate.value"/>
+          </div>
+          <van-cell title="调配说明" :value="billInfo.memo.value"/>
+        </van-cell-group>
+
+        <p class="item_body_title">调配前信息</p>
+        <van-cell-group>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in oldItem"
+                    :key="item.pk_stbill_itemset"/>
+        </van-cell-group>
+
+        <p class="item_body_title">调配后信息</p>
+        <van-cell-group>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in newItem"
+                    :key="item.pk_stbill_itemset"/>
+        </van-cell-group>
+
+        <p class="item_body_title">调配后管理组织</p>
+        <van-cell-group>
+          <van-cell title="原人员信息组织" :value="billInfo.pk_old_hi_org.display"/>
+          <van-cell title="新人员信息组织" :value="billInfo.pk_hi_org.display"/>
+        </van-cell-group>
+
+        <p class="item_body_title">合同管理组织</p>
+        <van-cell-group>
+          <van-cell title="原合同管理组织" :value="billInfo.pk_old_hrcm_org.display"/>
+          <van-cell title="新合同管理组织" :value="billInfo.pk_hrcm_org.display"/>
+          <van-cell title="解除" :value="billInfo.isrelease.display"/>
+          <van-cell title="终止" :value="billInfo.isend.display"/>
+        </van-cell-group>
+
+        <p class="item_body_title">执行信息</p>
+        <van-cell-group>
+          <van-cell title="结束兼职" :value="billInfo.ifendpart.display"/>
+          <van-cell title="同步工作履历" :value="billInfo.ifsynwork.display"/>
+        </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
-        <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
+        <ApproveProcess :workflownote="workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
       </div>
       <div v-else>
         <van-empty description="暂无数据"/>
       </div>
     </div>
-
-    <!-- 按钮区域-->
-    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
+    <!--单据操作按钮-->
+    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate"
+                 @submit="submitBill" @rollback="rollbackBill"/>
   </div>
 </template>
 
 <script>
-  import {Toast} from 'vant';
-  import {Dialog} from 'vant';
+  import {Toast, Dialog} from 'vant';
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/Button/ApplyButton'
-import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
-
+  import {
+    getTransBill,
+    saveTransBill,
+    submitTransBill,
+    recoverTransBill,
+    queryTransType,
+    deleteTransBill
+  } from '@/api/trans'
+  import {approveStateName} from '@/utils/ConstantUtils'
+  import {BillTypeCode} from '@/utils/ConstantUtils'
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store'
 
   export default {
     name: "edit",
     components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
-        title: '调动申请',
+        BillTypeCode,
+        approveStateName,
+        title: '调配申请',
         currentHeight: '',
         rightIcon: '',
-        billInfo: {},
+        billInfo: null,
+        oldItem: [],
+        newItem: [],
+        workflownote: [],
         approvestate: '',
         pk_h: '',
-        billtype: '',
+        billtype: BillTypeCode.trans.billtypecode,
+        pk_org: storage.get(USERINFO).pk_org
       }
     },
     watch: {
@@ -55,6 +114,8 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
         // 只有自由态可删除
         if (val == '-1') {
           this.rightIcon = 'delete-o'
+        } else {
+          this.rightIcon = ''
         }
       }
     },
@@ -81,7 +142,7 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
       fileManager() {
         // 如果等于 1  附件禁止操作
         let disabled = 1
-        if (['3', '-1'].includes(this.approvestate)) {
+        if (['-1'].includes(this.approvestate)) {
           // 提交 自由态 附件可操作
           disabled = 0
         }
@@ -101,6 +162,21 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
           title: '提交单据',
           message: '是否确定提交单据?',
         }).then(() => {
+          let params = {
+            billid: this.pk_h,
+            pk_org: this.pk_org
+          }
+          Toast.loading({
+            message: '提交中...',
+            duration: 0
+          })
+          submitTransBill(params).then(res => {
+            Toast.success(res.message)
+            this.queryBillInfo(this.pk_h)
+            // setTimeout(() => {
+            //   this.$router.push("myApply")
+            // },500)
+          })
         }).catch(() => {
         })
       },
@@ -112,6 +188,18 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
           title: '收回单据',
           message: '是否确定收回单据?',
         }).then(() => {
+          let params = {
+            billid: this.pk_h,
+            pk_org: this.pk_org
+          }
+          Toast.loading({
+            message: '收回中...',
+            duration: 0
+          })
+          recoverTransBill(params).then(res => {
+            Toast.success(res.message)
+            this.queryBillInfo(this.pk_h)
+          })
         }).catch(() => {
         })
       },
@@ -120,6 +208,10 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
        */
       deleteBill() {
         if (this.approvestate == '-1') {
+          let params = {
+            billid: this.pk_h,
+            pk_org: this.pk_org
+          }
           Dialog.confirm({
             title: '删除单据',
             message: '是否确定删除单据?',
@@ -127,6 +219,12 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
             Toast.loading({
               message: '删除中...',
               duration: 0
+            })
+            deleteTransBill(params).then(res => {
+              Toast.success(res.message)
+              setTimeout(() => {
+                this.$router.replace("myApply")
+              }, 500)
             })
           })
         }
@@ -140,12 +238,14 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
           duration: 0
         })
         let params = {
-          billid: pk_h,
-          billtype: billtype
+          billid: pk_h
         }
-        getBillInfo(params).then(res => {
-          this.billInfo = res.data
-          this.approvestate = res.data.approvestatus
+        getTransBill(params).then(res => {
+          this.oldItem = res.data.oldItem
+          this.newItem = res.data.newItem
+          this.billInfo = res.data.billInfo
+          this.workflownote = res.data.workflownote
+          this.approvestate = res.data.billInfo.approve_state.value
           Toast.clear()
         })
       }

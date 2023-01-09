@@ -1,5 +1,4 @@
 <template>
-  <div class="container">
     <van-popup v-model="show" position="left" :style="{ width: '90%', height: '100%' }" closeable>
       <div style="margin-top: 40px">
         <van-row type="flex">
@@ -33,7 +32,6 @@
         <van-button type="info" block>退出登录</van-button>
       </div>
     </van-popup>
-  </div>
 </template>
 
 <script>
@@ -57,7 +55,7 @@ export default {
     // localStorage
   },
   mounted() {
-    this.currentHeight = (document.documentElement.clientHeight - 100 -94) + 'px'
+    this.currentHeight = (document.documentElement.clientHeight - 100 - 104) + 'px'
   },
   methods: {
     // 退出登录
@@ -79,23 +77,11 @@ export default {
 </script>
 
 <style scoped>
-.container{
-  display: flex;
-  /*布局方向是垂直的*/
-  flex-direction: column;
-  width: 90%;
-  height: 100%;
-}
-.main{
-  flex: 1;
-  width: 90%;
-  overflow-y: auto;
-}
 .footer {
   width: 90%;
   height: 44px;
   padding: 0px 5%;
-  margin-bottom: 10px;
+  margin: 10px 0px;
   display: flex;
   flex-direction: column;
 }

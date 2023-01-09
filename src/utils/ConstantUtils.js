@@ -243,19 +243,3 @@ export const PsnInfoApproveList = [
     value: 1
   }
 ]
-
-// 调配方式
-export const StapplyModeList = [
-  {
-    text: '组织内调配',
-    value: 1
-  },
-  {
-    text: '调出',
-    value: 2
-  },
-  {
-    text: '调入',
-    value: 3
-  }
-]

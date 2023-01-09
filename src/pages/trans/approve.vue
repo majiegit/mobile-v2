@@ -2,19 +2,64 @@
   <div>
     <Header :title="title" @clickLeft="clickLeft"></Header>
     <div class="item_body" :style="{'height': currentHeight}">
-      <div v-if="billInfo.pk_psndoc">
+      <div v-if="billInfo">
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.pk_psndoc"/>
-          <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
-          <van-cell title="加班说明：" :value="billInfo.remark"/>
-          <van-cell title="审批状态：" :value="billInfo.approvestatus"/>
+          <van-cell title="申请单编号" :value="billInfo.bill_code.value"/>
+          <van-cell title="审批状态" :value="approveStateName[billInfo.approve_state.value]"/>
+          <van-cell title="申请人" :value="billInfo.billmaker.display"/>
+          <van-cell title="申请日期" :value="billInfo.apply_date.value"/>
+        </van-cell-group>
+
+        <p class="item_body_title">人员信息</p>
+        <van-cell-group>
+          <van-cell title="调配人员" :value="billInfo.pk_psndoc.display"/>
+          <van-cell title="调配业务类型" :value="billInfo.pk_trnstype.display"/>
+          <van-cell title="调配原因" :value="billInfo.sreason.display"/>
+          <van-cell title="生效日期" :value="billInfo.effectdate.value"/>
+          <div v-if="billInfo.trial_flag.value === 'Y'">
+            <van-cell title="试用" :value="billInfo.trial_flag.display"/>
+            <van-cell title="岗位试用期限" :value="billInfo.trialdays.value"/>
+            <van-cell title="岗位试用期限单位" :value="billInfo.trial_unit.display"/>
+            <van-cell title="试用开始日期" :value="billInfo.trialbegindate.value"/>
+            <van-cell title="试用结束日期" :value="billInfo.trialenddate.value"/>
+          </div>
+          <van-cell title="调配说明" :value="billInfo.memo.value"/>
+        </van-cell-group>
+
+        <p class="item_body_title">调配前信息</p>
+        <van-cell-group>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in oldItem"
+                    :key="item.pk_stbill_itemset"/>
+        </van-cell-group>
+
+        <p class="item_body_title">调配后信息</p>
+        <van-cell-group>
+          <van-cell :title="item.itemname" :value="billInfo[item.itemkey].display" v-for="item in newItem"
+                    :key="item.pk_stbill_itemset"/>
+        </van-cell-group>
+
+        <p class="item_body_title">调配后管理组织</p>
+        <van-cell-group>
+          <van-cell title="原人员信息组织" :value="billInfo.pk_old_hi_org.display"/>
+          <van-cell title="新人员信息组织" :value="billInfo.pk_hi_org.display"/>
+        </van-cell-group>
+
+        <p class="item_body_title">合同管理组织</p>
+        <van-cell-group>
+          <van-cell title="原合同管理组织" :value="billInfo.pk_old_hrcm_org.display"/>
+          <van-cell title="新合同管理组织" :value="billInfo.pk_hrcm_org.display"/>
+          <van-cell title="解除" :value="billInfo.isrelease.display"/>
+          <van-cell title="终止" :value="billInfo.isend.display"/>
+        </van-cell-group>
+
+        <p class="item_body_title">执行信息</p>
+        <van-cell-group>
+          <van-cell title="结束兼职" :value="billInfo.ifendpart.display"/>
+          <van-cell title="同步工作履历" :value="billInfo.ifsynwork.display"/>
         </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
-        <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
+        <ApproveProcess :workflownote="workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
       </div>
       <div v-else>
         <van-empty description="暂无数据"/>

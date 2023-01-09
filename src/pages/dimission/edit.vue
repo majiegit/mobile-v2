@@ -53,7 +53,7 @@
           />
 
           <p class="item_body_title" v-if="oldItem.length != 0">离职前信息</p>
-          <van-field :label="item.itemname" :value="billInfo[item.itemkey].display" disabled v-for="item in oldItem"
+          <van-field :label="item.itemname" :value="billInfo[item.itemkey].display" readonly v-for="item in oldItem"
                      :key="item.pk_stbill_itemset"/>
 
           <p class="item_body_title" v-if="newItem.length != 0">离职后信息</p>
@@ -65,12 +65,14 @@
             placeholder="请选择原人员信息组织"
             :value="billInfo.pk_old_hi_org.display"
             is-link
+            @click="selectData(hrOrgList,'请选择原人员信息组织','pk_old_hi_org', 'name', 'pk_hrorg', billInfo.pk_old_hi_org.value)"
             readonly/>
           <van-field
             label="新人员信息组织"
             placeholder="请选择新人员信息组织"
             :value="billInfo.pk_hi_org.display"
             is-link
+            @click="selectData(hrOrgList,'请选择新人员信息组织','pk_hi_org', 'name', 'pk_hrorg', billInfo.pk_hi_org.value)"
             readonly/>
           <p class="item_body_title">合同管理组织</p>
           <van-field
@@ -78,12 +80,14 @@
             placeholder="请选择原合同管理组织"
             :value="billInfo.pk_old_hrcm_org.display"
             is-link
+            @click="selectData(hrOrgList,'请选择原合同管理组织','pk_old_hrcm_org', 'name', 'pk_hrorg', billInfo.pk_old_hrcm_org.value)"
             readonly/>
           <van-field
             label="新合同管理组织"
             placeholder="请选择新合同管理组织"
             :value="billInfo.pk_hrcm_org.display"
             is-link
+            @click="selectData(hrOrgList,'请选择新合同管理组织','pk_hrcm_org', 'name', 'pk_hrorg', billInfo.pk_hrcm_org.value)"
             readonly/>
           <van-field label="解除" readonly>
             <template #input>
@@ -97,6 +101,7 @@
                           @change="changeSwitch(billInfo.isend)"/>
             </template>
           </van-field>
+
           <p class="item_body_title">执行信息</p>
           <van-field label="停用离职人员" readonly>
             <template #input>
@@ -142,6 +147,7 @@
   import SaveButton from '@/components/Button/SaveButton'
   import FieldEdit from '@/components/HrtrnFieldEdit/FieldEdit'
   import {getDimissionBill, saveDimissionBill, queryDimissionType, queryDimissionSreason} from '@/api/dimission'
+  import {quertHrOrgList} from '@/api/hrshRef'
   import {Toast} from 'vant';
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store';
@@ -163,7 +169,8 @@
           }
         },
         newItem: [],
-        oldItem: []
+        oldItem: [],
+        hrOrgList: []
       }
     },
     components: {Header, Select, SelectDate, SaveButton, FieldEdit},
@@ -171,6 +178,7 @@
       this.currentHeight = (document.documentElement.clientHeight - 46 - 60) + 'px'
       this.queryDimissionType()
       this.queryDimissionSreason()
+      this.quertHrOrgList()
       // 判断是修改还是新增
       if (this.$route.query.pk_h) {
         this.queryBillInfo(this.$route.query.pk_h, null)
@@ -180,6 +188,14 @@
     },
     watch: {},
     methods: {
+      /**
+       * 查询人力组织
+       */
+      quertHrOrgList(){
+        quertHrOrgList().then(res => {
+          this.hrOrgList = res.data
+        })
+      },
       changeSwitch(field) {
         if (field.value === 'Y') {
           field.display = '是'
@@ -297,7 +313,7 @@
           })
           saveDimissionBill(params).then(res => {
             Toast.clear()
-            this.$router.push({name: 'dimissionDetail', query: {pk_h: res.data.pk_dimission}})
+            this.$router.push({name: 'dimissionDetail', query: {pk_h: res.data.primaryKey}})
           })
         })
       },
