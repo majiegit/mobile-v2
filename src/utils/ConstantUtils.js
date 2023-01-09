@@ -245,7 +245,6 @@ export const PsnInfoApproveList = [
 ]
 
 // 调配方式
-
 export const StapplyModeList = [
   {
     text: '组织内调配',

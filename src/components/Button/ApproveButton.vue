@@ -3,7 +3,7 @@
     <!-- 按钮区域-->
     <van-row type="flex" justify="space-around" class="button_bottom">
       <van-col :span="11">
-        <van-button round block type="info" @click="checkBill('Y')" :disabled="!['2','3'].includes(approvestate)">批 准
+        <van-button round block type="info" @click="checkBillOk" :disabled="!['2','3'].includes(approvestate)">批 准
         </van-button>
       </van-col>
       <van-col :span="11">
@@ -20,8 +20,8 @@
       close-on-click-action
     />
     <!--审批弹框-->
-    <van-dialog v-model="check.show" title="审批意见" show-cancel-button @confirm="checkConfirm">
-      <van-field v-model="check.node" label="" placeholder="请输入审批意见"/>
+    <van-dialog v-model="checkshow" title="审批意见" show-cancel-button @confirm="checkConfirm">
+      <van-field v-model="checknode" label="" placeholder="请输入审批意见"/>
     </van-dialog>
   </div>
 </template>
@@ -47,12 +47,8 @@
     },
     data() {
       return {
-        check: {
-          show: false,
-          title: '',
-          node: '',
-          action: '',
-        },
+        checkshow: false,
+        checknode: '',
         show: false,
         approveMenu: [
           {name: '制单人', value: 1},
@@ -84,21 +80,10 @@
       /**
        * 单据审核
        */
-      checkBill(type) {
-        this.check.show = true
-        if (type == 'Y') {
-          // 审核通过
-          this.check.action = 'Y'
-          this.check.title = '审核通过'
-        } else if (type == 'N') {
-          // 审核不通过
-          this.check.action = 'N'
-          this.check.title = '审核不通过'
-        } else if (type == 'R') {
-          // 驳回
-          this.check.action = 'R'
-          this.check.title = '驳回'
-        }
+      checkBillOk() {
+        this.checkshow = true
+        // 审核通过
+        this.checknode = '批准'
       },
       /**
        * 审核确认
@@ -107,7 +92,7 @@
         let params = {
           billid: this.pk_h ,// 单据主键
           billtype: this.billtype,//单据类型或交易类型
-          check_note: this.check.node
+          check_note: this.checknode
         }
         Toast.loading({
           message: '审批中...',

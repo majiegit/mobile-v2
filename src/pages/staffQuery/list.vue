@@ -67,6 +67,7 @@
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 46) + 'px'
       this.queryPsndocList(this.$route.query.id, this.$route.query.isleaf, this.$route.query.isbusinessunit, this.$route.query.orgtype1)
+      this.title = this.$route.query.title
     },
     methods: {
 

@@ -5,23 +5,14 @@
       <van-collapse-item title="审批流程" name="1">
         <van-steps direction="vertical" :active="active" active-color="#2479ed">
           <van-step v-for=" (item ,index) in workflownote" :key="index">
-            <!--提交人-->
-            <div v-if="index == 0">
+            <!--审批流程-->
+            <div>
               <p>
-                <span>{{item.sendermanname}}</span>
-                <span>提交</span>
-              </p>
-              <p>{{item.senddate}}</p>
-            </div>
-            <!--审批人-->
-            <div v-else>
-              <p>
-                <span>{{item.checkmanname}}</span>
-                <span v-if="item.approveresult == 'Y'">审批通过</span>
-                <span v-if="item.approveresult == 'N'">审批不通过</span>
+                <span>{{item.dealman}}</span>
+                <span>{{item.dealstatus}}</span>
               </p>
               <p>{{item.checknote}}</p>
-              <p>{{item.senddate}}</p>
+              <p>{{item.dealdate}}</p>
             </div>
           </van-step>
         </van-steps>

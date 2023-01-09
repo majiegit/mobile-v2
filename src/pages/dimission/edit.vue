@@ -36,7 +36,7 @@
             :rules="formRules.effectdate"
             name="effectdate"
             v-model="billInfo.effectdate.value"
-            @click="selectDate(billInfo.effectdate,'effectdate','生效日期', 'date')"
+            @click="selectDate(billInfo.effectdate.value,'effectdate','生效日期', 'date')"
             label="生效日期"
             placeholder="请选择生效日期"
           />
@@ -200,8 +200,13 @@
        * 查询离职类型
        */
       queryDimissionType() {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
         queryDimissionType().then(res => {
           this.dimissionTypeList = res.data
+          Toast.clear()
         })
       },
       /**
@@ -281,13 +286,16 @@
        * 保存单据
        */
       saveBillInfo() {
+        let params = {
+          billInfo: this.billInfo
+        }
         console.log(this.billInfo)
         this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
           Toast.loading({
             message: '保存中...',
             duration: 0
           })
-          saveDimissionBill(this.billInfo).then(res => {
+          saveDimissionBill(params).then(res => {
             Toast.clear()
             this.$router.push({name: 'dimissionDetail', query: {pk_h: res.data.pk_dimission}})
           })

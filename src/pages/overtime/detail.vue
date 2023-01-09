@@ -16,7 +16,7 @@
 
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
-        <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3'].includes(approvestate)"/>
+        <ApproveProcess :workflownote="billInfo.workflownote" v-if="['102','0','1','2','3', '-1'].includes(approvestate)"/>
       </div>
       <div v-else>
         <van-empty description="暂无数据"/>

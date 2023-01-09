@@ -8,7 +8,7 @@
       show-action
       :clearable="false"
       placeholder="请输入姓名/电话/邮箱"
-      @input="search"
+      @search="search"
       @cancel="onCancel"
     />
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto; background-color: #fff;">
@@ -16,12 +16,15 @@
         <p class="item_title">联系人</p>
         <!-- 组织架构-->
         <van-row type="flex" justify="end">
-          <van-col span="24" v-for="(psndoc,index) in psndocList" :key="index">
-            <van-cell :border="false" :to="{name : 'directoryDetail', params: { psndoc: psndoc}}">
+          <van-col span="24" v-for="(psndoc,index) in psndocList" :key="index" class="row_div">
+            <van-cell :border="true" :to="{name : 'directoryDetail', params: { psndoc: psndoc}}">
               <!-- 使用 title 插槽来自定义标题 -->
               <template #title>
-                <div style="width: 100%; height: 100%; line-height: 30px;">
-                  <span style="margin-left: 15px;">{{psndoc.name}}</span>
+                <div style="width: 100%; height: 100%; padding-left: 10px; position:relative;">
+                  <p style="font-size: 14px; margin: 0; position:relative;">{{psndoc.name}}</p>
+                  <p
+                    style="font-size: 12px; color: #c8c9cc;margin: 0; border-bottom: 1px solid #f7f8fa; padding-bottom: 3px;">
+                    {{psndoc.dept_name}}</p>
                 </div>
               </template>
               <template #icon>
@@ -49,6 +52,7 @@
 </template>
 
 <script>
+  import {Toast} from 'vant';
   import Header from '@/components/Header/Index'
   import {USERINFO} from '@/utils/mutation-types'
   import {queryDirPsnInfoList} from '@/api/directory'
@@ -63,33 +67,16 @@
         title: '通讯录',
         currentHeight: '',
         psndocList: [],
-        psndocListAll: [],
         searchModel: ''
       }
     },
     mounted() {
       this.currentHeight = (document.documentElement.clientHeight - 54) + 'px'
-      this.queryDirPsnInfoList('','Y')
     },
     methods: {
 
-      search(value) {
-        console.log(value)
-        if (value) {
-          let arr = []
-          for (let i = 0; i < this.psndocListAll.length; i++) {
-            if (
-              (this.psndocListAll[i].name && this.psndocListAll[i].name.indexOf(value) != -1) ||    // 姓名
-              (this.psndocListAll[i].mobile && this.psndocListAll[i].mobile.indexOf(value) != -1) ||  // 电话
-              (this.psndocListAll[i].email && this.psndocListAll[i].email.indexOf(value) != -1)     // 邮箱
-            ) {
-              arr.push(this.psndocListAll[i])
-            }
-          }
-          this.psndocList = arr
-        } else {
-          this.psndocList = this.psndocListAll
-        }
+      search() {
+        this.queryDirPsnInfoList()
       },
       /**
        * 获取名字
@@ -111,14 +98,17 @@
       onCancel() {
         this.$router.go(-1)
       },
-      queryDirPsnInfoList(id, isbusinessunit) {
+      queryDirPsnInfoList() {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
         let params = {
-          id: id,
-          isbusinessunit: isbusinessunit
+          like: this.searchModel
         }
         queryDirPsnInfoList(params).then(res => {
+          Toast.clear()
           this.psndocList = res.data
-          this.psndocListAll = res.data
         })
       }
     }
@@ -126,20 +116,40 @@
 </script>
 
 <style scoped lang="less">
+
+  .item_title {
+    font-size: 12px;
+    line-height: 12px;
+    margin: 10px 0;
+    padding-left: 10px;
+    color: #999;
+  }
+
+  .head_img {
+    width: 30px;
+    height: 30px;
+    margin-top: 7px;
+    text-align: center;
+  }
+
   .head_text {
     width: 30px;
     height: 30px;
     line-height: 30px;
     text-align: center;
+    margin-top: 7px;
     background-color: #0c89f1;
     color: #fff;
     border-radius: 20%;
   }
 
-  .item_title {
-    font-size: 14px;
-    line-height: 14px;
-    padding-left: 10px;
-    color: #999;
+  .row_div {
+    padding: 5px 0px;
+    background-color: #fff;
+  }
+
+  .row_div .van-cell {
+    padding: 0 16px;
+    line-height: 20px;
   }
 </style>

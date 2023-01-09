@@ -1,41 +1,38 @@
 <template>
   <div>
     <!--导航栏区域-->
-    <Header :title="title"
-            @clickLeft="clickLeft"/>
+    <Header :title="title" @clickLeft="clickLeft"/>
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto;">
-      <div v-if="!show">
-        <!--已选择数据区域-->
-        <van-cell v-if="selectTreeData.length != 0" style="color: #2479ed">
+      <div v-if="orgData">
+        <!-- 已选择组织架构数据-->
+        <van-cell v-if="orgDataSelect.length != 0" style="color: #2479ed">
           <template #title>
-            <span v-for="(tree, index) in selectTreeData" :key="index">
-              <span @click="selectTreeDataClick(tree)">{{tree.name}}</span>
-              <van-icon name="arrow" v-if="index !== selectTreeData.length - 1"/>
+            <span v-for="(org, index) in orgDataSelect" :key="index">
+              <span @click="selectOrgDataClick(org,index)">{{org.name}}</span>
+              <van-icon name="arrow" v-if="index !== orgDataSelect.length - 1"/>
             </span>
           </template>
         </van-cell>
-        <!--带选择数据区域-->
-        <van-cell v-for="(item,index) in waitSelectData" :key="index">
-          <template #title>
-            <div style="width: 100%;" @click="clickWait(item)">
-              <span :style="item.select ? 'color: #2479ed' : ''">{{item.name}}</span>
-            </div>
-          </template>
-          <template #right-icon>
-            <van-icon name="success" color="#2479ed" v-if="item.select" class="select_right_icon"/>
-            <van-icon name="arrow" class="select_right_icon"
-                      @click="getCascadeData(item)"/>
-          </template>
-        </van-cell>
+        <p class="item_title">组织架构</p>
+        <!-- 组织架构-->
+        <van-row type="flex" justify="end" class="org">
+          <van-col span="24" v-for="(org,index) in orgData" :key="index">
+            <van-cell :border="false" :title="org.name" icon="cluster" @click="orgClick(org)"/>
+          </van-col>
+        </van-row>
+      </div>
+      <div v-else>
+        <van-empty description="暂无权限内数据"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
-  import {Toast} from 'vant'
+  import {Toast} from 'vant';
   import Header from '@/components/Header/Index'
+  import {querySubOrgOrDeptByPk} from '@/api/staffQuery'
+  import storage from 'store';
 
   export default {
     components: {
@@ -44,159 +41,94 @@
     name: "orgstructure",
     data() {
       return {
-        title: '选择组织',
-        right_text: '完成',
-        selectData: {},
-        selectTreeData: [],
+        title: '员工查询',
         currentHeight: '',
-        waitSelectData: [],
         orgData: [],
-        show: false,
-        downloadData: {
-          url: '',  //需要转化成二维码的网址
-          icon: require('./../../../static/img/inductionInfo/org.png')  //二维码中间的图片,可以不设置
-        }
+        orgModel: {},
+        orgDataSelect: []
       }
     },
     mounted() {
-      this.currentHeight = (document.documentElement.clientHeight - 46 - 50) + 'px'
-      this.getOrgs()
-    },
-    methods: {
-      //点击保存
-      toSave() {
-        html2canvas(document.getElementById("imageWrapper")).then(canvas => {
-          let saveUrl = canvas.toDataURL('image/png')
-          let aLink = document.createElement('a')
-          let blob = this.base64ToBlob(saveUrl)
-          let evt = document.createEvent('HTMLEvents')
-          evt.initEvent('click', true, true)
-          aLink.download = '二维码.jpg'
-          aLink.href = URL.createObjectURL(blob)
-          aLink.click()
-        });
-      },
-      //这里把图片转base64
-      base64ToBlob(code) {
-        let parts = code.split(';base64,')
-        let contentType = parts[0].split(':')[1]
-        let raw = window.atob(parts[1])
-        let rawLength = raw.length
-        let uInt8Array = new Uint8Array(rawLength)
-        for (let i = 0; i < rawLength; ++i) {
-          uInt8Array[i] = raw.charCodeAt(i)
-        }
-        return new Blob([uInt8Array], {type: contentType})
-      },
-      clickLeft() {
-        if (this.right_text === '') {
-          this.right_text = '完成'
-          this.title = '选择组织'
-          this.show = false
-        } else {
-          this.$router.go(-1)
-        }
-      },
-      // 完成事件
-      clickRight() {
-        if (this.selectData.pk_org == undefined) {
-          Toast("请先选择入职组织")
-          return
-        }
-        if (this.right_text === '完成') {
-          console.log(this.selectData)
-          this.show = true
-          this.downloadData.url = window.location.href.replace('qrCode', 'inductionInfo') + '?pk_org=' + this.selectData.pk_org
-          this.right_text = ''
-          this.title = '入职登记'
-        }
-      },
-      // 查询组织数据
-      getOrgs() {
-        queryOrgForScanQRCode({}).then(res => {
-          this.orgData = res.data
-          this.getWaitSelectData()
-        })
-      },
-      // 选择好的数据点击
-      selectTreeDataClick(item) {
-        let arr = []
-        this.getTreeDataClick(item, arr)
-        this.selectTreeData = JSON.parse(JSON.stringify(arr))
-        let data = this.getTreeData(item.pk_org, this.orgData)
-        if (data.length !== 0) {
-          this.waitSelectData = data
-        }
-      },
-      // 获取下一级数据
-      getCascadeData(item) {
-        // 获取下一级数据 并将当前列设为已选择的数据
-        // debugger
-        let data = this.getTreeData(item.pk_org, this.orgData)
-        this.waitSelectData.forEach(i => {
-          this.$set(i, 'select', false)
-        })
-        this.$set(item, 'select', true)
-        this.selectData = item
-        // 判断下一级数据是否为空，不为空
-        if (data.length !== 0) {
-          this.waitSelectData = data
-          let arr = []
-          this.getTreeDataClick(item, arr)
-          this.selectTreeData = JSON.parse(JSON.stringify(arr))
-        } else {
-          Toast('已经到底了')
-        }
-      },
-      // 选择数据
-      clickWait(item) {
-        this.waitSelectData.forEach(i => {
-          this.$set(i, 'select', false)
-        })
-        this.$set(item, 'select', true)
-        this.selectData = item
-        let arr = []
-        this.getTreeDataClick(item, arr)
-        this.selectTreeData = JSON.parse(JSON.stringify(arr))
-      },
-      // 获取待选择数据
-      getWaitSelectData() {
-        // 树形数据
-        this.waitSelectData = this.getTreeData(undefined, this.orgData)
-        console.log(this.waitSelectData)
-      },
-      // 获取树形数据
-      getTreeData(pid, data) {
-        return data.filter(item => item.pid == pid)
-      },
-      // 获取点击树形数据
-      getTreeDataClick(item, arr) {
-        if (item.pid) {
-          let data = JSON.parse(JSON.stringify(this.orgData))
-          for (var i = 0; i < data.length; i++) {
-            if (item.pid === data[i].pk_org) {
-              this.getTreeDataClick(data[i], arr)
-            }
+      this.currentHeight = (document.documentElement.clientHeight - 46) + 'px'
+      let storageOrgDataSelect = storage.get('StaffQueryOrgDataSelectKey')
+      if (storageOrgDataSelect) {
+        for (let i = 0; i < storageOrgDataSelect.length; i++) {
+          if (i != storageOrgDataSelect.length - 1) {
+            this.orgDataSelect.push(storageOrgDataSelect[i])
           }
         }
-        arr.push(item)
+        if(this.orgDataSelect.length != 0){
+          this.querySubOrgOrDeptByPk(this.orgDataSelect[this.orgDataSelect.length - 1].id)
+        }else {
+          this.querySubOrgOrDeptByPk()
+        }
+      } else {
+        this.querySubOrgOrDeptByPk()
+      }
+    },
+    watch: {
+      orgData(val) {
+        if (this.orgData.length == 0) {
+          // 查询人员
+          this.$router.push({
+            name: 'staffQueryList',
+            query: {
+              id: this.orgModel.id,
+              isleaf: this.orgModel.isleaf,
+              isbusinessunit: this.orgModel.isbusinessunit,
+              orgtype1: this.orgModel.orgtype1,
+              title: this.orgModel.name
+            }
+          })
+        }
+      }
+    },
+    methods: {
+      // 选择已选择组织
+      selectOrgDataClick(org,index) {
+        this.orgDataSelect.splice(index + 1, this.orgDataSelect.length - (index + 1))
+        this.querySubOrgOrDeptByPk(org.id)
+      },
+      // 选择下级组织
+      orgClick(org) {
+        this.orgModel = org
+        this.orgDataSelect.push(this.orgModel)
+        storage.set('StaffQueryOrgDataSelectKey', this.orgDataSelect)
+        this.querySubOrgOrDeptByPk(org.id)
+      },
+      // 头部左上角点击事件
+      clickLeft() {
+        storage.remove('StaffQueryOrgDataSelectKey')
+        this.$router.push("application")
+      },
+      // 查询组织架构
+      querySubOrgOrDeptByPk(id) {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
+        let params = {
+          id: id
+        }
+        querySubOrgOrDeptByPk(params).then(res => {
+          Toast.clear()
+          this.orgData = res.data
+        })
       },
     }
   }
 </script>
 
 <style scoped>
-  .wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+  .org .van-cell__left-icon {
+    color: #2479ed;
   }
 
-  .block {
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    overflow-y: auto;
+  .item_title {
+    font-size: 12px;
+    line-height: 12px;
+    margin: 10px 0;
+    padding-left: 10px;
+    color: #999;
   }
 </style>

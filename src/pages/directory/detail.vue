@@ -1,25 +1,25 @@
 <template>
   <div>
     <!--导航栏区域-->
-    <Header :title="title" @clickLeft="clickLeft"/>
+    <Header :title="userInfo.name" @clickLeft="clickLeft"/>
     <div :style="{ 'height': currentHeight }" style="overflow-y: auto; background-color: rgb(245,248,255)">
       <div style="width: 100%; text-align: center;" v-if="userInfo">
-        <div>
+        <div
+          style="width: 100px; height: 100px; padding: 4px; background: rgba(43,128,255,0.17); border-radius: 50%; margin: 20px auto 10px auto; ">
           <van-image
             v-if="userInfo.photo"
-            style="margin-top: 20px; "
             round
             width="100px"
             height="100px"
             :src="userInfo.photo"
           />
           <div class="head_text" v-else>
-            <span style="font-size: 16px; -webkit-transform: scale(0.5)">{{getName(userInfo.name)}}</span>
+            <span style="font-size: 20px; -webkit-transform: scale(0.5)">{{getName(userInfo.name)}}</span>
           </div>
         </div>
         <div>
           <p style="font-size: 18px; line-height: 18px; margin: 10px;">{{ userInfo.name }}</p>
-          <p style="font-size: 14px; line-height: 14px; margin: 10px; color: #999999;">{{ userInfo.orgname }}</p>
+          <p style="font-size: 14px; line-height: 14px; margin: 10px; color: #999999;">{{ userInfo.org_name }}</p>
         </div>
       </div>
       <van-row type="flex" justify="center">
@@ -59,7 +59,7 @@
           },
           {
             name: '邮箱',
-            value: 'mobile',
+            value: 'email',
             icon: 'envelop-o'
           },
           {
@@ -110,6 +110,7 @@
   .detail {
     width: 100%;
     height: 80px;
+    box-shadow: 0px 2px 16px 0px rgba(112, 112, 112, 0.21);
     background-color: #fff;
     border-radius: 10px;
     color: #2479ed;
@@ -127,10 +128,11 @@
       height: 60px;
       margin: 10px;
       float: left;
-      font-size: 18px;
-      font-weight: bolder;
-      font-family: 黑体;
+      font-size: 16px;
       line-height: 60px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #2B80FF;
     }
   }
 
@@ -141,7 +143,6 @@
     margin: 0 auto;
     text-align: center;
     background-color: #0c89f1;
-    margin-top: 20px;
     color: #fff;
     border-radius: 50%;
   }

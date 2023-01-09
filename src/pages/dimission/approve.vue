@@ -6,7 +6,7 @@
       <div v-if="billInfo">
         <van-cell-group>
           <van-cell title="申请单编号" :value="billInfo.bill_code.value"/>
-          <van-cell title="审批状态：" :value="approveStateName[billInfo.approvestatus.value]"/>
+          <van-cell title="审批状态：" :value="approveStateName[billInfo.approve_state.value]"/>
           <van-cell title="申请人：" :value="billInfo.billmaker.display"/>
           <van-cell title="申请日期：" :value="billInfo.apply_date.value"/>
         </van-cell-group>
@@ -61,7 +61,7 @@
     </div>
 
     <!-- 按钮区域-->
-    <ApproveButton :pk_h="pk_h" :approvestate="approvestate" v-if="pk_h && approvestate" />
+    <ApproveButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype" v-if="pk_h && approvestate" />
   </div>
 </template>
 
@@ -131,7 +131,7 @@
           this.newItem = res.data.newItem
           this.billInfo = res.data.billInfo
           this.workflownote = res.data.workflownote
-          this.approvestate = res.data.billInfo.approvestatus.value
+          this.approvestate = res.data.billInfo.approve_state.value
           Toast.clear()
         })
       },
@@ -140,36 +140,7 @@
        */
       clickLeft() {
         this.$router.go(-1)
-      },
-      /**
-       * 审核确认
-       */
-      checkConfirm() {
-        Toast.loading({
-          message: '审批中...',
-          duration: 0
-        })
-      },
-
-      /**
-       * 单据审核
-       */
-      checkBill(type) {
-        this.check.show = true
-        if (type == 'Y') {
-          // 审核通过
-          this.check.action = 'Y'
-          this.check.title = '审核通过'
-        } else if (type == 'N') {
-          // 审核不通过
-          this.check.action = 'N'
-          this.check.title = '审核不通过'
-        } else if (type == 'R') {
-          // 驳回
-          this.check.action = 'R'
-          this.check.title = '驳回'
-        }
-      },
+      }
     }
   }
 </script>
