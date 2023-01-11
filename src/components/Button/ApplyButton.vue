@@ -62,6 +62,7 @@
        */
       editBill() {
         let routerPath = BillTypeMap[this.billtype].routerEditPath
+        console.log(routerPath)
         this.$router.push({name: routerPath, query: {pk_h: this.pk_h}})
       },
 

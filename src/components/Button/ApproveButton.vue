@@ -100,6 +100,7 @@
         })
         approve(params).then(res => {
           Toast.success(res.message)
+          this.$router.go(-1)
         })
       }
     }

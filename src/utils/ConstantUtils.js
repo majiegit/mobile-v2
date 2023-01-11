@@ -92,9 +92,9 @@ export const BillTypeMap = {
   },
   '6QBK': {
     billtypename: '签卡单',
-    routerEditPath: 'signcardEdit',  // 签卡编辑页路由
-    routerDetailPath: 'signcardDetail',  // 签卡明细页路由
-    routerApprovePath: 'signcardApprove',  // 签卡审核页路由
+    routerEditPath: 'attendanceEdit',  // 签卡编辑页路由
+    routerDetailPath: 'attendanceDetail',  // 签卡明细页路由
+    routerApprovePath: 'attendanceApprove',  // 签卡审核页路由
   },
   '6111': {
     billtypename: '转正单',
@@ -137,7 +137,7 @@ export const BillTypeCode = {
     billtypecode: '6QXC',  // 单据编码
     billtypename: '销差单'
   },
-  signcard: {
+  attendance: {
     billtypecode: '6QQK',  // 单据编码
     billtypename: '签卡单'
   },
@@ -243,3 +243,13 @@ export const PsnInfoApproveList = [
     value: 1
   }
 ]
+
+// 补考勤 原始打卡状态
+export const signStatus = {
+  '0': '正常',
+  '1': '迟到',
+  '2': '早退',
+  '3': '缺卡',
+  '4': '旷工',
+}
+

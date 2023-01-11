@@ -14,7 +14,7 @@ import tripoff from './pages/tripoff'
 import leave from './pages/leave'
 import leaveoff from './pages/leaveoff'
 import trans from './pages/trans'
-import signcard from './pages/signcard'
+import attendance from './pages/attendance'
 import dimission from './pages/dimission'
 import calendar from './pages/calendar'
 import checkout from "./pages/checkout"
@@ -43,7 +43,7 @@ export const AllRouterList = [].concat(
   leave,
   leaveoff,
   trans,
-  signcard,
+  attendance,
   dimission,
   calendar,
   psnInfoApprove,

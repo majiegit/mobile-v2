@@ -4,13 +4,10 @@
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.pk_psndoc"/>
-          <van-cell title="申请时间：" :value="billInfo.applydate"/>
-          <van-cell title="开始时间：" :value="billInfo.overtimebegintime"/>
-          <van-cell title="结束时间：" :value="billInfo.overtimeendtime"/>
-          <van-cell title="加班时长：" :value="billInfo.otapplylength"/>
-          <van-cell title="加班说明：" :value="billInfo.remark"/>
-          <van-cell title="审批状态：" :value="billInfo.approvestatus"/>
+          <van-cell title="补考勤日期：" :value="billInfo.fill_date"/>
+          <van-cell title="原始打卡状态：" :value="signStatus[billInfo.original_sign_status]"/>
+          <van-cell title="补考勤类型：" :value="billInfo.fill_type_name"/>
+          <van-cell title="补考勤说明：" :value="billInfo.fill_reason"/>
         </van-cell-group>
 
         <p class="fileClass" @click="fileManager">附件管理</p>
@@ -23,7 +20,9 @@
     </div>
 
     <!-- 按钮区域-->
-    <ApplyButton :pk_h="pk_h" :approvestate="approvestate" :billtype="billtype"/>
+    <!--单据操作按钮-->
+    <ApplyButton :pk_h="pk_h" :billtype="billtype" :approvestate="approvestate" v-if="pk_h && approvestate"
+                 @submit="submitBill" @rollback="rollbackBill"/>
   </div>
 </template>
 
@@ -33,14 +32,16 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/Button/ApplyButton'
-import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
+  import {getAttendanceBill, submitAttendanceBill, recoverAttendanceBill, deleteAttendanceBill} from '@/api/attendance'
+  import {signStatus} from '@/utils/ConstantUtils'
 
   export default {
     name: "edit",
     components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
-        title: '签卡申请',
+        signStatus,
+        title: '补考勤申请',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},
@@ -65,7 +66,7 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
       if (this.$route.query.billtype) {
         this.billtype = this.$route.query.billtype
       }
-      this.queryBillInfo(this.$route.query.pk_h)
+      this.queryBillInfo(this.$route.query.pk_h,this.$route.query.billtype)
     },
     methods: {
       /**
@@ -100,6 +101,18 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
           title: '提交单据',
           message: '是否确定提交单据?',
         }).then(() => {
+          let params = {
+            pk_h: this.pk_h
+          }
+          Toast.loading({
+            message: '提交中...',
+            duration: 0
+          })
+          submitAttendanceBill(params).then(res => {
+            console.log(res)
+            Toast.success(res.message)
+            this.queryBillInfo(this.pk_h)
+          })
         }).catch(() => {
         })
       },
@@ -111,6 +124,17 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
           title: '收回单据',
           message: '是否确定收回单据?',
         }).then(() => {
+          let params = {
+            pk_h: this.pk_h
+          }
+          Toast.loading({
+            message: '收回中...',
+            duration: 0
+          })
+          recoverAttendanceBill(params).then(res => {
+            Toast.success(res.message)
+            this.queryBillInfo(this.pk_h)
+          })
         }).catch(() => {
         })
       },
@@ -123,9 +147,18 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
             title: '删除单据',
             message: '是否确定删除单据?',
           }).then(() => {
+            let params = {
+              billid: this.pk_h
+            }
             Toast.loading({
               message: '删除中...',
               duration: 0
+            })
+            deleteAttendanceBill(params).then(res => {
+              Toast.success(res.message)
+              setTimeout(() => {
+                this.$router.replace("myApply")
+              }, 500)
             })
           })
         }
@@ -133,16 +166,16 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
       /**
        * 查询单据
        */
-      queryBillInfo(pk_h) {
+      queryBillInfo(pk_h,billtype) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
         let params = {
           billid: pk_h,
-          billtype: billtype
+          // billtype: billtype
         }
-        getBillInfo(params).then(res => {
+        getAttendanceBill(params).then(res => {
           this.billInfo = res.data
           this.approvestate = res.data.approvestatus
           Toast.clear()
