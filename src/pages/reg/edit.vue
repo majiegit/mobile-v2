@@ -245,15 +245,18 @@
        * 保存单据
        */
       saveBillInfo() {
+        let params = {
+          billInfo: this.billInfo
+        }
         console.log(this.billInfo)
         this.$refs.billForm.validate(Object.keys(formRules)).then(() => {
           Toast.loading({
             message: '保存中...',
             duration: 0
           })
-          saveRegBill(this.billInfo).then(res => {
+          saveRegBill(params).then(res => {
             Toast.clear()
-            this.$router.push({name: 'regDetail', query: {pk_h: res.data.pk_reg}})
+            this.$router.push({name: 'regDetail', query: {pk_h: res.data.primaryKey}})
           })
         })
       },
