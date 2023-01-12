@@ -2,13 +2,16 @@
   <div>
     <Header title="审批中心" @clickLeft="clickLeft"></Header>
     <div class="checkStatus">
-      <van-tabs v-model="approveStatus" color="#2479ED" title-active-color="#2479ED" title-inactive-color="#000" line-width="100px">
-        <van-tab title="待办" name="N" :title-style="{'font-size': '16px','font-weight': 'bolder'}" style="background: #fff;"/>
+      <van-tabs v-model="approveStatus" color="#2479ED" title-active-color="#2479ED" title-inactive-color="#000"
+                line-width="100px">
+        <van-tab title="待办" name="N" :title-style="{'font-size': '16px','font-weight': 'bolder'}"
+                 style="background: #fff;"/>
         <van-tab title="已办" name="Y" :title-style="{'font-size': '16px','font-weight': 'bolder'}"/>
       </van-tabs>
     </div>
     <div class="applyListClass">
-      <div class="applyListClass_item" v-for="(billtype,index) in approveTypeList" :key="index" @click="clickApply(billtype,index)"
+      <div class="applyListClass_item" v-for="(billtype,index) in approveTypeList" :key="index"
+           @click="clickApply(billtype,index)"
            :style="{'color': index == billTypeModel ? '#2479ED': ''}">
         {{billtype.name}}
       </div>
@@ -51,7 +54,8 @@
   import {getMyApplication} from '@/api/my-apply'
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store'
-  import {approveStateName, approveStateColorList,BillTypeMap} from '@/utils/ConstantUtils'
+  import {approveStateName, approveStateColorList, BillTypeMap} from '@/utils/ConstantUtils'
+
   export default {
     watch: {
       approveStatus(val) {
@@ -89,10 +93,9 @@
       // 跳转单据
       toApply(item) {
         this.$router.push({
-          name: BillTypeMap[item.billtype.substring(0,4)].routerApprovePath,
+          name: BillTypeMap[item.billtype.substring(0, 4)].routerApprovePath,
           query: {
-            pk_h: item.billid,
-            billtype: item.billtype
+            pk_h: item.billid
           }
         })
       },
@@ -116,23 +119,25 @@
        * 获取审批通知消息单据类型
        */
       getApproveBillType(messageList) {
-        let arr = []
-        let item = {
-          name: '全部',
-          type: '',
-        }
-        arr.push(item)
-
-        for (let i = 0; i < messageList.length; i++) {
-          let filter = arr.filter(item => item.type === messageList[i].billtype)
-          if (filter.length === 0) {
-            arr.push({
-              name: messageList[i].billtypename,
-              type: messageList[i].billtype
-            })
+        if (messageList.length != 0) {
+          let arr = []
+          let item = {
+            name: '全部',
+            type: '',
           }
+          arr.push(item)
+
+          for (let i = 0; i < messageList.length; i++) {
+            let filter = arr.filter(item => item.type === messageList[i].billtype)
+            if (filter.length === 0) {
+              arr.push({
+                name: messageList[i].billtypename,
+                type: messageList[i].billtype
+              })
+            }
+          }
+          this.approveTypeList = arr
         }
-        this.approveTypeList = arr
       },
       clickLeft() {
         this.$router.push({name: 'application'})

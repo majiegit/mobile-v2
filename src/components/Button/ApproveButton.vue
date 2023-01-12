@@ -3,11 +3,11 @@
     <!-- 按钮区域-->
     <van-row type="flex" justify="space-around" class="button_bottom">
       <van-col :span="11">
-        <van-button round block type="info" @click="checkBillOk" :disabled="!['2','3'].includes(approvestate)">批 准
+        <van-button round block type="info" @click="Approve" :disabled="!['2','3'].includes(approvestate)">批 准
         </van-button>
       </van-col>
       <van-col :span="11">
-        <van-button round block type="info" @click="reject" :disabled="!['2','3'].includes(approvestate)">驳 回
+        <van-button round block type="info" @click="Reject" :disabled="!['2','3'].includes(approvestate)">驳 回
         </van-button>
       </van-col>
     </van-row>
@@ -20,19 +20,24 @@
       close-on-click-action
     />
 
-
     <!--审批弹框-->
-    <van-dialog v-model="checkshow" title="审批意见" show-cancel-button @confirm="checkConfirm">
+    <van-dialog v-model="checkshow" title="审批意见" show-cancel-button @confirm="ApproveConfirm">
       <van-field v-model="checknode" label="" placeholder="请输入审批意见"/>
     </van-dialog>
+
+    <Assign ref="assign"/>
   </div>
 </template>
 
 <script>
   import {Toast} from 'vant';
-  import {approve,reject} from '@/api/approveCenter'
+  import Assign from '@/components/Assign/index'
+  import {approve,reject, queryAssignResult} from '@/api/approveCenter'
   export default {
     name: "ApproveButton",
+    components:{
+      Assign
+    },
     props: {
       pk_h: {
         type: String,
@@ -74,26 +79,37 @@
         console.log(action)
       },
       /**
-       *
+       * 驳回按钮
        */
-      reject() {
+      Reject() {
         this.show = true
       },
       /**
        * 单据审核
        */
-      checkBillOk() {
-        this.checkshow = true
+      Approve() {
+        // 审核前 先判断是否有指派
+        let params = {
+          billid: this.pk_h, // 单据主键
+          billtype: this.billtype //单据类型或交易类型
+        }
+        queryAssignResult(params).then(res => {
+
+        })
+
+        this.$refs.assign.AssignShow()
+
+        // this.checkshow = true
         // 审核通过
-        this.checknode = '批准'
+        // this.checknode = '批准'
       },
       /**
        * 审核确认
        */
-      checkConfirm() {
+      ApproveConfirm() {
         let params = {
-          billid: this.pk_h ,// 单据主键
-          billtype: this.billtype,//单据类型或交易类型
+          billid: this.pk_h, // 单据主键
+          billtype: this.billtype, //单据类型或交易类型
           check_note: this.checknode
         }
         Toast.loading({

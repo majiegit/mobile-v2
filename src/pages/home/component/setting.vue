@@ -1,32 +1,22 @@
 <template>
     <van-popup v-model="show" position="left" :style="{ width: '90%', height: '100%' }" closeable>
-      <div style="margin-top: 40px">
-        <van-row type="flex">
-          <van-col :span="6" offset="2">
-            <van-image
-              style="margin-top: 20px;"
-              round
-              width="70px"
-              height="70px"
-              :src="userInfo.photo"
-            />
-          </van-col>
-          <van-col :span="15" style="margin-top: 4px">
-            <p class="userInfo" v-show='userInfo.name'>
-              <span>
-             {{ userInfo.name }}
-              </span> <br/>
-              <span>{{ userInfo.orgname }}</span> <br/>
-              <span>{{ userInfo.deptname }}</span><br/>
-            </p>
-          </van-col>
-        </van-row>
-      </div>
-      <div class="main" :style="{'height': currentHeight}">
-<!--          <div style="height: 500px"></div>-->
-<!--          <div style="height: 500px"></div>-->
-<!--          <div style="height: 500px"></div>-->
-<!--          <div style="height: 500px"></div>-->
+      <div :style="{'height': currentHeight, 'padding-top': '50px'}">
+        <van-cell>
+          <template #title>
+              <span style="line-height: 37px;">头像</span>
+          </template>
+          <template #right-icon>
+              <van-image v-if="userInfo.photo"
+                radius="20%"
+                width="37px"
+                height="37px"
+                :src="userInfo.photo"
+              />
+          </template>
+        </van-cell>
+        <van-cell title="名字" :value="userInfo.name"/>
+        <van-cell title="手机号码" :value="userInfo.mobile"/>
+        <van-cell title="密码修改" is-link to="updatePassword" />
       </div>
       <div class="footer" @click="logout">
         <van-button type="info" block>退出登录</van-button>
@@ -43,20 +33,15 @@ export default {
   name: 'setting',
   data () {
     return {
-      userInfo: {},
+      userInfo: storage.get(USERINFO),
       currentHeight: '',
       show: false
     }
   },
   created () {
-    // console.log(this.userInfo)
-    this.userInfo = storage.get(USERINFO)
-    console.log(this.userInfo)
-    // console.log(userInfo.photo)
-    // localStorage
   },
   mounted() {
-    this.currentHeight = (document.documentElement.clientHeight - 100 - 104) + 'px'
+    this.currentHeight = (document.documentElement.clientHeight - 114) + 'px'
   },
   methods: {
     // 退出登录

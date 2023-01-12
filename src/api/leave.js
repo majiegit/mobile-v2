@@ -108,3 +108,15 @@ export function queryLeaveLength(params) {
     data: params
   })
 }
+
+/**
+ * 查询请假类型剩余额度
+ * @param parameter
+ */
+export function queryLeaveTypeQuota(leaveTypeId) {
+  return request({
+    url: "/hrsh/leave/queryLeaveTypeQuota",
+    method: 'post',
+    params: { leaveTypeId: leaveTypeId }
+  })
+}

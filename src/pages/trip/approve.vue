@@ -37,7 +37,6 @@
   import ApproveButton from '@/components/Button/ApproveButton'
   import {getTripBill} from '@/api/trip'
   import {approveStateName, whetherYN, HrkqMinUnit,BillTypeCode} from '@/utils/ConstantUtils'
-  import {BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "approve",

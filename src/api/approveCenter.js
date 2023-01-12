@@ -13,7 +13,7 @@ export function getMyApprove(params) {
 }
 
 /**
- * 查询审批中心数据
+ * 批准
  * @param parameter
  */
 export function approve(params) {
@@ -25,12 +25,24 @@ export function approve(params) {
 }
 
 /**
- * 查询审批中心数据
+ * 驳回
  * @param parameter
  */
 export function reject(params) {
   return request({
     url: "/hrsh/approveCenter/reject",
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 查询批准是否需要指派
+ * @param parameter
+ */
+export function queryAssignResult(params) {
+  return request({
+    url: "/hrsh/approveCenter/queryAssignResult",
     method: 'post',
     data: params
   })

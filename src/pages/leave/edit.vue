@@ -81,8 +81,7 @@
         <van-field label="请假时长" :value="billInfo.leaveday + HrkqMinUnit[billInfo.minunit]" readonly/>
 
         <!--剩余额度-->
-        <van-field :label="billInfo.leavetypename + '剩余额度'" readonly
-                  :value="leaveTypeBalance + HrkqMinUnit[billInfo.minunit]"/>
+        <van-field :label="billInfo.leavetypename + '剩余额度'" readonly :value="leaveTypeBalance"/>
 
       </van-form>
     </div>
@@ -101,7 +100,7 @@
   import Select from '@/components/Selector/Select'
   import SelectDate from '@/components/Selector/SelectDate'
   import SaveButton from "@/components/Button/SaveButton";
-  import {saveLeaveBill, getLeaveBill, queryLeaveType, queryLeaveLength} from '@/api/leave'
+  import {saveLeaveBill, getLeaveBill, queryLeaveType, queryLeaveLength, queryLeaveTypeQuota} from '@/api/leave'
   import {StartEndDayType, StartEndDayTypeList, HrkqMinUnit} from '@/utils/ConstantUtils'
   import {getItem} from '@/utils/DataUtils'
   import {Toast} from "vant";
@@ -258,6 +257,21 @@
         this.billInfo.endtime = ''
         this.billInfo.begintime = ''
         this.billInfo.leaveday = ''
+        // 查询请假类型剩余额度
+        this.queryLeaveTypeQuota(type.id)
+      },
+      /**
+       *  查询请假类型剩余额度
+       */
+      queryLeaveTypeQuota(leaveTypeId) {
+        Toast.loading({
+          message: '查询剩余额度中...',
+          duration: 0
+        })
+        queryLeaveTypeQuota(leaveTypeId).then(res => {
+          Toast.clear()
+          this.leaveTypeBalance = res.data
+        })
       },
       /**
        * 查询休假类型

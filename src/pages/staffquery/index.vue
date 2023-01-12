@@ -8,7 +8,7 @@
         <van-cell v-if="orgDataSelect.length != 0" style="color: #2479ed">
           <template #title>
             <span v-for="(org, index) in orgDataSelect" :key="index">
-              <span @click="selectOrgDataClick(org)">{{org.name}}</span>
+              <span @click="selectOrgDataClick(org,index)">{{org.name}}</span>
               <van-icon name="arrow" v-if="index !== orgDataSelect.length - 1"/>
             </span>
           </template>
@@ -76,7 +76,8 @@
               id: this.orgModel.id,
               isleaf: this.orgModel.isleaf,
               isbusinessunit: this.orgModel.isbusinessunit,
-              orgtype1: this.orgModel.orgtype1
+              orgtype1: this.orgModel.orgtype1,
+              title: this.orgModel.name
             }
           })
         }
@@ -84,7 +85,8 @@
     },
     methods: {
       // 选择已选择组织
-      selectOrgDataClick(org) {
+      selectOrgDataClick(org,index) {
+        this.orgDataSelect.splice(index + 1, this.orgDataSelect.length - (index + 1))
         this.querySubOrgOrDeptByPk(org.id)
       },
       // 选择下级组织
@@ -123,8 +125,9 @@
   }
 
   .item_title {
-    font-size: 14px;
-    line-height: 14px;
+    font-size: 12px;
+    line-height: 12px;
+    margin: 10px 0;
     padding-left: 10px;
     color: #999;
   }

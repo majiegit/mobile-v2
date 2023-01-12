@@ -153,16 +153,11 @@
       },
       // 查询组织架构
       queryCompanyStructure(id, isbusinessunit) {
-        Toast.loading({
-          message: '加载中...',
-          duration: 0
-        })
         let params = {
           id: id,
           isbusinessunit: isbusinessunit
         }
         queryCompanyStructure(params).then(res => {
-          Toast.clear()
           this.orgData = res.data
         })
       },

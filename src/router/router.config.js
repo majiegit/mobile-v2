@@ -16,6 +16,7 @@ import leaveoff from './pages/leaveoff'
 import trans from './pages/trans'
 import attendance from './pages/attendance'
 import dimission from './pages/dimission'
+import entry from './pages/entry'
 import calendar from './pages/calendar'
 import checkout from "./pages/checkout"
 import psnInfoApprove from "./pages/psnInfoApprove"
@@ -45,6 +46,7 @@ export const AllRouterList = [].concat(
   trans,
   attendance,
   dimission,
+  entry,
   calendar,
   psnInfoApprove,
   prove,

@@ -96,6 +96,10 @@ export const BillTypeMap = {
     routerDetailPath: 'attendanceDetail',  // 签卡明细页路由
     routerApprovePath: 'attendanceApprove',  // 签卡审核页路由
   },
+  '6101': {
+    billtypename: '入职单',
+    routerApprovePath: 'entryApprove',  // 入职审核页路由
+  },
   '6111': {
     billtypename: '转正单',
     routerEditPath: 'regEdit',  // 转正编辑页路由
@@ -141,13 +145,17 @@ export const BillTypeCode = {
     billtypecode: '6QBK',  // 单据编码
     billtypename: '签卡单'
   },
+  entry: {
+    billtypecode: '6101',  // 单据编码
+    billtypename: '入职单'
+  },
   reg: {
     billtypecode: '6111',  // 单据编码
-    billtypename: '转正'
+    billtypename: '转正单'
   },
   trans: {
     billtypecode: '6113',  // 单据编码
-    billtypename: '调配'
+    billtypename: '调配单'
   },
   dimission: {
     billtypecode: '6115',  // 单据编码

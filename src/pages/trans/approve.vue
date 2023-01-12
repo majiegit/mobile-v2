@@ -75,25 +75,19 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
-import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
-
+  import {getTransBill, deleteTransBill} from '@/api/trans'
+  import {BillTypeCode} from '@/utils/ConstantUtils'
   export default {
     name: "approve",
     components: {Header, ApproveProcess, ApproveButton},
     data() {
       return {
         title: '加班申请单',
-        check: {
-          show: false,
-          title: '',
-          node: '',
-          action: '',
-        },
         currentHeight: '',
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: ''
+        billtype: BillTypeCode.trans.billtypecode
       }
     },
     watch: {},
@@ -101,9 +95,6 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
       this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
-      }
-      if (this.$route.query.billtype) {
-        this.billtype = this.$route.query.billtype
       }
       this.queryBillInfo(this.$route.query.pk_h)
     },
@@ -129,12 +120,14 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
           duration: 0
         })
         let params = {
-          billid: pk_h,
-          billtype: billtype
+          billid: pk_h
         }
-        getBillInfo(params).then(res => {
-          this.billInfo = res.data
-          this.approvestate = res.data.approvestatus
+        getTransBill(params).then(res => {
+          this.oldItem = res.data.oldItem
+          this.newItem = res.data.newItem
+          this.billInfo = res.data.billInfo
+          this.workflownote = res.data.workflownote
+          this.approvestate = res.data.billInfo.approve_state.value
           Toast.clear()
         })
       },
@@ -143,36 +136,7 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
        */
       clickLeft() {
         this.$router.go(-1)
-      },
-      /**
-       * 审核确认
-       */
-      checkConfirm() {
-        Toast.loading({
-          message: '审批中...',
-          duration: 0
-        })
-      },
-
-      /**
-       * 单据审核
-       */
-      checkBill(type) {
-        this.check.show = true
-        if (type == 'Y') {
-          // 审核通过
-          this.check.action = 'Y'
-          this.check.title = '审核通过'
-        } else if (type == 'N') {
-          // 审核不通过
-          this.check.action = 'N'
-          this.check.title = '审核不通过'
-        } else if (type == 'R') {
-          // 驳回
-          this.check.action = 'R'
-          this.check.title = '驳回'
-        }
-      },
+      }
     }
   }
 </script>

@@ -36,11 +36,9 @@
             </p>
           </van-col>
         </van-row>
-        <div class="dateEntry">
-          <span>今天是您加入{{ userInfo.orgname}}的第{{ userInfo.joinsysyear }}年{{ userInfo.joinsysday }}天</span>
-        </div>
       </div>
-
+      <van-notice-bar class="dateEntry" scrollable
+                      :text="'今天是您加入' + userInfo.orgname + '的第' + userInfo.joinsysyear + '年' + userInfo.joinsysday + '天'"/>
     </div>
     <Popup/>
     <!--菜单区域-->
@@ -64,16 +62,20 @@
   </div>
 </template>
 <script>
+  import {Toast} from 'vant'
   import {queryUserRoleMenu, queryPsndocInfo} from '@/api/home'
   import {queryIsReadMessageCount} from '@/api/message'
   import Setting from '@/pages/home/component/setting'
   import Popup from '@/components/Popup/Index'
+  import {USERINFO} from '@/utils/mutation-types'
+  import storage from 'store';
+
   export default {
     name: 'application',
     data() {
       return {
         menuData: [],
-        userInfo: {},
+        userInfo: storage.get(USERINFO),
         messageTotal: ''
       }
     },
@@ -82,20 +84,25 @@
       Popup
     },
     created() {
-      this.getUserInfo()
       this.getMenus()
+      this.getMessageNumber(storage.get(USERINFO).user_id)
     },
     mounted() {
     },
     methods: {
       // 获取权限菜单
       getMenus() {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
         let params = {
           status: 1,
           menu_type: 1
         }
         queryUserRoleMenu(params).then(res => {
           this.menuData = res.data
+          Toast.clear()
         })
       },
       // 消息个数统计
@@ -107,13 +114,6 @@
           this.messageTotal = res.data
         })
       },
-      // 获取用户详细资料
-      getUserInfo() {
-        queryPsndocInfo().then(res => {
-          this.userInfo = res.data
-          this.getMessageNumber(res.data.user_id)
-        })
-      },
       routerpush(router) {
         this.$router.push(router)
       },
@@ -122,7 +122,7 @@
         this.$router.push('message')
       },
       // 打开设置
-      openSetting(){
+      openSetting() {
         this.$refs.setting.open()
       }
     }
@@ -164,6 +164,7 @@
     right: 13px;
     float: right;
   }
+
   .headerTitle {
     color: #fff;
     font-size: 16px;
@@ -214,20 +215,16 @@
   }
 
   .dateEntry {
-    position: absolute;
-    bottom: -5px;
-    left: 25%;
+    position: relative;
+    top: 28px;
+    left: 22%;
     width: 50%;
-    display: block;
-    overflow: auto;
-    white-space: nowrap;
-    text-align: center;
-    /*margin: 0px auto;*/
+    height: 30px;
+    padding: 0 3%;
     color: #0b0306;
     font-size: 12px;
     background: #fff;
     border-radius: 20px;
-    padding: 10px;
   }
 </style>
 
