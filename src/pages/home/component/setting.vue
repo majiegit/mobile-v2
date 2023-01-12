@@ -37,6 +37,7 @@
 <script>
 import storage from 'store'
 import { ACCESS_TOKEN, REFRESH_TOKEN, USERINFO } from '@/utils/mutation-types'
+import { Dialog, Toast } from 'vant'
 
 export default {
   name: 'setting',
@@ -60,11 +61,17 @@ export default {
   methods: {
     // 退出登录
     logout () {
-      // token 失效,删除token
-      storage.remove(ACCESS_TOKEN)
-      storage.remove(REFRESH_TOKEN)
-      storage.remove(USERINFO)
-      this.$router.push('login')
+      Dialog.confirm({
+        title: '',
+        message: '是否退出登录?',
+      }).then(() => {
+        // token 失效,删除token
+        storage.remove(ACCESS_TOKEN)
+        storage.remove(REFRESH_TOKEN)
+        storage.remove(USERINFO)
+        this.$router.push('login')
+      }).catch(() => {
+      })
     },
     open () {
       this.show = true
