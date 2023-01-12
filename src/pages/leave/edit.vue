@@ -263,8 +263,13 @@
        * 查询休假类型
        */
       queryLeaveType() {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
         queryLeaveType().then(res => {
           this.leaveTypeList = res.data
+          Toast.clear()
         })
       },
       /**
