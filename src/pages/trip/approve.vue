@@ -37,7 +37,7 @@
   import ApproveButton from '@/components/Button/ApproveButton'
   import {getTripBill} from '@/api/trip'
   import {approveStateName, whetherYN, HrkqMinUnit,BillTypeCode} from '@/utils/ConstantUtils'
-
+  import {BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "approve",
@@ -58,7 +58,7 @@
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: ''
+        billtype: BillTypeCode.trip.billtypecode
       }
     },
     watch: {},
@@ -66,9 +66,6 @@
       this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
-      }
-      if (this.$route.query.billtype) {
-        this.billtype = this.$route.query.billtype
       }
       this.queryBillInfo(this.$route.query.pk_h)
     },

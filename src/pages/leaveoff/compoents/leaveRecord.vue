@@ -31,6 +31,7 @@
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store'
   import {StartEndDayType, HrkqMinUnit} from '@/utils/ConstantUtils'
+  import { Toast } from 'vant'
 
   export default {
     data() {
@@ -59,11 +60,16 @@
        * 查询待销假请假记录
        */
       queryLeaveIsRevoked() {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
         let params = {
           pk_psndoc: this.pk_psndoc
         }
         queryLeaveIsRevoked(params).then(res => {
           this.leaveList = res.data
+          Toast.clear()
         })
       },
       /**

@@ -27,6 +27,7 @@
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store'
   import {StartEndDayType, HrkqMinUnit} from '@/utils/ConstantUtils'
+  import { Toast } from 'vant'
 
   export default {
     data() {
@@ -54,10 +55,15 @@
        * 查询待销差出差记录
        */
       queryTripIsRevoked() {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
         let params = {
           pk_psndoc: storage.get(USERINFO).pk_psndoc
         }
         queryTripIsRevoked(params).then(res => {
+          Toast.clear()
           this.tripList = res.data
         })
       },

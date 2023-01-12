@@ -44,6 +44,7 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
   import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
+  import {BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "approve",
@@ -61,7 +62,7 @@
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: ''
+        billtype: BillTypeCode.tripOff.billtypecode
       }
     },
     watch: {},

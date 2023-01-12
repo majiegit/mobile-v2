@@ -298,10 +298,21 @@
       clickLeft() {
         this.$router.go(-1)
       },
+      // 验证是否存在返回数据
+      checkQueryData () {
+        let flag = true
+        if (this.billInfo.sreason) {
+          flag = false
+        }
+        return flag
+      },
       /**
        * 保存单据
        */
       saveBillInfo() {
+        if (this.checkQueryData()) {
+          return
+        }
         let params = {
           billInfo: this.billInfo
         }

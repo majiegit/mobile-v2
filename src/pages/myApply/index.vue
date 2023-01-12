@@ -105,6 +105,7 @@
       },
       // 跳转单据
       toApply(item) {
+        console.log(item)
         this.$router.push({
           name: BillTypeMap[item.billtype].routerDetailPath,
           query: {

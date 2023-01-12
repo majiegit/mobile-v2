@@ -208,7 +208,6 @@
        * @param Bool
        */
       getTripBill(trip) {
-        console.log(trip)
         this.billInfo.mainid = trip.pk_trip
         this.billInfo.tripendtime = trip.tripendtime
         this.billInfo.tripbegintime = trip.tripbegintime

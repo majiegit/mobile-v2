@@ -137,14 +137,17 @@
     created() {
     },
     mounted() {
+     if (storage.get('MESSAGETYPE')) {
+       this.messageType = storage.get('MESSAGETYPE')
+     }
       this.queryNotiveMessage()
       this.queryApproveMessage()
     },
     methods: {
       // 改变标签事件
       changeTab(name) {
-        // console.log(name)
-        // storage.set(MESSAGETYPE, name)
+        console.log(name)
+        storage.set('MESSAGETYPE', name)
       },
       /**
        * 标记为已读
@@ -181,7 +184,7 @@
         this.approveTypeList = arr
       },
       /**
-       * 查询通知消息
+       * 查询工作消息
        */
       queryApproveMessage() {
         let params = {
@@ -222,6 +225,7 @@
         })
       },
       clickLeft() {
+        storage.remove('MESSAGETYPE')
         this.$router.push({name: 'application'})
       },
       clickRight() {

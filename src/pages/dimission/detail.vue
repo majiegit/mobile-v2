@@ -116,9 +116,6 @@
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
-      if (this.$route.query.billtype) {
-        this.billtype = this.$route.query.billtype
-      }
       this.queryBillInfo(this.$route.query.pk_h)
     },
     methods: {

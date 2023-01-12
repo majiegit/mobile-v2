@@ -116,7 +116,12 @@
        * 查询离职类型
        */
       queryAttendanceType() {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
         queryAttendanceType().then(res => {
+          Toast.clear()
           this.attendanceTypeList = res.data
         })
       },

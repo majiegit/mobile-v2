@@ -127,8 +127,13 @@
        * 查询出差类型
        */
       queryTripType() {
+        Toast.loading({
+          message: '加载中...',
+          duration: 0
+        })
         queryTripType().then(res => {
           this.tripTypeList = res.data
+          Toast.clear()
         })
       },
       /**

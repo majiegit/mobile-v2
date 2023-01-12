@@ -31,9 +31,9 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
-import {getOvertimeBill} from '@/api/overtime'
+  import {getOvertimeBill} from '@/api/overtime'
   import {approveStateName, whetherYN} from '@/utils/ConstantUtils'
-
+  import {BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "approve",
@@ -47,7 +47,7 @@ import {getOvertimeBill} from '@/api/overtime'
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: ''
+        billtype: BillTypeCode.overtime.billtypecode,
       }
     },
     watch: {},
@@ -55,9 +55,6 @@ import {getOvertimeBill} from '@/api/overtime'
       this.currentHeight = (document.documentElement.clientHeight - 46 - 54) + 'px'
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
-      }
-      if (this.$route.query.billtype) {
-        this.billtype = this.$route.query.billtype
       }
       this.queryBillInfo(this.$route.query.pk_h)
     },
