@@ -41,7 +41,7 @@ export const BillTypeList = [
     billtype: '6QXC',
   },
   {
-    billtypename: '补签卡',
+    billtypename: '补考勤',
     billtype: '6QBK',
   },
   {
@@ -138,7 +138,7 @@ export const BillTypeCode = {
     billtypename: '销差单'
   },
   attendance: {
-    billtypecode: '6QQK',  // 单据编码
+    billtypecode: '6QBK',  // 单据编码
     billtypename: '签卡单'
   },
   reg: {
@@ -243,13 +243,4 @@ export const PsnInfoApproveList = [
     value: 1
   }
 ]
-
-// 补考勤 原始打卡状态
-export const signStatus = {
-  '0': '正常',
-  '1': '迟到',
-  '2': '早退',
-  '3': '缺卡',
-  '4': '旷工',
-}
 

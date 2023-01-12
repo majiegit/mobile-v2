@@ -19,6 +19,8 @@
       @select="choosereject"
       close-on-click-action
     />
+
+
     <!--审批弹框-->
     <van-dialog v-model="checkshow" title="审批意见" show-cancel-button @confirm="checkConfirm">
       <van-field v-model="checknode" label="" placeholder="请输入审批意见"/>

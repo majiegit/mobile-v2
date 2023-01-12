@@ -81,7 +81,7 @@
         <van-field label="请假时长" :value="billInfo.leaveday + HrkqMinUnit[billInfo.minunit]" readonly/>
 
         <!--剩余额度-->
-        <van-cell :title="billInfo.leavetypename + '剩余额度'"
+        <van-field :label="billInfo.leavetypename + '剩余额度'" readonly
                   :value="leaveTypeBalance + HrkqMinUnit[billInfo.minunit]"/>
 
       </van-form>

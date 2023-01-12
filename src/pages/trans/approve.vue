@@ -5,7 +5,7 @@
       <div v-if="billInfo">
         <van-cell-group>
           <van-cell title="申请单编号" :value="billInfo.bill_code.value"/>
-          <van-cell title="审批状态" :value="approveStateName[billInfo.approve_state.value]"/>
+          <van-cell title="审批状态" :value="billInfo.approve_state.display"/>
           <van-cell title="申请人" :value="billInfo.billmaker.display"/>
           <van-cell title="申请日期" :value="billInfo.apply_date.value"/>
         </van-cell-group>

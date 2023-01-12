@@ -294,13 +294,13 @@
   // 试用结果
   const regResultList = [
     {
-      trialresult: 1,
+      trialresult: '1',
       name: '转正'
     }, {
-      trialresult: 2,
+      trialresult: '2',
       name: '延长试用期'
     }, {
-      trialresult: 3,
+      trialresult: '3',
       name: '未通过试用'
     }
   ]
@@ -308,11 +308,11 @@
   // 转类型数据
   const regTypeList = [
     {
-      probation_type: 1,
+      probation_type: '1',
       name: '入职试用'
     },
     {
-      probation_type: 2,
+      probation_type: '2',
       name: '转岗试用'
     }
   ]

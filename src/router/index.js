@@ -19,7 +19,7 @@ const router = new Router({
   base: './'
 })
 
-const allowList = ['login', 'inductionInfo','qrCode']  // no redirect allowList
+const allowList = ['login', 'inductionInfo','qrCode', 'dingSsoLogin']  // no redirect allowList
 const loginRoutePath = '/login'
 const defaultRoutePath = '/application'
 

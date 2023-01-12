@@ -72,11 +72,16 @@
       },
       //登录
       login() {
+        Toast.loading({
+          message: '登录中...',
+          duration: 0
+        })
          let param = {
             usercode: this.usercode,
             password: this.password
           }
         loginByUserCodePassword(param).then(res => {
+          Toast.clear()
           storage.set(ACCESS_TOKEN, res.data.accessToken, TOKEN_TIME_EXP)
           storage.set(REFRESH_TOKEN, res.data.refreshToken, TOKEN_TIME_EXP)
           // setTimeout(eeee =>  {

@@ -5,7 +5,7 @@
       <div v-if="billInfo">
         <van-cell-group>
           <van-cell title="申请单编号" :value="billInfo.bill_code.value"/>
-          <van-cell title="审批状态" :value="approveStateName[billInfo.approve_state.value]"/>
+          <van-cell title="审批状态" :value="billInfo.approve_state.display"/>
           <van-cell title="申请人" :value="billInfo.billmaker.display"/>
           <van-cell title="申请日期" :value="billInfo.apply_date.value"/>
         </van-cell-group>
@@ -84,7 +84,6 @@
     queryTransType,
     deleteTransBill
   } from '@/api/trans'
-  import {approveStateName} from '@/utils/ConstantUtils'
   import {BillTypeCode} from '@/utils/ConstantUtils'
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store'
@@ -95,7 +94,6 @@
     data() {
       return {
         BillTypeCode,
-        approveStateName,
         title: '调配申请',
         currentHeight: '',
         rightIcon: '',

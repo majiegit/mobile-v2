@@ -5,7 +5,7 @@
       <div v-if="billInfo">
         <van-cell-group>
           <van-cell title="申请单编号" :value="billInfo.bill_code.value"/>
-          <van-cell title="审批状态" :value="approveStateName[billInfo.approvestatus.value]"/>
+          <van-cell title="审批状态" :value="billInfo.approve_state.display"/>
           <van-cell title="申请人" :value="billInfo.billmaker.display"/>
           <van-cell title="申请日期" :value="billInfo.apply_date.value"/>
         </van-cell-group>
@@ -60,7 +60,6 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/Button/ApplyButton'
   import {getRegBill, saveRegBill, submitRegBill, recoverRegBill, queryRegType, deleteRegBill} from '@/api/reg'
-  import {approveStateName} from '@/utils/ConstantUtils'
   import {BillTypeCode} from '@/utils/ConstantUtils'
   import {USERINFO} from '@/utils/mutation-types'
   import storage from 'store'
@@ -71,7 +70,6 @@
     data() {
       return {
         BillTypeCode,
-        approveStateName,
         title: '转正申请',
         currentHeight: '',
         rightIcon: '',
@@ -221,7 +219,7 @@
           this.newItem = res.data.newItem
           this.billInfo = res.data.billInfo
           this.workflownote = res.data.workflownote
-          this.approvestate = res.data.billInfo.approvestatus.value
+          this.approvestate = res.data.billInfo.approve_state.value
           Toast.clear()
         })
       }

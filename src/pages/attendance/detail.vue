@@ -4,10 +4,13 @@
     <div class="item_body" :style="{'height': currentHeight}">
       <div v-if="billInfo.pk_psndoc">
         <van-cell-group>
+          <van-cell title="申请人" :value="billInfo.psndocname"/>
+          <van-cell title="申请时间" :value="billInfo.creationtime"/>
+          <van-cell title="补考勤类型：" :value="billInfo.fill_type_id_name"/>
           <van-cell title="补考勤日期：" :value="billInfo.fill_date"/>
-          <van-cell title="原始打卡状态：" :value="signStatus[billInfo.original_sign_status]"/>
-          <van-cell title="补考勤类型：" :value="billInfo.fill_type_name"/>
+          <van-cell title="原始打卡状态：" :value="billInfo.original_sign_status_name"/>
           <van-cell title="补考勤说明：" :value="billInfo.fill_reason"/>
+          <van-cell title="审批状态" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
 
         <p class="fileClass" @click="fileManager">附件管理</p>
@@ -33,21 +36,20 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApplyButton from '@/components/Button/ApplyButton'
   import {getAttendanceBill, submitAttendanceBill, recoverAttendanceBill, deleteAttendanceBill} from '@/api/attendance'
-  import {signStatus} from '@/utils/ConstantUtils'
-
+  import {approveStateName,BillTypeCode} from '@/utils/ConstantUtils'
   export default {
     name: "edit",
     components: {Header, ApproveProcess, ApplyButton},
     data() {
       return {
-        signStatus,
+        approveStateName,
         title: '补考勤申请',
         currentHeight: '',
         rightIcon: '',
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: '',
+        billtype: BillTypeCode.attendance.billtypecode
       }
     },
     watch: {
@@ -63,10 +65,7 @@
       if (this.$route.query.pk_h) {
         this.pk_h = this.$route.query.pk_h
       }
-      if (this.$route.query.billtype) {
-        this.billtype = this.$route.query.billtype
-      }
-      this.queryBillInfo(this.$route.query.pk_h,this.$route.query.billtype)
+      this.queryBillInfo(this.$route.query.pk_h)
     },
     methods: {
       /**
@@ -166,14 +165,13 @@
       /**
        * 查询单据
        */
-      queryBillInfo(pk_h,billtype) {
+      queryBillInfo(pk_h) {
         Toast.loading({
           message: '加载中...',
           duration: 0
         })
         let params = {
-          billid: pk_h,
-          // billtype: billtype
+          billid: pk_h
         }
         getAttendanceBill(params).then(res => {
           this.billInfo = res.data

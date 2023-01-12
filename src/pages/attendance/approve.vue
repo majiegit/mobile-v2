@@ -5,11 +5,13 @@
 <!--      <div v-if="billInfo.pk_psndoc">-->
       <div v-if="show">
         <van-cell-group>
-          <van-cell title="申请人：" :value="billInfo.psndocname"/>
+          <van-cell title="申请人" :value="billInfo.psndocname"/>
+          <van-cell title="申请时间" :value="billInfo.creationtime"/>
+          <van-cell title="补考勤类型：" :value="billInfo.fill_type_id_name"/>
           <van-cell title="补考勤日期：" :value="billInfo.fill_date"/>
-          <van-cell title="原始打卡状态：" :value="signStatus[billInfo.original_sign_status]"/>
-          <van-cell title="补考勤类型：" :value="billInfo.fill_type_name"/>
+          <van-cell title="原始打卡状态：" :value="billInfo.original_sign_status_name"/>
           <van-cell title="补考勤说明：" :value="billInfo.fill_reason"/>
+          <van-cell title="审批状态" :value="approveStateName[billInfo.approvestatus]"/>
         </van-cell-group>
         <p class="fileClass" @click="fileManager">附件管理</p>
         <!--审批流程-->
@@ -30,15 +32,14 @@
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
   import {getAttendanceBill} from '@/api/attendance'
-  import {signStatus} from '@/utils/ConstantUtils'
-
+  import {approveStateName,BillTypeCode} from '@/utils/ConstantUtils'
 
   export default {
     name: "approve",
     components: {Header, ApproveProcess, ApproveButton},
     data() {
       return {
-        signStatus,
+        approveStateName,
         show: true,
         title: '申请单',
         check: {
@@ -51,7 +52,7 @@
         billInfo: {},
         approvestate: '',
         pk_h: '',
-        billtype: ''
+        billtype: BillTypeCode.attendance.billtypecode
       }
     },
     watch: {},

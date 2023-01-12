@@ -11,3 +11,15 @@ export function loginByUserCodePassword(parameter) {
     params: parameter
   })
 }
+
+/**
+ * 钉钉单点登录
+ * @param parameter
+ */
+export function dingSsoLogin(data) {
+  return request({
+    url: "/hrsh/login/dingSsoLogin",
+    method: 'post',
+    data: data
+  })
+}
