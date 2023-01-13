@@ -75,7 +75,7 @@
   import Header from '@/components/Header/Index'
   import ApproveProcess from '@/components/ApprovaProcess/ApproveProcess2'
   import ApproveButton from '@/components/Button/ApproveButton'
-import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
+  import {getTransBill, deleteTransBill} from '@/api/trans'
 
   export default {
     name: "approve",
@@ -132,7 +132,7 @@ import {getOvertimeBill, deleteOvertimeBill} from '@/api/overtime'
           billid: pk_h,
           billtype: billtype
         }
-        getBillInfo(params).then(res => {
+        getTransBill(params).then(res => {
           this.billInfo = res.data
           this.approvestate = res.data.approvestatus
           Toast.clear()
